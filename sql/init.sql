@@ -24,6 +24,7 @@ CREATE TABLE campaign_finance.contributions
 	`empAddress2` 		char varying(50) 	DEFAULT NULL,
 	`empCity` 			char varying(50) 	DEFAULT NULL,
 	`empState` 			char varying(3) 	DEFAULT NULL,
+	`empZip` 			char varying(10) 	DEFAULT NULL,
 	`unformattedDate` 	char varying(8) 	DEFAULT NULL,
 	`date` 				date 				DEFAULT NULL,
 	`contribution` 		float 				DEFAULT NULL,
