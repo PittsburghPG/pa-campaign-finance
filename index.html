@@ -1,1 +1,264 @@
+<<<<<<< HEAD
+<html>
+<head>
+	<title>Candidate page layout</title>
+  <link href="./stylesheets/styles.css" rel="stylesheet" type="text/css" />
+  <link href="./stylesheets/bootstrap-sortable.css" rel="stylesheet" type="text/css" />
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script type="text/javascript" src="javascripts/bootstrap.js"></script>
+  <script type="text/javascript" src="javascripts/bootstrap-sortable.js"></script>
+  <script type="text/javascript" src="javascripts/moment.min.js"></script>
+</head>
+
+<body>
+<!--	<h1>This is an h1. What up.</h1>
+	<h2>And again, with the h2.</h2>
+	<h3>Let's look at an h3.</h3>
+	<h4>Don't be alarmed. It's just an h4.</h4>
+	<h5>Any use for the h5? Anyone? Anyone?</h5>
+	<h6>Surely not an h6. Don't be absurd.</h6> -->
+	
+	
+	<!-- Navigation -->
+	<nav class="navbar navbar-default" role="navigation">
+	  <div class="container">
+	    <!-- Brand and toggle get grouped for better mobile display -->
+	    
+	    <div class="navbar-header">
+	      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+	        <span class="sr-only">Toggle navigation</span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	      </button>
+	      <a class="navbar-brand" href="#">Campaign Finance Project</a>
+	    </div>
+	
+	    <!-- Collect the nav links, forms, and other content for toggling -->
+	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+	      
+	      <ul class="nav navbar-nav">
+	        <li class="active"><a href="#">By candidate</a></li>
+	        <li><a href="#">By county</a></li>
+	        <li><a href="#">By donor</a></li>
+	      </ul>
+	      
+	      <ul class="nav navbar-nav navbar-right">
+	      	<li class="dropdown">
+	        	<a href="#" data-toggle="collapse" data-target="#search-menu"><span class="glyphicon glyphicon-search"></span></a>
+	        </li>
+	      </ul>
+	      
+	      <div id="search-menu" class="collapse nav navbar-nav navbar-right">
+	      	<form role="form">
+						<h4>Filter by:</h4>
+						<div class="row">
+							<div class="form-group col-lg-6 col-md-6 col-sm-6">
+								<h5 for="candidate">Candidate</h5>
+								<input class="form-control" name="candidate" type="text" placeholder="Candidate">
+							</div>
+							<div class="form-group col-lg-6 col-md-6 col-sm-6">
+								<h5 for="county">County</h5>
+								<input class="form-control" name="county" type="text" placeholder="County">
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-lg-6 col-md-6 col-sm-6">
+								<h5 for="donor">Donor</h5>
+								<input class="form-control" name="donor" type="text" placeholder="Donor">
+							</div>
+							<div class="form-group col-lg-6 col-md-6 col-sm-6">
+								<h5 for="employer">Employer</h5>
+								<input class="form-control" name="employer" type="text" placeholder="Employer">
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-lg-6 col-md-6 col-sm-6">
+								<h5 for="startdate">Start date</h5>
+								<input class="form-control" type="date" name="startdate" id="startdate">
+							</div>
+							<div class="form-group col-lg-6 col-md-6 col-sm-6">
+								<h5 for="enddate">End date</h5>
+								<input class="form-control" type="date" name="enddate" id="enddate">
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-lg-6 col-md-6 col-sm-6">
+								<h5 for="amtstart">Amount start</h5>
+								<div class="input-group">
+									<span class="input-group-addon">$</span>
+									<input class="form-control" type="text" name="amtstart" id="amtstart">
+								</div>
+							</div>
+							<div class="form-group col-lg-6 col-md-6 col-sm-6">
+								<h5 for="amtend">Amount end</h5>
+								<div class="input-group">
+									<span class="input-group-addon">$</span>
+									<input class="form-control" type="text" name="amend" id="amend">
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>   
+
+	    </div><!-- /.navbar-collapse -->
+	  </div><!-- /.container-fluid -->
+	</nav>
+		
+	<!-- container -->
+	<div class="container">
+		<div class="intro-row thick-divider">
+			<div class="jumbotron ">
+				<ul class="list-inline">
+					<li><h1>Tom Corbett</h1></li>
+					<li><h3>Republican</h3></li>
+				</ul>
+			</div>
+		</div>
+				
+		<!-- put these elements in a row so we can control how they flow at smaller sized screens-->
+		<div class="row">
+			<!-- candidate photo-->
+			<figure class="col-lg-5 col-md-5 col-sm-5 block">
+				<img src="img/cc-TomCorbett-McCainRally2008.jpg" alt="Tom Corbett" />
+				<figcaption>McCain Rally 2008 / flickr</figcaption>
+			</figure>
+			<!-- end candidate photo-->
+			
+			<!-- donation amounts beside photo for large view -->
+			<div class="col-lg-6 col-md-6 col-sm-7 col-lg-offset-1 col-md-offset-1">
+			
+				<div class="well stacked-amt-desc center block">
+					<h2>$4,999,999</h2>
+					<h3>Total contributions</h3>
+				</div>
+				
+				<div class="inline-amt-desc clearfix block">
+					<ul class="list-inline">
+						<li><h2>2,256</h2></li>
+						<li><p class="lead">donations under $50<br>
+					total of $xxxxx</p></li>
+					</ul>
+				</div>
+				
+				<div class="inline-amt-desc clearfix block">
+					<ul class="list-inline">
+						<li><h2>1,257</h2></li>
+						<li><p class="lead">donations $50 and over<br/>
+					total of $xxxxxxxx</p></li>
+					</ul>
+				</div>
+				
+				<div class="inline-amt-desc clearfix block">
+					<ul class="list-inline">
+						<li><h2>$1,253</h2></li>
+						<li><p class="lead">median donation over $50</p></li>
+					</ul>
+				</div>
+				
+			</div><!-- end donation amounts -->
+			
+		</div><!-- end row-->
+		
+		<div class="row"> <!-- maps, line charts and bar charts -->
+			<div class="col-lg-5 col-md-5 col-sm-6">
+				<div class="well block">
+					<img src="img/pa-heat-map.png" alt="PA heat map" />
+					<h3>Donations heat map of Pennsylvania</h3>
+				</div>
+				
+				<div class="well block">
+					<img src="img/us-heatmap.gif" alt="US heat map" />
+					<h3>Donations heat map of US</h3>
+				</div>
+			</div>
+			
+			<div class="col-lg-6 col-md-6 col-sm-6 col-lg-offset-1 col-md-offset-1">
+				<div class="well block">
+					<img src="img/over-time-linechart.png" alt="US heat map" />
+					<h3>Contributions over time</h3>
+				</div>
+				
+				<div class="well block">
+					<img src="img/contrib-type-barchart.png" alt="US heat map" />
+					<h3>Contributions by type</h3>
+				</div>
+			</div>
+		</div> <!-- end row -->
+		
+		
+		<div class="row"> <!-- pie charts -->
+			<div class="col-lg-5 col-md-5 col-sm-6">
+				<div class="block">
+					<img src="img/state-pie-chart.png" alt="Contributions by location pie chart" />
+					<h3>Contributions by location</h3>
+				</div>
+			</div>
+			
+			<div class="col-lg-6 col-md-6 col-sm-6 col-lg-offset-1 col-md-offset-1">
+				<div class="block">
+					<img src="img/amount-pie-chart.png" alt="Contributions by amount pie chart" />
+					<h3>Contributions by amount</h3>
+				</div>
+			</div>
+		</div> <!-- end row -->
+		
+		<div class="thick-divider"></div>
+		
+		<div class="row"> <!-- donations table -->
+			<div class="col-lg-12 col-md-12 col-sm-12 block">
+				<h3>Contributions by donation</h3>
+				<form class="form-inline pull-right">
+					<input type="search" class="form-control" placeholder="Search">
+					<button type="submit" class="btn btn-default">Submit</button>
+				</form>
+				<table class="table table-hover sortable">
+					<thead>
+						<tr>
+					    <th>Date</th>
+					    <th>Donor</th> 
+					    <th>Occupation, Employer</th>
+					    <th>Amount</th>
+					  </tr>
+					 </thead>
+					
+					<tbody>
+					<tr>
+				    <td data-dateformat="MMM-DD-YYYY">July 5, 2014</td>
+				    <td>Jack Smith</td> 
+				    <td>CEO, Some Company</td>
+				    <td data-value="2500">$2,500</td>
+				  </tr>
+				  <tr>
+				    <td data-dateformat="MMM-DD-YYYY">July 7, 2014</td>
+				    <td>Doris Jackson</td> 
+				    <td> --- </td>
+				    <td data-value="125">$125</td>
+				  </tr>
+				  <tr>
+				    <td data-dateformat="MMM-DD-YYYY">July 23, 2014</td>
+				    <td>Sally Griffith</td> 
+				    <td>Dunder Mifflin</td>
+				    <td data-value="1200000000000000">$1,200,000,000,000,000</td>
+				  </tr>
+				  <tr>
+				    <td data-dateformat="MMM-DD-YYYY">August 8, 2014</td>
+				    <td>Kimberly Kirsch</td> 
+				    <td>Wabtec, Systems Analyst</td>
+				    <td data-value="1200.75">$1,200.75</td>
+				  </tr>
+				 </tbody>
+				</table>
+			</div>
+		</div> <!-- end row -->
+		
+		
+		
+	</div> <!-- end container -->
+
+</body>
+
+</html>
+=======
  
+>>>>>>> origin/frontend
