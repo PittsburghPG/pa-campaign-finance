@@ -51,3 +51,6 @@ h2 {
 .top_space20 {
 	margin-top: 40px;
 }
+h1 .small {
+	font-size: 45%;
+}
