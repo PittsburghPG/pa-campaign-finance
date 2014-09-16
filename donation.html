@@ -1,0 +1,159 @@
+<html>
+<head>
+	<title>Donation</title>
+ <!-- <link href="./stylesheets/styles.css" rel="stylesheet" type="text/css" />
+  <link href="./stylesheets/bootstrap-sortable.css" rel="stylesheet" type="text/css" />
+  <script type="text/javascript" src="javascripts/bootstrap-sortable.js"></script>
+  <script type="text/javascript" src="javascripts/bootstrap.js"></script>-->
+ <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+   <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+<link href="./stylesheets/styles.css" rel="stylesheet" type="text/css" />
+<link href="./css/styles.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="javascripts/moment.min.js"></script>
+</head>
+
+<body>
+
+	
+	
+	<!-- Navigation -->
+	<nav class="navbar navbar-default" role="navigation">
+	  <div class="container">
+	    <!-- Brand and toggle get grouped for better mobile display -->
+	    
+	    <div class="navbar-header">
+	      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+	        <span class="sr-only">Toggle navigation</span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	      </button>
+	      <a class="navbar-brand" href="#">Campaign Finance Project</a>
+	    </div>
+	
+	    <!-- Collect the nav links, forms, and other content for toggling -->
+	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+	      
+	      <ul class="nav navbar-nav">
+	        <li><a href="#">By candidate</a></li>
+	        <li><a href="#">By county</a></li>
+	        <li class="active"><a href="#">By donor</a></li>
+	      </ul>
+	      
+	      <ul class="nav navbar-nav navbar-right">
+	      	<li class="dropdown">
+	        	<a href="#" data-toggle="collapse" data-target="#search-menu"><span class="glyphicon glyphicon-search"></span></a>
+	        </li>
+	      </ul>
+	      
+	      <div id="search-menu" class="collapse nav navbar-nav navbar-right">
+	      	<form role="form">
+						<h4>Filter by:</h4>
+						<div class="row">
+							<div class="form-group col-lg-6 col-md-6 col-sm-6">
+								<h5 for="candidate">Candidate</h5>
+								<input class="form-control" name="candidate" type="text" placeholder="Candidate">
+							</div>
+							<div class="form-group col-lg-6 col-md-6 col-sm-6">
+								<h5 for="county">County</h5>
+								<input class="form-control" name="county" type="text" placeholder="County">
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-lg-6 col-md-6 col-sm-6">
+								<h5 for="donor">Donor</h5>
+								<input class="form-control" name="donor" type="text" placeholder="Donor">
+							</div>
+							<div class="form-group col-lg-6 col-md-6 col-sm-6">
+								<h5 for="employer">Employer</h5>
+								<input class="form-control" name="employer" type="text" placeholder="Employer">
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-lg-6 col-md-6 col-sm-6">
+								<h5 for="startdate">Start date</h5>
+								<input class="form-control" type="date" name="startdate" id="startdate">
+							</div>
+							<div class="form-group col-lg-6 col-md-6 col-sm-6">
+								<h5 for="enddate">End date</h5>
+								<input class="form-control" type="date" name="enddate" id="enddate">
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-lg-6 col-md-6 col-sm-6">
+								<h5 for="amtstart">Amount start</h5>
+								<div class="input-group">
+									<span class="input-group-addon">$</span>
+									<input class="form-control" type="text" name="amtstart" id="amtstart">
+								</div>
+							</div>
+							<div class="form-group col-lg-6 col-md-6 col-sm-6">
+								<h5 for="amtend">Amount end</h5>
+								<div class="input-group">
+									<span class="input-group-addon">$</span>
+									<input class="form-control" type="text" name="amend" id="amend">
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>   
+
+	    </div><!-- /.navbar-collapse -->
+	  </div><!-- /.container-fluid -->
+	</nav>
+		
+	<!-- container -->
+	<div class="container">
+		<div class="intro-row divider">
+			
+				
+					<h3>DONATION</h3>
+					<h1>$5,000</h1>
+					
+				
+			
+			
+		</div>
+				
+		<!-- put these elements in a row so we can control how they flow at smaller sized screens-->
+		<div class="row">
+			<!-- candidate photo-->
+			
+			<!-- end candidate photo-->
+			
+			<!-- donation amounts beside photo for large view -->
+			<div class="col-lg-6 col-md-6 col-sm-6 ">
+			Candidate: <a href=""><strong>Tom Corbett</strong></a><br/>
+			Donor: <a href=""><strong>Jane Doe</strong></a><br/>
+			When: <strong>09.14.2014</strong><br/>
+			Location: <strong>Pittsburgh, <a href="">Allegheny County</a></strong><br/>
+			
+			 
+			
+				
+			</div><!-- end donation amounts -->
+			<div class="col-lg-6 col-md-6 col-sm-6 ">
+				<img class="sm_county_map" src="img/allegheny-map.png" alt="Allegheny County locator map"  /> 
+			</div>
+		</div><!-- end row-->
+		
+		
+		
+		
+		
+		
+	</div> <!-- end container -->
+
+</body>
+
+</html>
+
