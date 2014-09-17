@@ -1,6 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- GOOGLE ANALYTICS -->
+	<script type="text/javascript">
+	
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-15716261-1']);
+	_gaq.push(['_setDomainName', 'post-gazette.com']);
+	_gaq.push(['_trackPageview']);
+	
+	(function() {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	})();
+	
+	</script>
+	<!-- end Google Analytics -->
+<!--News Beat script -->
+	<script type='text/javascript'>
+		var _sf_async_config={};
+		/** CONFIGURATION START **/
+		_sf_async_config.uid = 34530;
+		_sf_async_config.domain = 'post-gazette.com';
+		_sf_async_config.sections = 'News';  //CHANGE THIS
+		_sf_async_config.authors = 'Moriah Balingit, Julia Rendleman';    //CHANGE THIS
+		/** CONFIGURATION END **/
+		(function(){
+		  function loadChartbeat() {
+			window._sf_endpt=(new Date()).getTime();
+			var e = document.createElement('script');
+			e.setAttribute('language', 'javascript');
+			e.setAttribute('type', 'text/javascript');
+			e.setAttribute('src',
+			   (('https:' == document.location.protocol) ? 'https://a248.e.akamai.net/chartbeat.download.akamai.com/102508/' : 'http://static.chartbeat.com/') +
+			   'js/chartbeat.js');
+			document.body.appendChild(e);
+		  }
+		  var oldonload = window.onload;
+		  window.onload = (typeof window.onload != 'function') ?
+			 loadChartbeat : function() { oldonload(); loadChartbeat(); };
+		})();
+	</script>
+	<!--News Beat script ends-->
 	<title>Counties</title>
  
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
@@ -24,6 +66,19 @@
 <script type="text/javascript" src="js/scripts.js"></script>
 	
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta property="og:type"            content="article" /> 
+	<meta property="og:url"             content="http://newsinteractive.post-gazette.com/camp_finance" /> 
+	<meta property="og:title"           content="" /> 
+	<meta property="og:description"     content="" /> 
+	<meta property="og:image"           content="" /> 
+
+	<meta name="twitter:card" 			content="summary">
+	<meta name="twitter:site" 			content="@pittsburghpg">
+	<meta name="twitter:creator"		content="@pgpolitweets">
+	<meta name="twitter:title"			content="">
+	<meta name="twitter:description"	content="">
+	<meta name="twitter:image" 			content="">
 </head>
 
 <body>
@@ -54,7 +109,9 @@
 	      </ul>
 	      
 	      <ul class="nav navbar-nav navbar-right">
-	      	<li class="dropdown">
+	      	<li><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://newsinteractive.post-gazette.com/campaign_finance" ><img class="social" src="../../../../glyphicons_free/glyphicons_social/png/glyphicons_social_30_facebook.png"/></a></li>
+			 <li><a target="_blank" href="https://twitter.com/intent/tweet?original_referer=http%3A%2F%2Fnewsinteractive.post-gazette.com%2Flongform%2Fstories%2Frefugees%2F&text=Examine each gubernatorial candidate's war chest for 2014':&:tw_p=tweetbutton&url=http://newsinteractive.post-gazette.com/campaign_finance"><img class="social" src="../../../../glyphicons_free/glyphicons_social/png/glyphicons_social_31_twitter.png"/></a></li>
+			 <li class="dropdown">
 	        	<a href="#" data-toggle="collapse" data-target="#search-menu"><span class="glyphicon glyphicon-search"></span></a>
 	        </li>
 	      </ul>
@@ -117,8 +174,8 @@
 		
 	<!-- container -->
 	<div class="container">
-		<div class="intro-row divider">
-			<h1>Counties <span class="small">of Pennsylvania</span></h1>
+		<div class="page-header">
+			<h1>Counties <small>of Pennsylvania</small></h1>
 		</div>
 				
 		<div class="row ">
@@ -258,7 +315,31 @@
 		
 		
 	</div> <!-- end container -->
-
+<script type='text/javascript'>
+			var _sf_async_config={};
+			/** CONFIGURATION START **/
+			_sf_async_config.uid = 34530;
+			_sf_async_config.domain = 'post-gazette.com';
+			_sf_async_config.sections = 'Refugees';  
+			_sf_async_config.authors = 'Moriah Balingit, Julia Rendleman';  
+			_sf_async_config.path = "/refugees";			
+			/** CONFIGURATION END **/
+			(function(){
+			  function loadChartbeat() {
+				window._sf_endpt=(new Date()).getTime();
+				var e = document.createElement('script');
+				e.setAttribute('language', 'javascript');
+				e.setAttribute('type', 'text/javascript');
+				e.setAttribute('src',
+				   (('https:' == document.location.protocol) ? 'https://a248.e.akamai.net/chartbeat.download.akamai.com/102508/' : 'http://static.chartbeat.com/') +
+				   'js/chartbeat.js');
+				document.body.appendChild(e);
+			  }
+			  var oldonload = window.onload;
+			  window.onload = (typeof window.onload != 'function') ?
+				 loadChartbeat : function() { oldonload(); loadChartbeat(); };
+			})();
+		</script>
 </body>
 
 </html>

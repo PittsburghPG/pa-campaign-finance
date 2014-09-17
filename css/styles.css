@@ -61,6 +61,12 @@ h1 .small {
 	border: 1px solid lightgray;
 	clear: both;
 }
+.social {
+	opacity: .5;
+}
+.social:hover {
+	opacity: .7;
+}
 
 
 /* Smartphones (portrait and landscape) ----------- */
