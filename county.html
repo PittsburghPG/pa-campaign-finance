@@ -1,12 +1,11 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
 	<title>County</title>
- <!-- <link href="./stylesheets/styles.css" rel="stylesheet" type="text/css" />
-  <link href="./stylesheets/bootstrap-sortable.css" rel="stylesheet" type="text/css" />
-  <script type="text/javascript" src="javascripts/bootstrap-sortable.js"></script>
-  <script type="text/javascript" src="javascripts/bootstrap.js"></script>-->
- <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-   <!-- Latest compiled and minified CSS -->
+ 
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  
+<!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 
 <!-- Optional theme -->
@@ -16,9 +15,15 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-<link href="./stylesheets/styles.css" rel="stylesheet" type="text/css" />
-<link href="./css/styles.css" rel="stylesheet" type="text/css" />
+<link href="stylesheets/styles.css" rel="stylesheet" type="text/css" />
+<link href="css/styles.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="javascripts/moment.min.js"></script>
+
+<script type="text/javascript"
+      src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBJJn3Cpmeni2OCnm9ZcduTTK4hC-rTRWk&sensor=true"></script>
+<script type="text/javascript" src="js/scripts.js"></script>
+	
+<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
@@ -114,7 +119,7 @@
 	<div class="container">
 		<div class="intro-row divider">
 			
-				
+					<div id="map_canvas"></div>
 					<h3>COUNTY</h3>
 					<h1>Allegheny</h1>
 					
@@ -131,17 +136,44 @@
 			
 			<!-- donation amounts beside photo for large view -->
 			
-			<div class="col-md-6 col-md-offset-1">
-			<h4>TOTAL CONTRIBUTIONS</h4>
-			<h2>$26.2 million</h2>
-			<div class="donor_donations_overview">
-				<p class="cand1">Corbett: $13.1 million (75 donations)<br/>
-				<span class="cand2">Wolfe: $13.1 million (75 donations)</span></p>
+			<div class="col-md-12 ">
+				<h4>TOTAL CONTRIBUTIONS</h4>
+				<h2>$26.2 million</h2>
+				
+				
 			</div>
-			<img src="img/over-time-linechart.png" alt="Contributions over time" />
+		</div>
+		<div class="row">
+			<div class="col-md-4 ">
+				<h3>88%</h3>
+				<p>Allegheny County represents 88% of all contributions in this race.</p>
+				
 			</div>
+			<div class="col-md-4 ">
+				
+				<h3>12 cents</h3>
+				<p>Contributions represent 12 cents per capita in Allegheny County.</p>
+			</div>
+			<div class="col-md-4 ">
+				<h3>Breakdown</h3>
+					<p class="cand1">Corbett: $13.1 million (75 donations)<br/>
+					<span class="cand2">Wolfe: $13.1 million (75 donations)</span></p>
+				
+			</div>
+			
 		</div><!-- end row-->
-		
+		<div class="row">
+			<div class="col-md-8">
+				<img src="img/over-time-linechart.png" alt="Contributions over time" />
+			</div>
+			<div class="col-md-4">
+				<img src="img/contrib-type-barchart.png" alt="Contributions by type" />
+				<h3>Contributions by type</h3>
+				<img src="img/amount-pie-chart.png" alt="Contributions by amount" />
+				<h3>Contributions by amount</h3>
+			</div>
+		</div>
+		<!---->
 		<div class="row"> <!-- donations table -->
 			<div class="col-lg-12 col-md-12 col-sm-12 block">
 				<h3 class="section_header">Contributions </h3>
