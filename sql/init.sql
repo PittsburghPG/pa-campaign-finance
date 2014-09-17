@@ -36,9 +36,9 @@ CREATE TABLE campaign_finance.contributions
 DROP TABLE IF EXISTS campaign_finance.filers;
 CREATE TABLE campaign_finance.filers
 (
-	`filerid` 			char varying(8)		DEFAULT NULL,
+	`filerid` 			char varying(10)		DEFAULT NULL,
 	`type`				int					DEFAULT NULL,
-	`name`				char varying(100)	DEFAULT NULL,
+	`name`				char varying(200)	DEFAULT NULL,
 	`office`			char varying(100)	DEFAULT NULL,
 	`district`			char varying(50)	DEFAULT NULL,
 	`party`				char varying(50)	DEFAULT NULL,
