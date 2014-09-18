@@ -1,6 +1,11 @@
- /* Create contribution schema */
+/* Create contribution schema */
 DROP DATABASE IF EXISTS campaign_finance;
 CREATE DATABASE campaign_finance;
+
+/* Add api acccess to database */
+CREATE USER 'api' IDENTIFIED BY 'api';
+GRANT SELECT ON campaign_finance.* to 'api'@'localhost';
+FLUSH PRIVILEGES;
 
 /* Create main contributions table */
 DROP TABLE IF EXISTS campaign_finance.contributions;
