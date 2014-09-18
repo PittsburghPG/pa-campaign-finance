@@ -9,7 +9,7 @@ CREATE TABLE campaign_finance.contributions
 	`id` 				bigint(20) unsigned NOT NULL AUTO_INCREMENT,
 	`filerid` 			char varying(8) 	DEFAULT NULL,
 	`year` 				int(11) 			DEFAULT NULL,
-	`cycle` 			char varying(1) 	DEFAULT NULL,
+	`cycle` 			char varying(5) 	DEFAULT NULL,
 	`section` 			char varying(2) 	DEFAULT NULL,
 	`contributor` 		char varying(100) 	DEFAULT NULL,
 	`address` 			char varying(150) 	DEFAULT NULL,
