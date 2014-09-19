@@ -366,8 +366,8 @@ th {
 }
 @font-face {
   font-family: 'Glyphicons Halflings';
-  src: url(/Users/akanik/PublicSource/Data/campaign-finance/campaign-finance-sass/fonts/../fonts/bootstrap/glyphicons-halflings-regular.eot?1410194192);
-  src: url(/Users/akanik/PublicSource/Data/campaign-finance/campaign-finance-sass/fonts/../fonts/bootstrap/glyphicons-halflings-regular.eot?&1410194192#iefix) format("embedded-opentype"), url(/Users/akanik/PublicSource/Data/campaign-finance/campaign-finance-sass/fonts/../fonts/bootstrap/glyphicons-halflings-regular.woff?1410194192) format("woff"), url(/Users/akanik/PublicSource/Data/campaign-finance/campaign-finance-sass/fonts/../fonts/bootstrap/glyphicons-halflings-regular.ttf?1410194192) format("truetype"), url(/Users/akanik/PublicSource/Data/campaign-finance/campaign-finance-sass/fonts/../fonts/bootstrap/glyphicons-halflings-regular.svg?1410194192#glyphicons_halflingsregular) format("svg");
+  src: url(/Users/akanik/PublicSource/Data/campaign-finance/campaign-finance-sass/fonts/../fonts/bootstrap/glyphicons-halflings-regular.eot?1410790065);
+  src: url(/Users/akanik/PublicSource/Data/campaign-finance/campaign-finance-sass/fonts/../fonts/bootstrap/glyphicons-halflings-regular.eot?&1410790065#iefix) format("embedded-opentype"), url(/Users/akanik/PublicSource/Data/campaign-finance/campaign-finance-sass/fonts/../fonts/bootstrap/glyphicons-halflings-regular.woff?1410790065) format("woff"), url(/Users/akanik/PublicSource/Data/campaign-finance/campaign-finance-sass/fonts/../fonts/bootstrap/glyphicons-halflings-regular.ttf?1410790065) format("truetype"), url(/Users/akanik/PublicSource/Data/campaign-finance/campaign-finance-sass/fonts/../fonts/bootstrap/glyphicons-halflings-regular.svg?1410790065#glyphicons_halflingsregular) format("svg");
 }
 /* line 25, ../../../../../../../Library/Ruby/Gems/1.8/gems/bootstrap-sass-3.2.0.2/assets/stylesheets/bootstrap/_glyphicons.scss */
 .glyphicon {
@@ -8038,40 +8038,49 @@ button.close {
 }
 
 /* line 19, ../sass/styles.scss */
+.banner-image {
+  height: 200px;
+}
+
+/* line 23, ../sass/styles.scss */
 img {
   width: 100%;
 }
 
-/* line 23, ../sass/styles.scss */
+/* line 27, ../sass/styles.scss */
 figcaption {
   color: #666666;
   font-style: italic;
 }
 
-/* line 28, ../sass/styles.scss */
+/* line 32, ../sass/styles.scss */
 .center {
   text-align: center;
 }
 
-/* line 32, ../sass/styles.scss */
+/* line 36, ../sass/styles.scss */
 .row {
   margin-top: 1.25em;
   margin-bottom: 1.25em;
 }
 
-/* line 37, ../sass/styles.scss */
+/* line 41, ../sass/styles.scss */
 .block {
-  margin-top: 2em;
-  margin-bottom: 2em;
+  border-right: #cccccc 1px solid;
 }
 
-/* line 42, ../sass/styles.scss */
+/* line 45, ../sass/styles.scss */
+.last.block {
+  border: none;
+}
+
+/* line 49, ../sass/styles.scss */
 .thick-divider {
   border-bottom: #cccccc 3px solid;
   margin: 1.25em 0;
 }
 
-/* line 47, ../sass/styles.scss */
+/* line 54, ../sass/styles.scss */
 .container .intro-row .jumbotron {
   background: none;
   border-radius: 0;
@@ -8080,34 +8089,62 @@ figcaption {
   padding: 0 15px;
 }
 
-/* line 55, ../sass/styles.scss */
+/* line 62, ../sass/styles.scss */
+.jumbotron h1 {
+  margin-top: 0;
+}
+
+/* line 66, ../sass/styles.scss */
 #search-menu {
-  /*position: fixed;
-  right:50px;
-  top:50px;
-  z-index:101;
-  background:#f8f8f8;
-  border-left:#e7e7e7 1px solid;
-  border-right:#e7e7e7 1px solid;
-  border-bottom:#e7e7e7 1px solid;
-  border-bottom-right-radius: 5px;
-  border-bottom-left-radius: 5px;*/
   padding: 20px;
 }
 
-/* line 69, ../sass/styles.scss */
+/* line 70, ../sass/styles.scss */
 #search-menu h5 {
   color: #666666;
 }
 
-/*@media (min-width: 768px){
+/* line 74, ../sass/styles.scss */
+.large {
+  font-size: 2em;
+}
 
-	.inline-amt-desc h2, .stacked-amt-desc h2{
-		font-size: 36px;
-		}
-	
-	.inline-amt-desc .lead, .stacked-amt-desc .lead{
-		font-size: 18px;
-		}
+/* line 78, ../sass/styles.scss */
+.larger {
+  font-size: 3em;
+}
 
-}*/
+/* line 82, ../sass/styles.scss */
+.jumbo {
+  font-size: 4em;
+}
+
+/* line 86, ../sass/styles.scss */
+.top-totals h2,
+.top-totals h3 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* line 92, ../sass/styles.scss */
+.thin-divider {
+  border-bottom: #cccccc 1px solid;
+}
+
+/* line 96, ../sass/styles.scss */
+label {
+  font-weight: 200;
+}
+
+@media screen and (max-width: 767px) {
+  /* line 102, ../sass/styles.scss */
+  .top-totals .col-lg-4 h3 {
+    font-size: 1.25em;
+  }
+}
+@media (min-width: 992px) {
+  /* line 113, ../sass/styles.scss */
+  .top-totals .col-lg-4 h3 {
+    font-size: 2em;
+  }
+}
