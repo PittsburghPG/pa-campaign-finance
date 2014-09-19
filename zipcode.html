@@ -43,13 +43,11 @@
 		})();
 	</script>
 	<!--News Beat script ends-->
-	<title>Donation</title>
- <!-- <link href="./stylesheets/styles.css" rel="stylesheet" type="text/css" />
-  <link href="./stylesheets/bootstrap-sortable.css" rel="stylesheet" type="text/css" />
-  <script type="text/javascript" src="javascripts/bootstrap-sortable.js"></script>
-  <script type="text/javascript" src="javascripts/bootstrap.js"></script>-->
- <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-   <!-- Latest compiled and minified CSS -->
+	<title>Zip Code</title>
+ 
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  
+<!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 
 <!-- Optional theme -->
@@ -59,11 +57,16 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-<link href="./stylesheets/styles.css" rel="stylesheet" type="text/css" />
-<link href="./css/styles.css" rel="stylesheet" type="text/css" />
+<link href="stylesheets/styles.css" rel="stylesheet" type="text/css" />
+<link href="css/styles.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="javascripts/moment.min.js"></script>
 
+<script type="text/javascript"
+      src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBJJn3Cpmeni2OCnm9ZcduTTK4hC-rTRWk&sensor=true"></script>
+<script type="text/javascript" src="js/scripts.js"></script>
+	
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
 
 <meta property="og:type"            content="article" /> 
 	<meta property="og:url"             content="http://newsinteractive.post-gazette.com/camp_finance" /> 
@@ -77,11 +80,9 @@
 	<meta name="twitter:title"			content="">
 	<meta name="twitter:description"	content="">
 	<meta name="twitter:image" 			content="">
-
 </head>
 
 <body>
-
 	
 	
 	<!-- Navigation -->
@@ -104,8 +105,8 @@
 	      
 	      <ul class="nav navbar-nav">
 	        <li><a href="#">By candidate</a></li>
-	        <li><a href="#">By county</a></li>
-	        <li class="active"><a href="#">By donor</a></li>
+	        <li class="active"><a href="#">By county</a></li>
+	        <li><a href="#">By donor</a></li>
 	      </ul>
 	      
 	      <ul class="nav navbar-nav navbar-right">
@@ -174,11 +175,11 @@
 		
 	<!-- container -->
 	<div class="container">
-		<div class="intro-row divider">
+		<div class="intro-row divider" >
 			
-				
-					<h3>DONATION</h3>
-					<h1>$5,000</h1>
+					<div id="map_canvas"></div>
+					<h3>ZIP CODE</h3>
+					<h1>15217</h1>
 					
 				
 			
@@ -186,27 +187,86 @@
 		</div>
 				
 		<!-- put these elements in a row so we can control how they flow at smaller sized screens-->
-		<div class="row divider">
-			<!-- candidate photo-->
-			
-			<!-- end candidate photo-->
+		<div class="row " >
 			
 			<!-- donation amounts beside photo for large view -->
-			<div class="col-md-5">
-			<p>Candidate: <a href=""><strong>Tom Corbett</strong></a></p>
-			<p>Donor: <a href=""><strong>Jane Doe</strong></a></p>
-			<p>When: <strong>09/14/2014</strong></p>
-			<p>Location: <strong>Pittsburgh, <a href="">15217</a></strong></p>
-			 
 			
-				
-			</div><!-- end donation amounts -->
-			<div class="col-md-7">
-				<img class="sm_county_map" src="img/allegheny-map.png" alt="Allegheny County locator map"  /> 
+			
+		</div>
+		<div class="row divider">
+			<div class="col-md-3 ">
+				<h4>TOTAL CONTRIBUTIONS</h4>
+				<h2>$26.2<br/>million</h2>
 			</div>
+			<div class="col-md-3 ">
+				<h3>88%</h3>
+				<p>Allegheny County represents 88% of all contributions in this race.</p>
+				
+			</div>
+			<div class="col-md-3 ">
+				<h3>12 cents</h3>
+				<p>Contributions represent 12 cents per capita in Allegheny County.</p>
+			</div>
+			<div class="col-md-3 ">
+				<h3>Breakdown</h3>
+					<p>Corbett: $13.1 million (75 donations)</p>
+					<p>Wolfe: $13.1 million (75 donations)</p>
+				
+			</div>
+			
 		</div><!-- end row-->
-		
-		
+		<div class="row divider">
+			<div class="col-md-4">
+				<img src="img/over-time-linechart.png" alt="Contributions over time" />
+			</div>
+			<div class="col-md-4">
+				<img src="img/contrib-type-barchart.png" alt="Contributions by type" />
+				
+			</div>
+			<div class="col-md-4">
+				<img src="img/amount-pie-chart.png" alt="Contributions by amount" />
+				
+			</div>
+		</div>
+		<!---->
+		<div class="row"> <!-- donations table -->
+			<div class="col-lg-12 col-md-12 col-sm-12 ">
+				<h3 class="section_header">Contributions </h3>
+				<form class="form-inline pull-right">
+					<input type="search" class="form-control" placeholder="Search">
+					<button type="submit" class="btn btn-default">Submit</button>
+				</form>
+				<table class="table table-hover sortable">
+					<thead>
+						<tr>
+					    <th>Date</th>
+					    <th>Donor</th> 
+					    <th>Occupation, Employer</th>
+					    <th>Amount</th>
+						<th>Candidate</th>
+					  </tr>
+					 </thead>
+					
+					<tbody>
+					<tr>
+				    <td data-dateformat="MMM-DD-YYYY">July 5, 2014</td>
+				    <td><a href="">Jane Doe</a></td> 
+				    <td>CEO, <a href="">X Corp.</a></td>
+				    <td data-value="5000">$5,000</td>
+					<td>Tom Corbett</td>
+				  </tr>
+				  <tr>
+				    <td data-dateformat="MMM-DD-YYYY">July 7, 2014</td>
+				    <td><a href="">Jane Doe</a></td> 
+				    <td>CEO, <a href="">X Corp.</a></td>
+				    <td data-value="5000">$5,000</td>
+					<td>Tom Wolfe</td>
+				  </tr>
+				 
+				 </tbody>
+				</table>
+			</div>
+		</div> <!-- end row -->
 		
 		
 		
