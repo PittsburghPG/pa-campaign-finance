@@ -1,1 +1,220 @@
- 
+/***********************************************
+  Added by Allie
+***********************************************/
+
+.inline-amt-desc h2, .stacked-amt-desc h2{
+	font-size: 48px;
+	}
+	
+.inline-amt-desc.block{
+	margin-top: 1em;
+	margin-bottom: 1em;
+	}
+	
+.banner-image{
+	height:200px;
+	}
+	
+img{
+	width:100%;
+	}
+	
+figcaption{
+	color:#666666;
+	font-style: italic;
+	}
+	
+.center{
+	text-align:center;
+	}
+	
+.row{
+	margin-top: 1.25em;
+	margin-bottom:1.25em;
+	}
+	
+.block{
+	border-right:#cccccc 1px solid;
+	}
+	
+.last.block{
+	border:none;
+	}
+	
+.thick-divider{
+	border-bottom:#cccccc 3px solid;
+	margin:1.25em 0;
+	}
+	
+.container .intro-row .jumbotron{
+	background: none;
+	border-radius: 0;
+	margin-left: -15px;
+	margin-right: -15px;
+	padding:0 15px;
+	}
+	
+.jumbotron h1{
+	margin-top:0;
+	}
+
+#search-menu{
+	padding:20px;
+	}
+	
+#search-menu h5{
+	color:#666666;
+	}
+	
+.large{
+	font-size: 2em;
+	}
+	
+.larger{
+	font-size:3em;
+	}
+	
+.jumbo{
+	font-size:4em;
+	}
+	
+.top-totals h2,
+.top-totals h3{
+	margin-top:0;
+	margin-bottom:0;
+	}
+	
+.thin-divider{
+	border-bottom:#cccccc 1px solid;
+	}
+	
+label{
+	font-weight: 200;
+	}
+
+
+@media screen and (max-width: 767px) {
+	.top-totals .col-lg-4 h3{
+		font-size: 1.25em;
+	}
+}
+
+@media (min-width: 768px) {
+
+}
+
+@media (min-width: 992px) {
+	
+	.top-totals .col-lg-4 h3{
+		font-size: 2em;
+	}
+}
+
+@media (min-width: 1200px) {
+
+}
+
+@media (max-width: 480px) and (orientation: landscape) {
+
+}
+
+@media (min-width: 768px) {
+
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+
+}
+
+@media (max-width: 767px) {
+
+}
+
+
+
+/***********************************************
+  End added by Allie
+***********************************************/
+
+
+
+
+body {
+	font-family: 'Open Sans', sans-serif;
+}
+
+#map_canvas {
+	height: 100px;
+	width: 300px;
+	float: right;
+	border: 1px solid lightgray;
+	clear: both;
+	margin-bottom: 10px;
+}
+
+/*small {
+	font-size: 50% !important;
+}
+.divider {
+	padding-bottom: 10px;
+	border-bottom: 1px solid lightgray;
+}
+.col-md-3 {
+	border-right: 1px solid lightgray;
+	padding-left: 20px;
+}
+.col-md-3:last-child {
+	border-right: none;
+}
+.col-md-4 {
+	border-left: 1px solid lightgray;
+	border-right: 1px solid lightgray;
+	padding-left: 20px;
+}
+.col-md-4:first-child, .col-md-4:last-child {
+	border: none;
+}
+
+.sm_county_map {
+	width: 250px;
+	height: auto;
+	
+}
+.donor_donations_overview {
+	margin-top: 10px;
+}
+
+.section_header {
+	font-weight: bold !important;
+}
+
+.top_space20 {
+	margin-top: 40px;
+}
+h1 .small {
+	font-size: 45%;
+}
+
+.social {
+	opacity: .5;
+}
+.social:hover {
+	opacity: .7;
+}*/
+
+
+/* Smartphones (portrait and landscape) ----------- */
+/*@media only screen and (max-width: 480px) {
+
+	#map_canvas {
+		float: left;
+	}
+	.intro-row h3 {
+		clear: both;
+		padding-top: 10px;
+	}
+ }*/

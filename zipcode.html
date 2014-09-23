@@ -1,4 +1,5 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 	<head>
 	<!-- GOOGLE ANALYTICS -->
 		<script type="text/javascript">
@@ -42,7 +43,7 @@
 			})();
 		</script>
 		<!--News Beat script ends-->
-		<title>Candidate</title>
+		<title>Zip code</title>
 	 
 	  <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 	  
@@ -79,12 +80,6 @@
 	</head>
 
 <body>
-<!--	<h1>This is an h1. What up.</h1>
-	<h2>And again, with the h2.</h2>
-	<h3>Let's look at an h3.</h3>
-	<h4>Don't be alarmed. It's just an h4.</h4>
-	<h5>Any use for the h5? Anyone? Anyone?</h5>
-	<h6>Surely not an h6. Don't be absurd.</h6> -->
 	
 	
 	<!-- Navigation -->
@@ -106,8 +101,8 @@
 	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 	      
 	      <ul class="nav navbar-nav">
-	        <li class="active"><a href="#">By candidate</a></li>
-	        <li><a href="#">By county</a></li>
+	        <li><a href="#">By candidate</a></li>
+	        <li class="active"><a href="#">By county</a></li>
 	        <li><a href="#">By donor</a></li>
 	      </ul>
 	      
@@ -118,8 +113,7 @@
 	        	<a href="#" data-toggle="collapse" data-target="#search-menu"><span class="glyphicon glyphicon-search"></span></a>
 	        </li>
 	      </ul>
-
-	      
+	      	      
 	      <div id="search-menu" class="collapse nav navbar-nav navbar-right">
 	      	<form role="form">
 						<h4>Filter by:</h4>
@@ -179,128 +173,81 @@
 	<!-- container -->
 	<div class="container">
 		<div class="intro-row">
-			<label>CANDIDATE</label>
+			<label>ZIP CODE</label>
 			<div class="jumbotron ">
-				<h1>Tom Corbett</h1>
+				<h1>15217</h1>
+				<div class="thin-divider"></div>
 			</div>
 		</div>
 	</div>
 	
-	<div class="banner-image" style="background-image: url('img/corbett-header.jpg'); background-size: cover; ">
-	</div>
-	
-	<!-- center all DATA in a container -->
-	<div class="container">
+	<div class="container">			
 		
-		<!-- BIO/TOTALS row -->
-		<div class="row thick-divider">
+		<!-- Map + totals row -->
+		<div class="row ">
 			
-			<!-- BIO -->
-			<div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
-				<p>
-					<span class="fa-stack fa-lg">
-						<i class="fa fa-square fa-stack-2x"></i>
-						<i class="fa fa-birthday-cake fa-stack-1x fa-inverse"></i>
-					</span>
-					<strong>Republican</strong><br>
-					<span class="fa-stack fa-lg">
-						<i class="fa fa-square fa-stack-2x"></i>
-						<i class="fa fa-phone fa-stack-1x fa-inverse"></i>
-					</span>
-					<strong>717.201.2323</strong><br>
-					<span class="fa-stack fa-lg">
-						<i class="fa fa-square fa-stack-2x"></i>
-						<i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
-					</span>
-					<strong>123 S. Main St., Harrisburg, PA 13828</strong><br>
-				</p>
-				<p class="lead">Tom Corbett! What a bro. This is some text about his biography. We'd presumably write it. I don't think it really should be more than three lines. </p>
-			</div><!-- end BIO -->
+			<!-- Line chart -->
+			<div class="col-lg-5 col-md-5 col-sm-4 col-xs-12">
+				<img src="img/allegheny-co.png" alt="Allegheny County map" />
+			</div><!-- end line chart -->
 			
 			<!-- TOTALS -->
-			<div class="col-lg-6 col-md-6 col-sm-7 col-lg-offset-1 col-md-offset-1 top-totals">
+			<div class="col-lg-7 col-md-7 col-sm-8 top-totals">
 				
 				<div class="row">
 					<div class="col-lg-12 col-md-12 col-sm-12">
-						<label>TOTAL RAISED</label>
-						<h2 class="jumbo">$4,999,999</h2>
+						<label>TOTAL CONTRIBUTIONS</label>
+						<h2 class="jumbo">$26.2 million</h2>
 					</div>
 				</div>
 				
 				<div class="row">
 					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 block first">
-						<label>$50 AND OVER</label>
-						<h3>$3,456,223</h3>
+						<h3>88%</h3>
+						<label>Allegheny County represents 88% of total race contributions.</label>
 					</div>
 					
 					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 block">
-						<label>UNDER $50</label>
-						<h3>$1,543,776</h3>
+						<h3>12 cents</h3>
+						<label>Contributions represent 12 cents per capita in Allegheny County.</label>
 					</div>
 					
 					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 block last">
-						<label>MEDIAN DONATION</label>
-						<h3>$200</h3>
+						<label><strong>Corbett:</strong> $13.1 million <br>(75 donations)<br><br>
+						<strong>Wolfe:</strong> $13.1 million <br>(75 donations)</label>
 					</div>
 				</div>
-								
+	
 			</div><!-- end TOTALS -->
-		</div><!-- end  BIO/TOTALS row-->
-		
-		
-		<!-- COUNTY,TIME,TYPE row -->
-		<div class="row">
-			
-			<!-- COUNTY MAP -->
-			<div class="col-lg-8 col-md-8 col-sm-8 block">
-				<h3>County-by-county contributions <i class="fa fa-info-circle"></i></h3>
-				<div class="well">
-					<img src="img/pa-heat-map.png" alt="County-by-county contribution" />
-				</div>
-			</div><!-- end COUNTY MAP -->
-			
-			<!-- TIME/TYPE -->
-			<div class="col-lg-4 col-md-4 col-sm-4">
-				<h3>Over time</h3>
-				<div class="well">
-					<img src="img/over-time-linechart.png" alt="US heat map" />
-				</div>
-				
-				<h3>Type of contribution</h3>
-				<div class="well">
-					<img src="img/contrib-type-barchart.png" alt="Type of contributions" />
-				</div>
-			</div><!-- end TIME/TYPE -->
-			
-		</div><!-- end COUNTY,TIME,TYPE row -->
+		</div><!-- end Map + totals row -->
 		
 		<div class="thin-divider"></div>
+	
+		<!-- Line, bar, pie charts row --> 
+		<div class="row divider">
 		
-		<!-- COUNTRY/STATE/SIZE -->
-		<div class="row">
-		
-			<div class="col-lg-4 col-md-4 col-sm-4 block first">
-				<h3>Countrywide</h3>
-				<img src="img/us-heatmap.gif" alt="US heat map" />
-			</div>
-			
 			<div class="col-lg-4 col-md-4 col-sm-4 block">
-				<h3>In-state / Out-of-state</h3>
-				<img src="img/state-pie-chart.png" alt="US heat map" />
+				<h3>Contributions over time</h3>
+				<img src="img/over-time-linechart.png" alt="Contributions over time" />
+			</div>
+			<div class="col-lg-4 col-md-4 col-sm-4 block">
+				<h3>Contributions by type</h3>
+				<img src="img/contrib-type-barchart.png" alt="Contributions by type" />
+			</div>
+			<div class="col-lg-4 col-md-4 col-sm-4">
+				<h3>Contributions by amount</h3>
+				<img src="img/amount-pie-chart.png" alt="Contributions by amount" />
 			</div>
 			
-			<div class="col-lg-4 col-md-4 col-sm-4 block last">
-				<h3>Donation size</h3>
-				<img src="img/amount-pie-chart.png" alt="US heat map" />
-			</div>
-		
-		</div> <!-- end COUNTRY/STATE/SIZE -->
+		</div><!-- end Line, bar, pie charts row --> 
 		
 		<div class="thin-divider"></div>
 		
-		<div class="row"> <!-- donations table -->
-			<div class="col-lg-12 col-md-12 col-sm-12">
-				<h3>Donations</h3>
+		
+		<!-- donations table row -->
+		<div class="row">
+			<div class="col-lg-12 col-md-12 col-sm-12 ">
+				<h3 class="section_header">Contributions</h3>
 				<form class="form-inline pull-right">
 					<input type="search" class="form-control" placeholder="Search">
 					<button type="submit" class="btn btn-default">Submit</button>
@@ -312,43 +259,61 @@
 					    <th>Donor</th> 
 					    <th>Occupation, Employer</th>
 					    <th>Amount</th>
+						<th>Candidate</th>
 					  </tr>
 					 </thead>
 					
 					<tbody>
 					<tr>
 				    <td data-dateformat="MMM-DD-YYYY">July 5, 2014</td>
-				    <td>Jack Smith</td> 
-				    <td>CEO, Some Company</td>
-				    <td data-value="2500">$2,500</td>
+				    <td><a href="">Jane Doe</a></td> 
+				    <td>CEO, <a href="">X Corp.</a></td>
+				    <td data-value="5000">$5,000</td>
+					<td>Tom Corbett</td>
 				  </tr>
 				  <tr>
 				    <td data-dateformat="MMM-DD-YYYY">July 7, 2014</td>
-				    <td>Doris Jackson</td> 
-				    <td> --- </td>
-				    <td data-value="125">$125</td>
+				    <td><a href="">Jane Doe</a></td> 
+				    <td>CEO, <a href="">X Corp.</a></td>
+				    <td data-value="5000">$5,000</td>
+					<td>Tom Wolfe</td>
 				  </tr>
-				  <tr>
-				    <td data-dateformat="MMM-DD-YYYY">July 23, 2014</td>
-				    <td>Sally Griffith</td> 
-				    <td>Dunder Mifflin</td>
-				    <td data-value="1200000000000000">$1,200,000,000,000,000</td>
-				  </tr>
-				  <tr>
-				    <td data-dateformat="MMM-DD-YYYY">August 8, 2014</td>
-				    <td>Kimberly Kirsch</td> 
-				    <td>Wabtec, Systems Analyst</td>
-				    <td data-value="1200.75">$1,200.75</td>
-				  </tr>
+				 
 				 </tbody>
 				</table>
 			</div>
-		</div> <!-- end row -->
+		</div> <!-- end donations table row -->
 		
 		
 		
-	</div> <!-- end DATA container -->
-
+		
+	</div> <!-- end container -->
+<script type='text/javascript'>
+			var _sf_async_config={};
+			/** CONFIGURATION START **/
+			_sf_async_config.uid = 34530;
+			_sf_async_config.domain = 'post-gazette.com';
+			_sf_async_config.sections = 'Refugees';  
+			_sf_async_config.authors = 'Moriah Balingit, Julia Rendleman';  
+			_sf_async_config.path = "/refugees";			
+			/** CONFIGURATION END **/
+			(function(){
+			  function loadChartbeat() {
+				window._sf_endpt=(new Date()).getTime();
+				var e = document.createElement('script');
+				e.setAttribute('language', 'javascript');
+				e.setAttribute('type', 'text/javascript');
+				e.setAttribute('src',
+				   (('https:' == document.location.protocol) ? 'https://a248.e.akamai.net/chartbeat.download.akamai.com/102508/' : 'http://static.chartbeat.com/') +
+				   'js/chartbeat.js');
+				document.body.appendChild(e);
+			  }
+			  var oldonload = window.onload;
+			  window.onload = (typeof window.onload != 'function') ?
+				 loadChartbeat : function() { oldonload(); loadChartbeat(); };
+			})();
+		</script>
 </body>
 
 </html>
+
