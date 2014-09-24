@@ -53,14 +53,14 @@ figcaption{
 .block{
 	border-right:#cccccc 1px solid;
 	}
-
+	
+	.block:last-child {
+		border:none;
+	}
+	
 .lead {
 	font-size:19px;
 }
-	
-.last.block{
-	border:none;
-	}
 	
 .thick-divider{
 	border-bottom:#cccccc 3px solid;
@@ -113,7 +113,57 @@ label{
 	font-weight: 200;
 	}
 
+table.horizontal-bar-graph {
+	border-spacing: 0;
+    border-collapse: collapse;
+	width:100%;
+}
+	table.horizontal-bar-graph tr td {
+		border-bottom:1px solid lightgray;
+		padding: 10px 0px;
+	}
+		
+		table.horizontal-bar-graph tr:last-child td {
+			border-bottom:0px;
+		}
+		
+		table.horizontal-bar-graph tr td:first-child {
+			width:65px;
+		}
+		
+		table.horizontal-bar-graph tr td .bar {
+		
+			padding:5px;
+			box-shadow: inset 0 -1px 0 rgba(0,0,0,.15);
+			border-radius:5px;
+			font-weight:600;
+			color: rgba(255,255,255,.8);
+		}
+			
+			table.horizontal-bar-graph tr td .bar.democrat {
+				background-color: #0B6BCF;
+			}
+			
+			table.horizontal-bar-graph tr td .bar.republican {
+				background-color:#B62C33;
+			}
 
+.big-number-with-wrapped-text {
+
+}
+
+	.big-number-with-wrapped-text h3 {
+		float:left;
+		display:inline;
+		font-size:40pt;
+		float:left;
+		margin-right: 15px;
+	}
+	
+	.big-number-with-wrapped-text label {
+		display:inline;
+	}
+	
 @media screen and (max-width: 767px) {
 	.top-totals .col-lg-4 h3{
 		font-size: 1.25em;
