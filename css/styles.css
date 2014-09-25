@@ -33,6 +33,10 @@ figcaption{
 	margin-bottom:1.25em;
 	}
 	
+	.row:first-child {
+		margin-top:0;
+	}
+	
 	.row.graphs {
 		margin-bottom:15px;
 	}
@@ -44,6 +48,10 @@ figcaption{
 	.row.tabular{
 	
 	}
+		
+		.row.tabular table {
+			margin-top:20px;
+		}
 	
 		.row.tabular h3{
 			float:left;
@@ -119,7 +127,7 @@ table.horizontal-bar-graph {
 	width:100%;
 }
 	table.horizontal-bar-graph tr td {
-		border-bottom:1px solid lightgray;
+		border-bottom:1px dotted lightgray;
 		padding: 10px 0px;
 	}
 		
