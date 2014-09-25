@@ -33,7 +33,7 @@ figcaption{
 	margin-bottom:1.25em;
 	}
 	
-	.row:first-child {
+	.row .row:first-child {
 		margin-top:0;
 	}
 	
