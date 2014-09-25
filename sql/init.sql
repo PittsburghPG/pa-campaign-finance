@@ -73,3 +73,17 @@ CREATE TABLE campaign_finance.filings
 	PRIMARY KEY (`id`),
 	UNIQUE KEY `id` (`id`)
 );
+
+/* CREATE candidate table */
+DROP TABLE IF EXISTS campaign_finance.candidates;
+CREATE TABLE campaign_finance.candidates
+(
+	`id` 				bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+	`filerid` 			char varying(8)		DEFAULT NULL,
+	`year`				int					DEFAULT NULL,
+	`race`				char varying(50)	DEFAULT NULL,
+	`candidate`			char varying(50)	DEFAULT NULL,
+	`party`				char varying(50)	DEFAULT NULL,	
+	PRIMARY KEY (`id`),
+	UNIQUE KEY `id` (`id`)
+);
