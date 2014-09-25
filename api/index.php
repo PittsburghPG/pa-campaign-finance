@@ -1,5 +1,7 @@
 <?PHP
 
+// will want to add /year and /race endpoints at some point
+
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
@@ -20,8 +22,6 @@ class MyAPI extends API{
 	}
 	
 	protected function contributions(){
-	
-		// Returns donation ID, donation amount, donation contributor, donation recipient, donation date, donation description
 		$select = "SELECT id,
 						contribution, 
 						contributor,
@@ -44,17 +44,22 @@ class MyAPI extends API{
 				while( sizeof($this -> args) > 0 ){
 					$where .= $this -> addConditions( array_shift($this -> args), array_shift($this -> args)  );
 				}
-			}
-			
+			}	
 		}
 		
-		echo $select . $from . $join . $where;
+		// Check for parameters
+		$where = $this -> addParameters(array_slice($this -> request, 1), $where);
+		
+		// Run main query
 		$res = $this->mysqli -> query($select . $from . $join . $where);
-		$output = Array();
+		$results = Array();
 		while($row = mysqli_fetch_assoc($res)){
-			$output[] = $row;
+			$results[] = $row;
 		}
 		
+		// Dump query in JSON for debugging
+		$output["sql"] = $this->formatSQL($select . $from . $join . $where);
+		$output["results"] = $results;
 		return $output;
 
 	}
@@ -100,11 +105,13 @@ class MyAPI extends API{
 			}	
 		}
 		
-		echo  $select . $from . $join . $where . $group;
+		// Check for parameters
+		$where = $this -> addParameters(array_slice($this -> request, 1), $where);
+		
 		// Run main query
 		$res = $this->mysqli->query($select . $from . $join . $where . $group);
 		
-		$output = Array();
+		$results = Array();
 		while($row = mysqli_fetch_assoc($res)){
 			// For each row, break down how much candidate got
 			$filers_array = Array();
@@ -119,9 +126,12 @@ class MyAPI extends API{
 				$filers_array[] = $sub_row;
 			}
 			$row["beneficiaries"] = $filers_array;
-			$output[] = $row;
+			$results[] = $row;
 		}
 		
+		// Dump query into JSON for debugging
+		$output["sql"] = $this->formatSQL($select . $from . $join . $where . $group);
+		$output["results"] = $results;
 		return $output;
 
 	}
@@ -161,14 +171,19 @@ class MyAPI extends API{
 			}	
 		}
 		
-		echo  $select . $from . $join . $where . $group;
+		// Check for parameters
+		$where = $this -> addParameters(array_slice($this -> request, 1), $where);
+		
 		// Run main query
 		$res = $this->mysqli->query($select . $from . $join . $where . $group);
-		$output = Array();
+		$results = Array();
 		while($row = mysqli_fetch_assoc($res)){
-			$output[] = $row;
+			$results[] = $row;
 		}
 		
+		// Dump query into JSON for debugging
+		$output["sql"] = $this->formatSQL($select . $from . $join . $where . $group);
+		$output["results"] = $results;
 		return $output;
 
 	}
@@ -176,18 +191,74 @@ class MyAPI extends API{
 	protected function addConditions($category, $arg){
 		switch($category){
 			case "contributors":
-				return "AND contributor = '" . $this->mysqli -> real_escape_string($arg) . "'";
+				return "AND contributions.contributor = '" . $this->mysqli -> real_escape_string($arg) . "'";
 			break;
+			
 			case "filers":
 				return "AND filers.name = '" . $this->mysqli -> real_escape_string($arg) . "'";
 			break;
 			
+			case "zip":
+				return "AND contributions.newzip = '" . $this->mysqli -> real_escape_string($arg) . "'";
 			
 		}
 	}
 	
-	protected function addQueries(){
+	protected function addParameters($parameters, $where){
+		if( sizeof($parameters) > 0 ){
+			foreach( $parameters as $key => $value ){
+				if( $value ) {
+					switch($key) {
+						case "contributor":
+							$where .= "AND contributions.contributor LIKE '%" . $this->mysqli -> real_escape_string($value) . "%' ";
+						break;
+						
+						case "filer":
+							$where .= "AND filers.name LIKE '%" . $this->mysqli -> real_escape_string($value) . "%' ";
+						break;
+						
+						case "contributor_city":
+							$where .= "AND contributions.city LIKE '%" . $this->mysqli -> real_escape_string($value) . "%' "; 
+						break;
+						
+						case "contributor_zip":
+							$where .= "AND contributions.zip LIKE '%" . $this->mysqli -> real_escape_string($value) . "%' "; 
+						break;
+						
+						case "employer":
+							$where .= "AND contributions.empName LIKE '%" . $this->mysqli -> real_escape_string($value) . "%' "; 
+						break;
+						
+						case "startDate":
+							$value = date("Y-m-d", strtotime($value));
+							$where .= "AND contributions.date >= '" . $this->mysqli -> real_escape_string($value) . "' "; 
+						break;
+						
+						case "endDate":
+							$value = date("Y-m-d", strtotime($value));
+							$where .= "AND contributions.date <= '" . $this->mysqli -> real_escape_string($value) . "' "; 
+						break;
+						
+						case "startAmount":
+							$value = floatval($value);
+							$where .= "AND contributions.amount >= " . $this->mysqli -> real_escape_string($value) . " "; 
+						break;
+						
+						case "endAmount":
+							$value = floatval($value);
+							$where .= "AND contributions.amount <= " . $this->mysqli -> real_escape_string($value) . " "; 
+						break;
+					}
+				} else {
+						
+				}
+			}
+		}
+		return $where;
+	}
 	
+	protected function formatSQL($sql){
+		return preg_replace("/\s+/", " ", $sql);
 	}
 	
 }
