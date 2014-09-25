@@ -82,7 +82,7 @@ CREATE TABLE campaign_finance.candidates
 	`filerid` 			char varying(8)		DEFAULT NULL,
 	`year`				int					DEFAULT NULL,
 	`race`				char varying(50)	DEFAULT NULL,
-	`candidate`			char varying(50)	DEFAULT NULL,
+	`name`				char varying(50)	DEFAULT NULL,
 	`party`				char varying(50)	DEFAULT NULL,	
 	PRIMARY KEY (`id`),
 	UNIQUE KEY `id` (`id`)
