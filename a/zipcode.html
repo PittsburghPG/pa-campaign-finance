@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	<!-- GOOGLE ANALYTICS -->
+		<script type="text/javascript">
+		
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-15716261-1']);
+		_gaq.push(['_setDomainName', 'post-gazette.com']);
+		_gaq.push(['_trackPageview']);
+		
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+		
+		</script>
+		<!-- end Google Analytics -->
+	<!--News Beat script -->
+		<script type='text/javascript'>
+			var _sf_async_config={};
+			/** CONFIGURATION START **/
+			_sf_async_config.uid = 34530;
+			_sf_async_config.domain = 'post-gazette.com';
+			_sf_async_config.sections = 'News';  //CHANGE THIS
+			_sf_async_config.authors = 'Moriah Balingit, Julia Rendleman';    //CHANGE THIS
+			/** CONFIGURATION END **/
+			(function(){
+			  function loadChartbeat() {
+				window._sf_endpt=(new Date()).getTime();
+				var e = document.createElement('script');
+				e.setAttribute('language', 'javascript');
+				e.setAttribute('type', 'text/javascript');
+				e.setAttribute('src',
+				   (('https:' == document.location.protocol) ? 'https://a248.e.akamai.net/chartbeat.download.akamai.com/102508/' : 'http://static.chartbeat.com/') +
+				   'js/chartbeat.js');
+				document.body.appendChild(e);
+			  }
+			  var oldonload = window.onload;
+			  window.onload = (typeof window.onload != 'function') ?
+				 loadChartbeat : function() { oldonload(); loadChartbeat(); };
+			})();
+		</script>
+		<!--News Beat script ends-->
+		<title>Zip code</title>
+	 
+	  <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	  
+		<!-- Optional theme -->
+		<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">-->
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+		<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+		<link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+		<link href="stylesheets/styles.css" rel="stylesheet" type="text/css" />
+		<link href="css/styles.css" rel="stylesheet" type="text/css" />
+		
+		<!-- Latest compiled and minified JavaScript -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="javascripts/moment.min.js"></script>
+		<script type="text/javascript"
+	      src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBJJn3Cpmeni2OCnm9ZcduTTK4hC-rTRWk&sensor=true"></script>
+		<script type="text/javascript" src="js/scripts.js"></script>
+		
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+		<meta property="og:type"            content="article" /> 
+		<meta property="og:url"             content="http://newsinteractive.post-gazette.com/camp_finance" /> 
+		<meta property="og:title"           content="" /> 
+		<meta property="og:description"     content="" /> 
+		<meta property="og:image"           content="" /> 
+	
+		<meta name="twitter:card" 			content="summary">
+		<meta name="twitter:site" 			content="@pittsburghpg">
+		<meta name="twitter:creator"		content="@pgpolitweets">
+		<meta name="twitter:title"			content="">
+		<meta name="twitter:description"	content="">
+		<meta name="twitter:image" 			content="">
+	</head>
+
+<body>
+	
+	
+	<!-- Navigation -->
+	<nav class="navbar navbar-default" role="navigation">
+	  <div class="container">
+	    <!-- Brand and toggle get grouped for better mobile display -->
+	    
+	    <div class="navbar-header">
+	      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+	        <span class="sr-only">Toggle navigation</span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	      </button>
+	      <a class="navbar-brand" href="#">Campaign Finance Project</a>
+	    </div>
+	
+	    <!-- Collect the nav links, forms, and other content for toggling -->
+	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+	      
+	      <ul class="nav navbar-nav">
+	        <li><a href="#">By candidate</a></li>
+	        <li class="active"><a href="#">By county</a></li>
+	        <li><a href="#">By donor</a></li>
+	      </ul>
+	      
+	      <ul class="nav navbar-nav navbar-right">
+	      	<li><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://newsinteractive.post-gazette.com/campaign_finance"><i class="fa fa-lg fa-twitter"></i></a></li>
+			 <li><a target="_blank" href="https://twitter.com/intent/tweet?original_referer=http%3A%2F%2Fnewsinteractive.post-gazette.com%2Flongform%2Fstories%2Frefugees%2F&text=Examine each gubernatorial candidate's war chest for 2014':&:tw_p=tweetbutton&url=http://newsinteractive.post-gazette.com/campaign_finance"><i class="fa fa-lg fa-facebook"></i></a></li>
+			 <li class="dropdown">
+	        	<a href="#" data-toggle="collapse" data-target="#search-menu"><span class="glyphicon glyphicon-search"></span></a>
+	        </li>
+	      </ul>
+	      	      
+	      <div id="search-menu" class="collapse nav navbar-nav navbar-right">
+	      	<form role="form">
+						<h4>Filter by:</h4>
+						<div class="row">
+							<div class="form-group col-lg-6 col-md-6 col-sm-6">
+								<h5 for="candidate">Candidate</h5>
+								<input class="form-control" name="candidate" type="text" placeholder="Candidate">
+							</div>
+							<div class="form-group col-lg-6 col-md-6 col-sm-6">
+								<h5 for="county">County</h5>
+								<input class="form-control" name="county" type="text" placeholder="County">
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-lg-6 col-md-6 col-sm-6">
+								<h5 for="donor">Donor</h5>
+								<input class="form-control" name="donor" type="text" placeholder="Donor">
+							</div>
+							<div class="form-group col-lg-6 col-md-6 col-sm-6">
+								<h5 for="employer">Employer</h5>
+								<input class="form-control" name="employer" type="text" placeholder="Employer">
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-lg-6 col-md-6 col-sm-6">
+								<h5 for="startdate">Start date</h5>
+								<input class="form-control" type="date" name="startdate" id="startdate">
+							</div>
+							<div class="form-group col-lg-6 col-md-6 col-sm-6">
+								<h5 for="enddate">End date</h5>
+								<input class="form-control" type="date" name="enddate" id="enddate">
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-lg-6 col-md-6 col-sm-6">
+								<h5 for="amtstart">Amount start</h5>
+								<div class="input-group">
+									<span class="input-group-addon">$</span>
+									<input class="form-control" type="text" name="amtstart" id="amtstart">
+								</div>
+							</div>
+							<div class="form-group col-lg-6 col-md-6 col-sm-6">
+								<h5 for="amtend">Amount end</h5>
+								<div class="input-group">
+									<span class="input-group-addon">$</span>
+									<input class="form-control" type="text" name="amend" id="amend">
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>   
+
+	    </div><!-- /.navbar-collapse -->
+	  </div><!-- /.container-fluid -->
+	</nav>
+		
+	<!-- container -->
+	<div class="container">
+		<div class="intro-row">
+			<label>ZIP CODE</label>
+			<div class="jumbotron ">
+				<h1>15217</h1>
+				<div class="thin-divider"></div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="container">			
+		
+		<!-- Map + totals row -->
+		<div class="row ">
+			
+			<!-- Line chart -->
+			<div class="col-lg-5 col-md-5 col-sm-4 col-xs-12">
+				<img src="img/allegheny-co.png" alt="Allegheny County map" />
+			</div><!-- end line chart -->
+			
+			<!-- TOTALS -->
+			<div class="col-lg-7 col-md-7 col-sm-8 top-totals">
+				
+				<div class="row">
+					<div class="col-lg-12 col-md-12 col-sm-12">
+						<label>TOTAL CONTRIBUTIONS</label>
+						<h2 class="jumbo">$26.2 million</h2>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 block first">
+						<h3>88%</h3>
+						<label>Allegheny County represents 88% of total race contributions.</label>
+					</div>
+					
+					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 block">
+						<h3>12 cents</h3>
+						<label>Contributions represent 12 cents per capita in Allegheny County.</label>
+					</div>
+					
+					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 block last">
+						<label><strong>Corbett:</strong> $13.1 million <br>(75 donations)<br><br>
+						<strong>Wolfe:</strong> $13.1 million <br>(75 donations)</label>
+					</div>
+				</div>
+	
+			</div><!-- end TOTALS -->
+		</div><!-- end Map + totals row -->
+		
+		<div class="thin-divider"></div>
+	
+		<!-- Line, bar, pie charts row --> 
+		<div class="row divider">
+		
+			<div class="col-lg-4 col-md-4 col-sm-4 block">
+				<h3>Contributions over time</h3>
+				<img src="img/over-time-linechart.png" alt="Contributions over time" />
+			</div>
+			<div class="col-lg-4 col-md-4 col-sm-4 block">
+				<h3>Contributions by type</h3>
+				<img src="img/contrib-type-barchart.png" alt="Contributions by type" />
+			</div>
+			<div class="col-lg-4 col-md-4 col-sm-4">
+				<h3>Contributions by amount</h3>
+				<img src="img/amount-pie-chart.png" alt="Contributions by amount" />
+			</div>
+			
+		</div><!-- end Line, bar, pie charts row --> 
+		
+		<div class="thin-divider"></div>
+		
+		
+		<!-- donations table row -->
+		<div class="row">
+			<div class="col-lg-12 col-md-12 col-sm-12 ">
+				<h3 class="section_header">Contributions</h3>
+				<form class="form-inline pull-right">
+					<input type="search" class="form-control" placeholder="Search">
+					<button type="submit" class="btn btn-default">Submit</button>
+				</form>
+				<table class="table table-hover sortable">
+					<thead>
+						<tr>
+					    <th>Date</th>
+					    <th>Donor</th> 
+					    <th>Occupation, Employer</th>
+					    <th>Amount</th>
+						<th>Candidate</th>
+					  </tr>
+					 </thead>
+					
+					<tbody>
+					<tr>
+				    <td data-dateformat="MMM-DD-YYYY">July 5, 2014</td>
+				    <td><a href="">Jane Doe</a></td> 
+				    <td>CEO, <a href="">X Corp.</a></td>
+				    <td data-value="5000">$5,000</td>
+					<td>Tom Corbett</td>
+				  </tr>
+				  <tr>
+				    <td data-dateformat="MMM-DD-YYYY">July 7, 2014</td>
+				    <td><a href="">Jane Doe</a></td> 
+				    <td>CEO, <a href="">X Corp.</a></td>
+				    <td data-value="5000">$5,000</td>
+					<td>Tom Wolfe</td>
+				  </tr>
+				 
+				 </tbody>
+				</table>
+			</div>
+		</div> <!-- end donations table row -->
+		
+		
+		
+		
+	</div> <!-- end container -->
+<script type='text/javascript'>
+			var _sf_async_config={};
+			/** CONFIGURATION START **/
+			_sf_async_config.uid = 34530;
+			_sf_async_config.domain = 'post-gazette.com';
+			_sf_async_config.sections = 'Refugees';  
+			_sf_async_config.authors = 'Moriah Balingit, Julia Rendleman';  
+			_sf_async_config.path = "/refugees";			
+			/** CONFIGURATION END **/
+			(function(){
+			  function loadChartbeat() {
+				window._sf_endpt=(new Date()).getTime();
+				var e = document.createElement('script');
+				e.setAttribute('language', 'javascript');
+				e.setAttribute('type', 'text/javascript');
+				e.setAttribute('src',
+				   (('https:' == document.location.protocol) ? 'https://a248.e.akamai.net/chartbeat.download.akamai.com/102508/' : 'http://static.chartbeat.com/') +
+				   'js/chartbeat.js');
+				document.body.appendChild(e);
+			  }
+			  var oldonload = window.onload;
+			  window.onload = (typeof window.onload != 'function') ?
+				 loadChartbeat : function() { oldonload(); loadChartbeat(); };
+			})();
+		</script>
+</body>
+
+</html>
+

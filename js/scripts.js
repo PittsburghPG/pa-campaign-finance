@@ -8,4 +8,8 @@ $(document).ready(function() {
   map = new google.maps.Map(document.getElementById('map_canvas'),
       mapOptions);
 
+  //parse url
+  var pathname = window.location.pathname;
+  console.log(pathname);
+	  
 });
