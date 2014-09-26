@@ -11,15 +11,26 @@ $(document).ready(function() {
  //parse url
  var pathname = window.location.pathname; //get current url
  var split = pathname.split("/"); //treat it like a string, break it up where the /'s are
- //console.log(split[2]);
+ //console.log(split[2]); 
  
  //case statement
  switch(split[2]) { //the second item in the array will be the type of page this will be
     case "candidate":
         $('#bycandidate').addClass('active'); //make the dropdown menu active on the correct item
+		
+		
 		var candName = decodeURIComponent(split[3]); //grab the candidate name from the url
 		console.log(toTitleCase(candName));
-        break;
+        
+		
+		
+		
+		
+		
+		
+		
+		
+		break;
     case "county":
       $('#bycounty').addClass('active');
 	  var countyName = split[3];
