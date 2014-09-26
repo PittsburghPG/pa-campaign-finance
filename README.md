@@ -69,7 +69,7 @@ A Post-Gazette/PublicSource collaboration cataloging campaign finance figures fo
   * **Code:** 200 <br />
     **Content:** 
         
-        {
+        ```{
             "sql": "SELECT contributions.id, 
                            contribution, 
                            contributor, 
@@ -100,7 +100,7 @@ A Post-Gazette/PublicSource collaboration cataloging campaign finance figures fo
                 }
                 ...
             ]
-        } 
+        }```
 	    
  
 * **Error Response:**
