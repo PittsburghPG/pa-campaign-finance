@@ -68,39 +68,40 @@ A Post-Gazette/PublicSource collaboration cataloging campaign finance figures fo
 
   * **Code:** 200 <br />
     **Content:** 
-            
+    ```
+    {
+        "sql": "SELECT contributions.id, 
+                       contribution, 
+                       contributor, 
+                       filers.name, 
+                       date, 
+                       description 
+                FROM campaign_finance.contributions 
+                LEFT JOIN campaign_finance.filers ON contributions.filerid = filers.filerid 
+                LEFT JOIN campaign_finance.candidates ON contributions.filerid = candidates.filerid 
+                WHERE 1=1 
+                  AND candidates.name = 'Tom Corbett'",
+        "results": [
             {
-                "sql": "SELECT contributions.id, 
-                               contribution, 
-                               contributor, 
-                               filers.name, 
-                               date, 
-                               description 
-                        FROM campaign_finance.contributions 
-                        LEFT JOIN campaign_finance.filers ON contributions.filerid = filers.filerid 
-                        LEFT JOIN campaign_finance.candidates ON contributions.filerid = candidates.filerid 
-                        WHERE 1=1 
-                          AND candidates.name = 'Tom Corbett'",
-                "results": [
-                    {
-                        "id": "1",
-                        "contribution": "150",
-                        "contributor": "FRANK C. BYHAM",
-                        "name": "TOM CORBETT FOR GOVERNOR",
-                        "date": "2013-12-19",
-                        "description": ""
-                    },
-                    {
-                        "id": "2",
-                        "contribution": "250",
-                        "contributor": "JAMES H. MCCUNE",
-                        "name": "TOM CORBETT FOR GOVERNOR",
-                        "date": "2013-05-14",
-                        "description": ""
-                    }
-                    ...
-                ]
-            } 
+                "id": "1",
+                "contribution": "150",
+                "contributor": "FRANK C. BYHAM",
+                "name": "TOM CORBETT FOR GOVERNOR",
+                "date": "2013-12-19",
+                "description": ""
+            },
+            {
+                "id": "2",
+                "contribution": "250",
+                "contributor": "JAMES H. MCCUNE",
+                "name": "TOM CORBETT FOR GOVERNOR",
+                "date": "2013-05-14",
+                "description": ""
+            }
+            ...
+        ]
+    } 
+	```
  
 * **Error Response:**
 
