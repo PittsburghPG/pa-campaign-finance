@@ -21,51 +21,69 @@ class MyAPI extends API{
 		}
 	}
 	
-	protected function contributions(){
-		$select = "SELECT id,
-						contribution, 
-						contributor,
-						filers.name,
-						date, 
-						description ";
-						
-		$from = "FROM campaign_finance.contributions ";
-		$join = "LEFT JOIN campaign_finance.filers on contributions.filerid = filers.filerid ";
-		$where = "WHERE 1=1 ";
-		
+	public function queryAPI($query, $identifier_query, $handler_function){
 		// See if args exist
 		if( sizeof($this -> args) > 0 ){
 			// If there's only one arg, it's an identifer
 			if( sizeof($this -> args) == 1 ){
-				$where .= "AND id = '" . $this->mysqli -> real_escape_string($this -> args[0]) . "' ";
+				$query["where"] .= sprintf($identifier_query, $this->mysqli -> real_escape_string($this -> args[0]));
 			}
 			// Now we know it's a series of verbs doing their thing
 			else {
 				while( sizeof($this -> args) > 0 ){
-					$where .= $this -> addConditions( array_shift($this -> args), array_shift($this -> args)  );
+					$query["where"] .= $this -> addConditions( array_shift($this -> args), array_shift($this -> args)  );
 				}
 			}	
 		}
 		
 		// Check for parameters
-		$where = $this -> addParameters(array_slice($this -> request, 1), $where);
+		$query = $this -> addParameters(array_slice($this -> request, 1), $query);
+		
 		
 		// Run main query
-		$res = $this->mysqli -> query($select . $from . $join . $where);
-		$results = Array();
-		while($row = mysqli_fetch_assoc($res)){
-			$results[] = $row;
-		}
+		$res = $this->mysqli -> query($query["select"] . $query["from"] . $query["join"] . $query["where"] . $query["group"]);
 		
-		// Dump query in JSON for debugging
-		$output["sql"] = $this->formatSQL($select . $from . $join . $where);
-		$output["results"] = $results;
-		return $output;
-
+		// Use special handler function if one is included, 
+		// otherwise parse results the default way
+		if( is_callable( $handler_function ) ) {
+			return $handler_function($res, $query);
+		} else {
+			$results = Array();
+			while($row = mysqli_fetch_assoc($res)){
+				$results[] = $row;
+			}
+			
+			// Dump query in JSON for debugging
+			$output["sql"] = $this->formatSQL($query["select"] . $query["from"] . $query["join"] . $query["where"] . $query["group"]);
+			$output["results"] = $results;
+			return $output;
+		}
 	}
 	
-	protected function contributors(){
-		$select = "SELECT contributor,
+	public function contributions(){
+		$query["select"] = "SELECT contributions.id,
+						contribution, 
+						contributor,
+						filers.name,
+						filers.filerid,
+						date, 
+						description ";
+						
+		$query["from"] = "FROM campaign_finance.contributions ";
+		$query["join"] = "LEFT JOIN campaign_finance.filers on contributions.filerid = filers.filerid  ";
+		$query["join"] .= "LEFT JOIN campaign_finance.candidates on contributions.filerid = candidates.filerid  ";
+		$query["where"] = "WHERE 1=1 ";
+		$query["group"] = " ";
+		
+		return $this->queryAPI($query, "AND contributions.id = '%s' ", "");
+		
+		
+	}
+	
+	
+	
+	public function contributors(){
+		$query["select"] = "SELECT contributor,
 						contributions.address, 
 						contributions.address2,
 						contributions.city,
@@ -81,69 +99,56 @@ class MyAPI extends API{
 						COUNT(contribution) as contributions,
 						SUM(contribution) as total_contribution ";
 						
-		$from = "FROM campaign_finance.contributions ";
-		$join = "LEFT JOIN campaign_finance.filers on contributions.filerid = filers.filerid ";
-		$where = "WHERE 1=1 ";
-		$group = "GROUP BY  contributor, 
+		$query["from"] = "FROM campaign_finance.contributions ";
+		$query["join"] = "LEFT JOIN campaign_finance.filers on contributions.filerid = filers.filerid ";
+		$query["join"] .= "LEFT JOIN campaign_finance.candidates on contributions.filerid = candidates.filerid ";
+		$query["where"] = "WHERE 1=1 ";
+		$query["group"] = "GROUP BY  contributor, 
 							contributions.address, 
 							contributions.address2,
 							contributions.city,
 							contributions.state,
 							contributions.zip ";
 							
-		// See if args exist
-		if( sizeof($this -> args) > 0 ){
-			// If there's only one arg, it's an identifer
-			if( sizeof($this -> args) == 1 ){
-				$where .= "AND contributor = '" . $this->mysqli->real_escape_string($this -> args[0]) . "' ";
-			}
-			// Now we know it's a series of verbs doing their thing
-			else {
-				while( sizeof($this -> args) > 0 ){
-					$where .= $this -> addConditions( array_shift($this -> args), array_shift($this -> args)  );
+		$that = $this;
+		return $this->queryAPI($query, "AND contributions.name = '%s' ", function($res, $query) use ($that) {
+			$results = Array();
+			while($row = mysqli_fetch_assoc($res)){
+				// For each row, break down how much candidate got
+				$filers_array = Array();
+				//echo "SELECT filers.name, SUM(contribution) as contribution " . $query["from"] . $query["join"] . $query["where"]  . " AND contributor = '" . $row["contributor"] . "' " . "GROUP BY filers.name ";
+				$sub_res = $that->mysqli->query("SELECT filers.name, 
+														SUM(contribution) as contribution " 
+												. $query["from"] 
+												. $query["join"] 
+												. $query["where"] . " AND contributor = '" . $that->mysqli->real_escape_string($row["contributor"]) . "' "
+												. "GROUP BY filers.name ");
+				while($sub_row = mysqli_fetch_assoc($sub_res)) {
+					$filers_array[] = $sub_row;
 				}
-			}	
-		}
-		
-		// Check for parameters
-		$where = $this -> addParameters(array_slice($this -> request, 1), $where);
-		
-		// Run main query
-		$res = $this->mysqli->query($select . $from . $join . $where . $group);
-		
-		$results = Array();
-		while($row = mysqli_fetch_assoc($res)){
-			// For each row, break down how much candidate got
-			$filers_array = Array();
-			//echo "SELECT filers.name, SUM(contribution) as contribution " . $from . $join . $where  . " AND contributor = '" . $row["contributor"] . "' " . "GROUP BY filers.name ";
-			$sub_res = $this->mysqli->query("SELECT filers.name, 
-													SUM(contribution) as contribution " 
-											. $from 
-											. $join 
-											. $where . " AND contributor = '" . $this->mysqli->real_escape_string($row["contributor"]) . "' "
-											. "GROUP BY filers.name ");
-			while($sub_row = mysqli_fetch_assoc($sub_res)) {
-				$filers_array[] = $sub_row;
+				$row["beneficiaries"] = $filers_array;
+				$results[] = $row;
 			}
-			$row["beneficiaries"] = $filers_array;
-			$results[] = $row;
-		}
+			// Dump query into JSON for debugging
+			$output["sql"] = $that->formatSQL($query["select"] . $query["from"] . $query["join"] . $query["where"] . $query["group"]);
+			$output["results"] = $results;
+			return $output;	
 		
-		// Dump query into JSON for debugging
-		$output["sql"] = $this->formatSQL($select . $from . $join . $where . $group);
-		$output["results"] = $results;
-		return $output;
+		});
+		
+		
 
 	}
 	
-	protected function filers(){
+	public function filers(){
 	
 		// Returns name, 
-		$select = "SELECT name,
+		$query["select"] = "SELECT filers.name,
+						filers.filerid,
 						type,
 						office, 
 						district,
-						party,
+						filers.party,
 						filers.address1,
 						filers.address2,
 						filers.city,
@@ -152,113 +157,137 @@ class MyAPI extends API{
 						county,
 						phone
 					";
-		$from = "FROM campaign_finance.filers ";
-		$join = "LEFT JOIN campaign_finance.contributions on contributions.filerid = filers.filerid ";
-		$where = "WHERE 1=1 ";
-		$group = "GROUP BY filers.filerid";
+		$query["from"] = "FROM campaign_finance.filers ";
+		$query["join"] = "LEFT JOIN campaign_finance.contributions on contributions.filerid = filers.filerid ";
+		$query["join"] .= "LEFT JOIN campaign_finance.candidates on contributions.filerid = candidates.filerid ";
+		$query["where"] = "WHERE 1=1 ";
+		$query["group"] = "GROUP BY filers.filerid";
 		
-		// See if args exist
-		if( sizeof($this -> args) > 0 ){
-			// If there's only one arg, it's an identifer
-			if( sizeof($this -> args) == 1 ){
-				$where .= "AND name = '" . $this->mysqli -> real_escape_string($this -> args[0]) . "' ";
-			}
-			// Now we know it's a series of verbs doing their thing
-			else {
-				while( sizeof($this -> args) > 0 ){
-					$where .= $this -> addConditions( array_shift($this -> args), array_shift($this -> args)  );
-				}
-			}	
-		}
-		
-		// Check for parameters
-		$where = $this -> addParameters(array_slice($this -> request, 1), $where);
-		
-		// Run main query
-		$res = $this->mysqli->query($select . $from . $join . $where . $group);
-		$results = Array();
-		while($row = mysqli_fetch_assoc($res)){
-			$results[] = $row;
-		}
-		
-		// Dump query into JSON for debugging
-		$output["sql"] = $this->formatSQL($select . $from . $join . $where . $group);
-		$output["results"] = $results;
-		return $output;
-
+		return $this->queryAPI($query, "AND filers.filerid = '%s' ", "");
 	}
 	
-	protected function addConditions($category, $arg){
+	
+	// OK, so, yeah, I had hoped filers would handle this. But we need
+	// some way of differentiating candidates from all the other PACS. 
+	public function candidates(){
+		// Returns name, 
+		$query["select"] = "SELECT candidates.name,
+						candidates.filerid,
+						candidates.party, 
+						candidates.year,
+						candidates.race,
+						SUM(contributions.contribution) as total,
+						COUNT(contributions.contribution) as count
+					";
+		$query["from"] = "FROM campaign_finance.candidates ";
+		$query["join"] = "LEFT JOIN campaign_finance.contributions on contributions.filerid = candidates.filerid ";
+		$query["where"] = "WHERE 1=1 ";
+		$query["group"] = "GROUP BY candidates.name, candidates.year, candidates.race ";
+		
+		return $this->queryAPI($query, "AND candidates.filerid = '%s' ", "");
+	}
+	
+	public function addConditions($category, $arg){
 		switch($category){
 			case "contributors":
-				return "AND contributions.contributor = '" . $this->mysqli -> real_escape_string($arg) . "'";
+				return "AND contributions.contributor = '" . $this->mysqli -> real_escape_string($arg) . "' ";
 			break;
 			
 			case "filers":
-				return "AND filers.name = '" . $this->mysqli -> real_escape_string($arg) . "'";
+				return "AND filers.filerid = '" . $this->mysqli -> real_escape_string($arg) . "' ";
 			break;
 			
-			case "zip":
-				return "AND contributions.newzip = '" . $this->mysqli -> real_escape_string($arg) . "'";
+			case "zips":
+				return "AND contributions.newzip = '" . $this->mysqli -> real_escape_string($arg) . "' ";
+			break;
 			
+			// for now, year just works with /candidates
+			case "years":
+				return "AND candidates.year = '" . $this->mysqli -> real_escape_string($arg) . "' ";
+			break;
+			
+			// for now, race just works with /candidates
+			case "races":
+				return "AND candidates.race = '" . $this->mysqli -> real_escape_string($arg) . "' ";
+			break;
+			
+			case "candidates":
+				return "AND candidates.filerid = '" . $this->mysqli -> real_escape_string($arg) . "' ";
+			break;
 		}
 	}
 	
-	protected function addParameters($parameters, $where){
+	public function addParameters($parameters, $query){
 		if( sizeof($parameters) > 0 ){
 			foreach( $parameters as $key => $value ){
 				if( $value ) {
 					switch($key) {
 						case "contributor":
-							$where .= "AND contributions.contributor LIKE '%" . $this->mysqli -> real_escape_string($value) . "%' ";
+							$query["where"] .= "AND contributions.contributor LIKE '%" . $this->mysqli -> real_escape_string($value) . "%' ";
 						break;
 						
-						case "filer":
-							$where .= "AND filers.name LIKE '%" . $this->mysqli -> real_escape_string($value) . "%' ";
+						case "filername":
+							$query["where"] .= "AND filers.name LIKE '%" . $this->mysqli -> real_escape_string($value) . "%' ";
 						break;
 						
 						case "contributor_city":
-							$where .= "AND contributions.city LIKE '%" . $this->mysqli -> real_escape_string($value) . "%' "; 
+							$query["where"] .= "AND contributions.city LIKE '%" . $this->mysqli -> real_escape_string($value) . "%' "; 
 						break;
 						
 						case "contributor_zip":
-							$where .= "AND contributions.zip LIKE '%" . $this->mysqli -> real_escape_string($value) . "%' "; 
+							$query["where"] .= "AND contributions.zip LIKE '%" . $this->mysqli -> real_escape_string($value) . "%' "; 
 						break;
 						
 						case "employer":
-							$where .= "AND contributions.empName LIKE '%" . $this->mysqli -> real_escape_string($value) . "%' "; 
+							$query["where"] .= "AND contributions.empName LIKE '%" . $this->mysqli -> real_escape_string($value) . "%' "; 
 						break;
 						
 						case "startDate":
 							$value = date("Y-m-d", strtotime($value));
-							$where .= "AND contributions.date >= '" . $this->mysqli -> real_escape_string($value) . "' "; 
+							$query["where"] .= "AND contributions.date >= '" . $this->mysqli -> real_escape_string($value) . "' "; 
 						break;
 						
 						case "endDate":
 							$value = date("Y-m-d", strtotime($value));
-							$where .= "AND contributions.date <= '" . $this->mysqli -> real_escape_string($value) . "' "; 
+							$query["where"] .= "AND contributions.date <= '" . $this->mysqli -> real_escape_string($value) . "' "; 
 						break;
 						
 						case "startAmount":
 							$value = floatval($value);
-							$where .= "AND contributions.amount >= " . $this->mysqli -> real_escape_string($value) . " "; 
+							$query["where"] .= "AND contributions.contribution >= " . $this->mysqli -> real_escape_string($value) . " "; 
 						break;
 						
 						case "endAmount":
 							$value = floatval($value);
-							$where .= "AND contributions.amount <= " . $this->mysqli -> real_escape_string($value) . " "; 
+							$query["where"] .= "AND contributions.contribution <= " . $this->mysqli -> real_escape_string($value) . " "; 
 						break;
+						
+						case "monthly":
+							if( $value == ("true" || "TRUE") ){
+							//$query["group"] 
+							}
 					}
 				} else {
 						
 				}
 			}
 		}
-		return $where;
+		return $query;
 	}
 	
-	protected function formatSQL($sql){
+	public function formatSQL($sql){
 		return preg_replace("/\s+/", " ", $sql);
+	}
+	
+	public function search_for_value_in_array($array, $key, $value){
+		for($i = 0; $i < count($array); $i++){
+			if( array_key_exists($array[$i]["key"]) ){
+				if( $array[$i]["key"] == $value ){
+					return $i;
+				}
+			}
+		}
+		return false; 
 	}
 	
 }
