@@ -41,7 +41,7 @@ class MyAPI extends API{
 		
 		
 		// Run main query
-		$res = $this->mysqli -> query($query["select"] . $query["from"] . $query["join"] . $query["where"] . $query["group"]);
+		$res = $this->mysqli -> query($query["select"] . $query["from"] . $query["join"] . $query["where"] . $query["group"] . $query["order"]);
 		
 		// Use special handler function if one is included, 
 		// otherwise parse results the default way
@@ -54,7 +54,7 @@ class MyAPI extends API{
 			}
 			
 			// Dump query in JSON for debugging
-			$output["sql"] = $this->formatSQL($query["select"] . $query["from"] . $query["join"] . $query["where"] . $query["group"]);
+			$output["sql"] = $this->formatSQL($query["select"] . $query["from"] . $query["join"] . $query["where"] . $query["group"] . $query["order"]);
 			$output["results"] = $results;
 			return $output;
 		}
@@ -74,6 +74,7 @@ class MyAPI extends API{
 		$query["join"] .= "LEFT JOIN campaign_finance.candidates on contributions.filerid = candidates.filerid  ";
 		$query["where"] = "WHERE 1=1 ";
 		$query["group"] = " ";
+		$query["order"] = " ";
 		
 		return $this->queryAPI($query, "AND contributions.id = '%s' ", "");
 		
@@ -84,18 +85,21 @@ class MyAPI extends API{
 	
 	public function contributors(){
 		$query["select"] = "SELECT contributor,
+						contributions.contributorid,
 						contributions.address, 
 						contributions.address2,
 						contributions.city,
 						contributions.state,
-						contributions.zip
-						occupation,
-						empName,
-						empAddress1,
-						empAddress2,
-						empCity,
-						empState,
-						empZip,
+						contributions.zip,
+						contributions.occupation,
+						contributions.empName,
+						contributions.empAddress1,
+						contributions.empAddress2,
+						contributions.empCity,
+						contributions.empState,
+						contributions.empZip,
+						filers.filerid,
+						filers.name,
 						COUNT(contribution) as contributions,
 						SUM(contribution) as total_contribution ";
 						
@@ -108,32 +112,46 @@ class MyAPI extends API{
 							contributions.address2,
 							contributions.city,
 							contributions.state,
-							contributions.zip ";
+							contributions.zip,
+							filers.filerid
+							";
+		$query["order"] = "ORDER BY contributor ASC "; 
 							
 		$that = $this;
 		return $this->queryAPI($query, "AND contributions.name = '%s' ", function($res, $query) use ($that) {
+						
 			$results = Array();
 			while($row = mysqli_fetch_assoc($res)){
-				// For each row, break down how much candidate got
-				$filers_array = Array();
-				//echo "SELECT filers.name, SUM(contribution) as contribution " . $query["from"] . $query["join"] . $query["where"]  . " AND contributor = '" . $row["contributor"] . "' " . "GROUP BY filers.name ";
-				$sub_res = $that->mysqli->query("SELECT filers.name, 
-														SUM(contribution) as contribution " 
-												. $query["from"] 
-												. $query["join"] 
-												. $query["where"] . " AND contributor = '" . $that->mysqli->real_escape_string($row["contributor"]) . "' "
-												. "GROUP BY filers.name ");
-				while($sub_row = mysqli_fetch_assoc($sub_res)) {
-					$filers_array[] = $sub_row;
+				
+				if( $i = $that->search_for_value_in_array($results, "contributorid", $row["contributorid"])) {
+					$results[$i]["contributions"] += $row["contributions"];
+					$results[$i]["amount"] += $row["total_contribution"];
+					$results[$i]["beneficiaries"][] = Array("name" => $row["name"], "filerid" => $row["filerid"], "contributions" => $row["contributions"], "amount" => $row["total_contribution"]);
 				}
-				$row["beneficiaries"] = $filers_array;
-				$results[] = $row;
+				else {
+					$results[] = Array("contributor" => $row["contributor"],
+										"address" => $row["address"],
+										"address2" => $row["address2"],
+										"city" => $row["city"],
+										"state" => $row["state"],
+										"zip" => $row["zip"], 
+										"occupation" => $row["occupation"],
+										"empName" => $row["empName"],
+										"empAddress1" => $row["empAddress2"],
+										"empCity" => $row["empCity"],
+										"empState" => $row["empState"],
+										"empZip" => $row["empZip"],
+										"contributions" => $row["contributions"],
+										"amount" => $row["total_contribution"],
+										"beneficiaries" => Array( Array("name" => $row["name"], "filerid" => $row["filerid"], "contributions" => $row["contributions"], "amount" => $row["total_contribution"]) )
+										);
+				}
 			}
 			// Dump query into JSON for debugging
 			$output["sql"] = $that->formatSQL($query["select"] . $query["from"] . $query["join"] . $query["where"] . $query["group"]);
 			$output["results"] = $results;
 			return $output;	
-		
+			
 		});
 		
 		
@@ -162,6 +180,7 @@ class MyAPI extends API{
 		$query["join"] .= "LEFT JOIN campaign_finance.candidates on contributions.filerid = candidates.filerid ";
 		$query["where"] = "WHERE 1=1 ";
 		$query["group"] = "GROUP BY filers.filerid";
+		$query["order"] = " ";
 		
 		return $this->queryAPI($query, "AND filers.filerid = '%s' ", "");
 	}
@@ -183,6 +202,7 @@ class MyAPI extends API{
 		$query["join"] = "LEFT JOIN campaign_finance.contributions on contributions.filerid = candidates.filerid ";
 		$query["where"] = "WHERE 1=1 ";
 		$query["group"] = "GROUP BY candidates.name, candidates.year, candidates.race ";
+		$query["order"] = " ";
 		
 		return $this->queryAPI($query, "AND candidates.filerid = '%s' ", "");
 	}
@@ -281,8 +301,8 @@ class MyAPI extends API{
 	
 	public function search_for_value_in_array($array, $key, $value){
 		for($i = 0; $i < count($array); $i++){
-			if( array_key_exists($array[$i]["key"]) ){
-				if( $array[$i]["key"] == $value ){
+			if( array_key_exists($key, $array[$i]) ){
+				if( $array[$i][$key] == $value ){
 					return $i;
 				}
 			}
@@ -303,12 +323,6 @@ try {
 } catch (Exception $e) {
     echo json_encode(Array('error' => $e->getMessage()));
 }
-
-/*
-
-
-
- */
 
 
 ?> 
