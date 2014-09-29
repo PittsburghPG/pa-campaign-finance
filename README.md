@@ -35,9 +35,9 @@ A Post-Gazette/PublicSource collaboration cataloging campaign finance figures fo
     * **contributor=[string]<br />**
     Filters by contributor name (wildcarded).<br />
        Example: `contributions/?contributor=andrew`
-    * **filer=[string]<br />**
-    Filters by filer id (wildcarded).<br />
-       Example: `contributions/?filer=2009216`
+    * **filername=[string]<br />**
+    Filters by filer name (wildcarded).<br />
+       Example: `contributions/?filername=corbett`
     * **contributor_city=[string]<br />**
     Filters by contributor's listed city (wildcarded).<br />
        Example: `contributions/?contributor_city=pittsburgh`
@@ -143,9 +143,9 @@ A Post-Gazette/PublicSource collaboration cataloging campaign finance figures fo
 *  **URL Params**
 
        Example: `contributions/?contributor=andrew`
-    * **filer=[string]<br />**
-    Filters by filer id (wildcarded).<br />
-       Example: `contributions/?filer=2009216`
+    * **filername=[string]<br />**
+    Filters by filer name (wildcarded).<br />
+       Example: `contributions/?filername=corbett`
     * **contributor_city=[string]<br />**
     Filters by contributor's listed city (wildcarded).<br />
        Example: `contributors/?contributor_city=pittsburgh`
@@ -278,9 +278,9 @@ A Post-Gazette/PublicSource collaboration cataloging campaign finance figures fo
 	* **contributor=[string]<br />**
     Filters to candidates who have received donation from contributor by contributor name (wildcarded).<br />
        Example: `candidates/?contributor=andrew`
-    * **filer=[string]<br />**
+    * **filername=[string]<br />**
     Filters by filer name (wildcarded).<br />
-       Example: `candidates/?filer=corbett`
+       Example: `candidates/?filername=corbett`
     * **contributor_city=[string]<br />**
     Filters by contributor's listed city (wildcarded).<br />
        Example: `candidates/?contributor_city=pittsburgh`
@@ -333,6 +333,141 @@ A Post-Gazette/PublicSource collaboration cataloging campaign finance figures fo
                 "race": "GOV",
                 "total": null,
                 "count": "0"
+            }
+        ]
+    }
+	```
+	
+ 
+* **Error Response:**
+
+  * **Code:** 404 NOT FOUND <br />
+    **Content:** `{ error : "User doesn't exist" }`
+
+  OR
+
+  * **Code:** 401 UNAUTHORIZED <br />
+    **Content:** `{ error : "You are unauthorized to make this request." }`
+
+* **Sample Call:**
+
+  ```javascript
+    $.ajax({
+      url: "/candidates/2009216",
+      dataType: "json",
+      type : "GET",
+      success : function(r) {
+        console.log(r);
+      }
+    });
+  ```
+  
+##Show filers
+  Returns json listing either a collection of PACS and candidate committees who have filed finance reports, or a single filer specified by a `filerid`. 
+
+* **URL**
+
+  /filers
+
+  /filers/:filerid
+
+* **Method:**
+
+  `GET`
+
+* **URL Paths**
+
+	* **/contributors/:contributor-name<br />**
+    Filters to filers who have received donations from a specific contributor.<br />
+       Example: `filers/contributors/andrew mcgill`
+
+*  **URL Params**
+	
+	* **contributor=[string]<br />**
+    Filters to filers who have received donation from contributor by contributor name (wildcarded).<br />
+       Example: `filers/?contributor=andrew`
+    * **filername=[string]<br />**
+    Filters by filer name (wildcarded).<br />
+       Example: `filers/?filername=corbett`
+    * **contributor_city=[string]<br />**
+    Filters by contributor's listed city (wildcarded).<br />
+       Example: `filers/?contributor_city=pittsburgh`
+    * **contributor_zip=[string]<br />**
+    Filters by contributor's listed zip code (wildcarded).<br />
+       Example: `filers/?contributor_zip=15222`
+    * **employer=[string]<br />**
+    Filters by contributor's employer's name (wildcarded).<br />
+       Example: `filers/?employer=US Steel`
+    * **startDate=[YYYY-MM-DD]<br />**
+    Filters by filers who received contributions made after (and including) specified date.<br />
+       Example: `filers/?startDate=2014-06-01`
+    * **endDate=[YYYY-MM-DD]<br />**
+    Filters by filers who received contributions made before (and including) specified date.<br />
+       Example: `filers/?endDate=2014-10-01`
+    * **startAmount=[integer]<br />**
+    Filters for filers who received contributions over (and including) specified amount.<br />
+       Example: `filers/?startAmount=1000`
+    * **endAmount=[integer]<br />**
+    Filters for filers who received contributions under (and including) specified amount.<br />
+       Example: `filers/?startAmount=2500`
+
+* **Data Params**
+
+    None
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** 
+    
+    ```javascript
+    {
+        "sql": [WUERY SQL],
+        "results": [
+            {
+                "name": "FirstEnergy Corp. Political Action Committee",
+                "filerid": "2000081",
+                "type": "2",
+                "office": "",
+                "district": "",
+                "party": "",
+                "address1": "76 South Main Street",
+                "address2": "",
+                "city": "Akron",
+                "state": "OH",
+                "zip": "44308",
+                "county": "",
+                "phone": "0"
+            },
+            {
+                "name": "RE-ELECT ANGEL CRUZFOR THE 180TH",
+                "filerid": "2000085",
+                "type": "2",
+                "office": "STH",
+                "district": "180",
+                "party": "DEM",
+                "address1": "133 E WESTMORELAND ST",
+                "address2": "",
+                "city": "PHILADELPHIA",
+                "state": "PA",
+                "zip": "19134",
+                "county": "51",
+                "phone": "2154235610"
+            },
+            {
+                "name": "Friends of Senator Don White",
+                "filerid": "2000115",
+                "type": "2",
+                "office": "",
+                "district": "",
+                "party": "",
+                "address1": "368 School Street",
+                "address2": "",
+                "city": "Indiana",
+                "state": "PA",
+                "zip": "15701",
+                "county": "",
+                "phone": "7244655001"
             }
         ]
     }
