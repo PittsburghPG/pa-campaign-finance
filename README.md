@@ -422,7 +422,7 @@ A Post-Gazette/PublicSource collaboration cataloging campaign finance figures fo
     
     ```javascript
     {
-        "sql": [WUERY SQL],
+        "sql": [QUERY SQL],
         "results": [
             {
                 "name": "FirstEnergy Corp. Political Action Committee",
