@@ -56,23 +56,20 @@ $(document).ready(function() {
 				var contribJob = data.results[0].occupation;
 				var contribEmp = data.results[0].empName;
 				
-				console.log(contribJob.length);
+				//console.log(contribJob.length);
 				
-				var contribTitle = $("<small>" + contribJob + ", " + contribEmp + "</small>");
-				//var contribTitle = "";
-				//if((contribJob.length > 0) && (contribEmp.length > 0)){
-					//contribTitle = "<small>" + contribJob + ", " + contribEmp + "</small>";
-				//}
-				//elseif ((contribJob.length > 0) && (contribEmp.length == 0)){
-					//contribTitle = "<small>" + contribJob + "</small>";
-				//}
-				//elseif ((contribJob.length == 0) && (contribEmp.length > 0)){
-					//contribTitle = ", <small>" + contribEmp + "</small>"; 
-				//}
-				//else {
-					//contribTitle = "";
-				//};
-				contribTitle.appendTo(headerAmt);
+				var contribTitle = "";
+				if((contribJob.length > 0) && (contribEmp.length > 0)){
+					contribTitle = "<small>" + contribJob + ", " + contribEmp + "</small>";
+				}else if ((contribJob.length > 0) && (contribEmp.length == 0)){
+					contribTitle = "<small>" + contribJob + "</small>";
+				}else if ((contribJob.length == 0) && (contribEmp.length > 0)){
+					contribTitle = ", <small>" + contribEmp + "</small>"; 
+				}else {
+					contribTitle = "";
+				};
+				$(contribTitle).appendTo(headerAmt);
+				
 				
 				var thinDivider = $("<div class='thin-divider'></div>");
 				thinDivider.appendTo(jumbotron);
@@ -94,18 +91,64 @@ $(document).ready(function() {
 				var topTotalsContrib = $("<div class='row'></div>").appendTo(topTotalsLeft);
 				var topTotalsContribCol12 = $("<div class='col-lg-12 col-md-12 col-sm-12'></div>").appendTo(topTotalsContrib);
 	   
-				var topTotalsContribLabel = $("<label>TOP CONTRIBUTED</label><h3>" + need + "</h3>").appendTo(topTotalsContribCol12);
+				var contributionTotal = data.results[0].amount;
+				var topTotalsContribLabel = $("<label>TOP CONTRIBUTED</label><h3>" + contributionTotal + "</h3>").appendTo(topTotalsContribCol12);
 				
 				//Candidate breakdown table
 				var topTotalsContribCandidate = $("<div class='row'></div>").appendTo(topTotalsContribCol12);
 				var topTotalsContribCandidateCol12 = $("<div class='col-lg-12 col-md-12 col-sm-12'></div>").appendTo(topTotalsContribCandidate);
 				var topTotalsContribCandidateTable = $("<table class='horizontal-bar-graph'></table>").appendTo(topTotalsContribCandidateCol12);
 				
+				
+				
+				
+				//Corbett_Wolf variables and logic 
+				var wolfContributionAmt = "";
+				var wolfContributionNum = "";
+				var results = data.results[0].beneficiaries;
+				$.each(results, function(i, item){
+					if(results[i].filerid == "20130153"){
+						wolfContributionAmt = results[i].amount;
+						wolfContributionNum = results[i].contributions;
+					}else {
+						wolfContributionAmt = "0";
+						wolfContributionNum = "0";
+					}
+				});
+				
+				var corbettContributionAmt = "";
+				var corbettContributionNum = "";
+				var results = data.results[0].beneficiaries;
+				$.each(results, function(i, item){
+					if(results[i].filerid == "2009216"){
+						corbettContributionAmt = results[i].amount;
+						corbettContributionNum = results[i].contributions;
+					}else {
+						corbettContributionAmt = "0";
+						corbettContributionNum = "0";
+					}
+				});
+				
+				var wolfBarWidth = "";
+				var corbettBarWidth = "";
+				if(wolfContributionAmt > corbettContributionAmt){
+					wolfBarWidth = "100";
+					corbettBarWidth = (corbettContributionAmt)/(wolfContributionAmt);
+				}else if(corbettContributionAmt > wolfContributionAmt){
+					corbettBarWidth = "100";
+					wolfBarWidth = (wolfContributionAmt)/(corbettContributionAmt);
+				} else{
+					corbettBarWidth = "100";
+					wolfBarWidth = "100";
+				};
+				
+				
 				//Corbett row --> need to make graphic length respect amt donated 
-				var topTotalsCorbettRow = $("<tr><td>Corbett</td><td><div class='bar republican' style='width:80%'>" + need + " (" + need + " donations)" + "</div></td></tr>").appendTo(topTotalsContribCandidateTable);
+				var topTotalsCorbettRow = $("<tr><td><strong>Corbett</strong></td><td><div class='bar republican' style='width:" + corbettBarWidth +"%; color:#000000;'></div><span style='overflow:visible;'>" + corbettContributionAmt + " (" + corbettContributionNum + " donations)" + "</span></td></tr>").appendTo(topTotalsContribCandidateTable);
+				
 				
 				//Wolf row --> need to make graphic length respect amt donated
-				var topTotalsWolfRow = $("<tr><td>Wolf</td><td><div class='bar democrat' style='width:100%'>" + need + " (" + need + " donations)" + "</div></td></tr>").appendTo(topTotalsContribCandidateTable);
+				var topTotalsWolfRow = $("<tr><td><strong>Wolf</strong></td><td><div class='bar democrat' style='width:" + wolfBarWidth + "%; color:#000000;'></div><span style='overflow:visible;'>" + wolfContributionAmt + " (" + wolfContributionNum + " donations)" + "</span></td></tr>").appendTo(topTotalsContribCandidateTable);
 				
 				//Overtime
 				var topTotalsOvertime = $("<div class='col-lg-8 col-md-8 col-sm-8 col-xs-12 block last'>").appendTo(topTotals);
