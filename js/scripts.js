@@ -35,6 +35,10 @@ $(document).ready(function() {
       $('#bycounty').addClass('active');
 	  var countyName = split[3];
 		console.log("yoooooooo");
+		console.log("yoooooooo");
+		console.log("yoooooooo");
+		console.log("yoooooooo");
+		console.log("yoooooooo");
 	break;
 
 	case "contributor":
