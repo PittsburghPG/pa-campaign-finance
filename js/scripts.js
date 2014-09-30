@@ -23,8 +23,10 @@ $(document).ready(function() {
     case "counties":
       $('#bycounty').addClass('active');
 	  var countyName = split[3];
-        break;
-	case "contributors":
+		console.log("one more tiiiiiiiiiime");
+		console.log("we're gonna celebrate");
+	break;
+	case "contributor":
        $('#bycontributor').addClass('active');
 	   var contributorName = split[3];
 	   
