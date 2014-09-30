@@ -247,7 +247,6 @@ class MyAPI extends API{
 		});
 	}
 	
-<<<<<<< HEAD
 	public function months(){
 		$query["select"] = " SELECT
 						MONTH(contributions.date) as month,
@@ -264,8 +263,6 @@ class MyAPI extends API{
 		return $this->queryAPI($query, "AND MONTH(contributions.date) = %s ", "");
 	}
 	
-=======
->>>>>>> 100c5eb17561f89b859396c3088be7e2b57b2ef8
 	public function addConditions($category, $arg){
 		switch($category){
 			case "contributors":
