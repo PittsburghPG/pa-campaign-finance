@@ -1,12 +1,13 @@
-var map;
 $(document).ready(function() {
- /* var mapOptions = {
-    zoom: 8,
-    center: new google.maps.LatLng(40.4450813, -80.00877459999998),
+/* var mapOptions = {
+  zoom: 8,
+  center: new google.maps.LatLng(40.4450813, -80.00877459999998),
 	disableDefaultUI: true
-  };
-  map = new google.maps.Map(document.getElementById('map_canvas'),
+ };
+ map = new google.maps.Map(document.getElementById('map_canvas'),
       mapOptions);*/
+      
+   
 
  //parse url
  var pathname = window.location.pathname; //get current url
@@ -34,7 +35,7 @@ $(document).ready(function() {
 	   
 	   $.getJSON("/api/contributors/" + contribNameRaw, function(data){
 	   		
-	   		var need = "{need variable}";
+	   		//var need = "{need variable}";
 	   		
 	   		
 		   	//intro row
@@ -212,7 +213,7 @@ $(document).ready(function() {
 				$.getJSON("/api/contributors/" + contribName, function(data){
 					 var locationCity = data.results[0].city;
 					 var locationZip = data.results[0].zip;
-					 locationZip.substring(0,5);
+					 locationZip = locationZip.substring(0,5);
 				
 				
 				
@@ -282,13 +283,19 @@ $(document).ready(function() {
 						var locationLabel = $("<strong>Location: </strong>").appendTo(locationItem);
 						var locationData = $("<span>" + locationCity + ", " + locationZip + "</span>").appendTo(locationItem);
 						
-						mapColumn = $("<div></div>").appendTo(contributionRow);
-						mapColumn.addClass(collg7 + " " + colmd7 + " " + colsm7);
+						function initialize() {
+					    var mapOptions = {
+					      center: { lat: -34.397, lng: 150.644},
+					      zoom: 8
+					    };
+					    var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+					  };
+						google.maps.event.addDomListener(window, 'load', initialize);
+						mapColumn = $("<div class='col-lg-7 col-md-7 col-sm-7' id='map-canvas' style='height:100%;'></div>").appendTo(contributionRow);
+						$(map).appendTo(mapColumn);
 						
-						var countyMap = $("<img>").appendTo(mapColumn);
-						countyMap.addClass("sm_county_map");
-						countyMap.attr("src", "/img/allegheny-map.png");
-						countyMap.attr("alt", "Allegheny County locator map");
+						//var countyMap = $("<img class='sm_county_map' src='/img/allegheny-map.png' alt='Allegheny County locator map'>").appendTo(mapColumn);
+						
 					
 					
 					
