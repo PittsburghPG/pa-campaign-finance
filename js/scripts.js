@@ -23,7 +23,7 @@ $(document).ready(function() {
 		console.log(toTitleCase(candName));
         
 		
-		
+		//laura's new comemnt
 		
 		
 		
