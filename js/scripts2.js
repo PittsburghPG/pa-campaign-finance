@@ -13,7 +13,7 @@ $(document).ready(function() {
  var split = pathname.split("/"); //treat it like a string, break it up where the /'s are
  //console.log(split[2]);
  var apiURL = split[2] + "/" + split[3];
- 
+ //console.log(apiURL);
  //case statement
  switch(split[2]) { //the second item in the array will be the type of page this will be
     case "candidates":
@@ -28,33 +28,114 @@ $(document).ready(function() {
 			type : "GET",
 			success : function(r) {
 			  //console.log(r);
-			  console.log(r.results[0]);
-			  $('.intro-row label').html('CANDIDATE');
+			  //console.log(r.results[0]);
 			  var name = r.results[0].name;
 			  var party = r.results[0].party;
 			  if (party == 'REP') { party = "Republican";}
 			  if (party == 'DEM') { party = "Democratic";}
 			  var total = r.results[0].total;
-			  $('.jumbotron h1').html(name);
+			  var average = r.results[0].average;
+			  var address1 = r.results[0].address1;
+			  var address2 = r.results[0].address2;
+			  var city = r.results[0].city;
+			  city = city.toLowerCase();
+			  var state = r.results[0].state;
+			  var zip = r.results[0].zip;
+			  var phone = r.results[0].phone;
+			  
+			  //intro row 
+			var container = $("#main");
+			introRow = $("<div></div>").appendTo(container);	
+			introRow.addClass("row intro-row");
+			
+			var introLabel = $("<label>CANDIDATE</label>");
+			introLabel.appendTo(introRow);
+			
+			var jumbotron = $("<div></div>").appendTo(introRow);
+			jumbotron.addClass("jumbotron");
+			
+			var candName = $("<h1>" + name + "</h1>");
+			candName.appendTo(jumbotron);
+			
+			var thinDivider = $("<div class='thin-divider'></div>");
+			thinDivider.appendTo(jumbotron);
+			  
+			 
+			 //banner image
 			  var n = name.split(" ");
 			  var lastName = n[1];
 			  lastName = lastName.toLowerCase();
-			  $( "<div class='banner-image'></div>" ).insertAfter( "#intro-row" );
+			  $( "<div class='banner-image'></div>" ).appendTo(container);
 			  $('.banner-image').css('background-image', "url('/../img/" + lastName + "-header.jpg')");
 			  $('.banner-image').css('background-size', 'cover');
+			  
+			  //bio information
 			  $( "<div class='container' id='data'></div>" ).insertAfter( ".banner-image" );
-			  $('#data').append("<div class='row thick-divider' id='bio_totals'></div>");
+			  $('#data').append("<div class='row' id='bio_totals'></div>");
 			  $('#bio_totals').append("<div id='bio' class='col-lg-5 col-md-5 col-sm-5 col-xs-12'></div>");
-			  $('#bio').append('<p><span class="fa-stack fa-md"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-birthday-cake fa-stack-1x fa-inverse"></i></span><strong id="party"></strong><br><span class="fa-stack fa-md"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-phone fa-stack-1x fa-inverse"></i></span><strong id="phone">phone</strong><br><span class="fa-stack fa-md"><i class="fa fa-square fa-stack-2x"></i>	<i class="fa fa-envelope fa-stack-1x fa-inverse"></i></span><strong id="address">address</strong><br></p><p class="lead">Tom Corbett! What a bro. This is some text about his biography. Not more than three lines. </p>');
+			  $('#bio').append('<p><span class="fa-stack fa-md"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-birthday-cake fa-stack-1x fa-inverse"></i></span><strong id="party"></strong><br><span class="fa-stack fa-md"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-phone fa-stack-1x fa-inverse"></i></span><strong id="phone"></strong><br><span class="fa-stack fa-md"><i class="fa fa-square fa-stack-2x"></i>	<i class="fa fa-envelope fa-stack-1x fa-inverse"></i></span><strong id="address"></strong><br></p><p class="lead">Tom Corbett! What a bro. </p>');
 			  $('#party').html(party);
+			  $('#address').html(address1 + address2 + " " + city + ", " + state + " " + zip);
+			  $('#phone').html(phone);
 			  
-			  $('#bio_totals').append('<div class="col-lg-6 col-md-6 col-sm-7 col-lg-offset-1 col-md-offset-1 top-totals"><div class="row no-margin-top"><div class="col-lg-12 col-md-12 col-sm-12"><label>TOTAL RAISED</label>		<h2 class="jumbo" id="total_raised"></h2></div></div><div class="row"><div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 block first"><label>$50 AND OVER</label><h3>$3,456,223</h3></div><div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 block"><label>UNDER $50</label><h3>$1,543,776</h3></div><div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 block last"><label>MEDIAN DONATION</label><h3>$200</h3></div></div></div>');
-			  
-			  
-			 
+			  //totals
+			  $('#bio_totals').append('<div class="col-lg-6 col-md-6 col-sm-7 col-lg-offset-1 col-md-offset-1 top-totals"><div class="row no-margin-top"><div class="col-lg-12 col-md-12 col-sm-12"><label>TOTAL RAISED</label>		<h2 class="jumbo" id="total_raised"></h2></div></div><div class="row"><div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 block first"><label>$50 AND OVER</label><h3 id="over50"></h3></div><div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 block"><label>UNDER $50</label><h3 id="under50"></h3></div><div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 block last"><label>AVERAGE DONATION</label><h3 id="average"></h3></div></div></div>');
 			  $('#total_raised').html('$' + total);
+			  //over $50
+			   $.ajax({
+					url: "api/" + apiURL + "?startAmount=50",
+					dataType: "json",
+					type : "GET",
+					success : function(s) {
+						$('#over50').html( "$" + s.results[0].total );
+					}
+			    });
+				//under $50
+				$.ajax({
+					url: "api/" + apiURL + "?endAmount=49",
+					dataType: "json",
+					type : "GET",
+					success : function(t) {
+						$('#under50').html( "$" + t.results[0].total );
+					}
+			    });
+				//average
+				$('#average').html( "$" + average );
+				
+				container.append(thinDivider);
+				//charts would go here
+				
+				//tabular data
+				container.append(thinDivider);
+				
+				container.append('<div class="row tabular"><div class="col-lg-12 col-md-12 col-sm-12"><h3>Donors</h3><form class="form-inline pull-right"><input type="search" class="form-control" placeholder="Search"><button type="submit" class="btn btn-default">Submit</button></form><table class="table table-hover sortable"><thead><tr><th>Donor</th> <th>Occupation, Employer</th><th>Amount</th></tr></thead><tbody></tbody></table></div></div> ');
+				
+				//get contributor data
+				$.ajax({
+					url: "api/contributors/filers/" + split[3],
+					dataType: "json",
+					type : "GET",
+					success : function(u) {
+						//console.log(u.results[0].contributor);
+						//console.log(u.results.length);
+						var line;
+						for(var i =0; i < u.results.length; i++) {
+							var emp;
+							if (u.results[i].occupation == '') { //don't show comma if there's no occupation
+								emp = u.results[i].empName;
+							} else {
+								emp = u.results[i].occupation + ", " + u.results[i].empName;
+							}
+							line = "<tr><td>" + u.results[i].contributor + "</td><td>" +  emp  + "</td><td align='right'>$" + u.results[i].amount + "</td></tr>";
+							//console.log(line);
+							$('tbody').append(line);
+						}
+					}
+			    });
+				
 			}
 		  });
+		 
         break;
     case "counties":
       $('#bycounty').addClass('active');
