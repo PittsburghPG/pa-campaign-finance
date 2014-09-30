@@ -26,31 +26,56 @@ $(document).ready(function() {
 		console.log("one more tiiiiiiiiiime");
 		console.log("we're gonna celebrate");
 	break;
-	case "contributor":
+	
+	
+	case "contributors":
        $('#bycontributor').addClass('active');
-	   var contributorName = split[3];
+	   var contribName = split[3];
 	   
-	   //intro row
-			var container = $("#main");
-			introRow = $("<div></div>").appendTo(container);	
-			introRow.addClass("row intro-row");
-			
-			var introLabel = $("<label>CONTRIBUTOR</label>");
-			introLabel.appendTo(introRow);
-			
-			var jumbotron = $("<div></div>").appendTo(introRow);
-			jumbotron.addClass("jumbotron");
-			
-			var headerAmt = $("<h1>" + contributionAmt + "</h1>");
-			headerAmt.appendTo(jumbotron);
-			
-			var thinDivider = $("<div class='thin-divider'></div>");
-			thinDivider.appendTo(jumbotron);
+	   $.getJSON("/api/contributors/" + contribName, function(data){
+	   
+		   	//intro row
+				var container = $("#main");
+				introRow = $("<div></div>").appendTo(container);	
+				introRow.addClass("row intro-row");
+				
+				var introLabel = $("<label>CONTRIBUTOR</label>");
+				introLabel.appendTo(introRow);
+				
+				var jumbotron = $("<div></div>").appendTo(introRow);
+				jumbotron.addClass("jumbotron");
+				
+				var headerAmt = $("<h1>" + contribName + "</h1>");
+				headerAmt.appendTo(jumbotron);
+				
+				var contribJob = data.results[0].occupation;
+				var contribEmp = data.results[0].empName;
+				
+				console.log(contribJob.length);
+				
+				var contribTitle = $("<small>" + contribJob + ", " + contribEmp + "</small>");
+				//var contribTitle = "";
+				//if((contribJob.length > 0) && (contribEmp.length > 0)){
+					//contribTitle = "<small>" + contribJob + ", " + contribEmp + "</small>";
+				//}
+				//elseif ((contribJob.length > 0) && (contribEmp.length == 0)){
+					//contribTitle = "<small>" + contribJob + "</small>";
+				//}
+				//elseif ((contribJob.length == 0) && (contribEmp.length > 0)){
+					//contribTitle = ", <small>" + contribEmp + "</small>"; 
+				//}
+				//else {
+					//contribTitle = "";
+				//};
+				contribTitle.appendTo(headerAmt);
+				
+				var thinDivider = $("<div class='thin-divider'></div>");
+				thinDivider.appendTo(jumbotron);
 	   
 	   
 	   
 
-	   
+			});
 	   
 	   
 	   
@@ -65,15 +90,13 @@ $(document).ready(function() {
 	   
 	   
         break;
-	case "contributions":
+		case "contributions":
          $('#bycontributor').addClass('active');
 		  var contributionID = split[3];
         
 			$.getJSON("/api/contributions/" + contributionID, function(data){
 				var contribName = data.results[0].contributor;
 				var contributionAmt = "$" + data.results[0].contribution;
-				//var locationZip = data.results[0].newzip;
-				//var locationCity = data.results[0].city;
 				
 				var conDateRaw = data.results[0].date;
 				var d = new Date(conDateRaw);
@@ -149,14 +172,12 @@ $(document).ready(function() {
 						var dateItem = $(h3).appendTo(contributionColumn);
 						dateItem.addClass("date-item");
 						var dateLabel = $("<strong>Date: </strong>").appendTo(dateItem);
-						//why can I not omit the <span> below?
 						var dateData = $("<span>" + contributionDate + "</span>").appendTo(dateItem);
 						
 						
 						var locationItem = $(h3).appendTo(contributionColumn);
 						locationItem.addClass("location-item");
 						var locationLabel = $("<strong>Location: </strong>").appendTo(locationItem);
-						//why can I not omit the <span> below?
 						var locationData = $("<span>" + locationCity + ", " + locationZip + "</span>").appendTo(locationItem);
 						
 						mapColumn = $("<div></div>").appendTo(contributionRow);
