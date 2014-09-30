@@ -42,6 +42,7 @@ $(document).ready(function() {
 	   var contributorName = split[3];
         break;
 	case "contribution":
+		console.log("working on contribution!");
          $('#bycontributor').addClass('active');
 		  var contributionID = split[3];
         break;
