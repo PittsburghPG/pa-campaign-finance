@@ -30,10 +30,13 @@ $(document).ready(function() {
 	
 	case "contributors":
        $('#bycontributor').addClass('active');
-	   var contribName = split[3];
+	   var contribNameRaw = split[3];
 	   
-	   $.getJSON("/api/contributors/" + contribName, function(data){
-	   
+	   $.getJSON("/api/contributors/" + contribNameRaw, function(data){
+	   		
+	   		var need = "{need variable}";
+	   		
+	   		
 		   	//intro row
 				var container = $("#main");
 				introRow = $("<div></div>").appendTo(container);	
@@ -44,6 +47,8 @@ $(document).ready(function() {
 				
 				var jumbotron = $("<div></div>").appendTo(introRow);
 				jumbotron.addClass("jumbotron");
+				
+				var contribName = data.results[0].contributor;
 				
 				var headerAmt = $("<h1>" + contribName + "</h1>");
 				headerAmt.appendTo(jumbotron);
@@ -73,6 +78,42 @@ $(document).ready(function() {
 				thinDivider.appendTo(jumbotron);
 	   
 	   
+				// top totals row
+				var topTotals = $("<div class='row top-totals'></div>").appendTo(container);
+				
+				var topTotalsLeft = $("<div class='col-lg-4 col-md-4 col-sm-4 col-xs-12 block first'></div>").appendTo(topTotals);
+				
+				// Location block	
+				var locationCity = data.results[0].city;
+				var locationZip = data.results[0].zip;
+				var topTotalsLeftLocationBlock = $("<div class='row'><div class='col-lg-12 col-md-12 col-sm-12'><label>LOCATION</label><h3>" + locationCity + "</h3><p>" + locationZip + "</p></div></div>" ).appendTo(topTotalsLeft);
+	   
+				thinDivider.appendTo(topTotalsLeft);
+	   
+				//Top contributed block
+				var topTotalsContrib = $("<div class='row'></div>").appendTo(topTotalsLeft);
+				var topTotalsContribCol12 = $("<div class='col-lg-12 col-md-12 col-sm-12'></div>").appendTo(topTotalsContrib);
+	   
+				var topTotalsContribLabel = $("<label>TOP CONTRIBUTED</label><h3>" + need + "</h3>").appendTo(topTotalsContribCol12);
+				
+				//Candidate breakdown table
+				var topTotalsContribCandidate = $("<div class='row'></div>").appendTo(topTotalsContribCol12);
+				var topTotalsContribCandidateCol12 = $("<div class='col-lg-12 col-md-12 col-sm-12'></div>").appendTo(topTotalsContribCandidate);
+				var topTotalsContribCandidateTable = $("<table class='horizontal-bar-graph'></table>").appendTo(topTotalsContribCandidateCol12);
+				
+				//Corbett row --> need to make graphic length respect amt donated 
+				var topTotalsCorbettRow = $("<tr><td>Corbett</td><td><div class='bar republican' style='width:80%'>" + need + " (" + need + " donations)" + "</div></td></tr>").appendTo(topTotalsContribCandidateTable);
+				
+				//Wolf row --> need to make graphic length respect amt donated
+				var topTotalsWolfRow = $("<tr><td>Wolf</td><td><div class='bar democrat' style='width:100%'>" + need + " (" + need + " donations)" + "</div></td></tr>").appendTo(topTotalsContribCandidateTable);
+				
+				//Overtime
+				var topTotalsOvertime = $("<div class='col-lg-8 col-md-8 col-sm-8 col-xs-12 block last'>").appendTo(topTotals);
+				var topTotalsOvertimeGraph = $("<h3>Contributions over time</h3><img src='/img/over-time-linechart.png' alt='Contributions over time' />").appendTo(topTotalsOvertime);
+	   
+	   
+				thinDivider.appendTo(container);
+	   
 	   
 
 			});
@@ -80,11 +121,7 @@ $(document).ready(function() {
 	   
 	   
 	   
-	   
-	   
-	   
-	   
-	   
+	 
 	   
 	   
 	   
