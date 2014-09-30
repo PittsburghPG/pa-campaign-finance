@@ -50,11 +50,9 @@ $(document).ready(function() {
 			  
 			  $('#bio_totals').append('<div class="col-lg-6 col-md-6 col-sm-7 col-lg-offset-1 col-md-offset-1 top-totals"><div class="row no-margin-top"><div class="col-lg-12 col-md-12 col-sm-12"><label>TOTAL RAISED</label>		<h2 class="jumbo" id="total_raised"></h2></div></div><div class="row"><div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 block first"><label>$50 AND OVER</label><h3>$3,456,223</h3></div><div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 block"><label>UNDER $50</label><h3>$1,543,776</h3></div><div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 block last"><label>MEDIAN DONATION</label><h3>$200</h3></div></div></div>');
 			  
-			  if (total/1000000 > 0) {
-				var newTotal = total.toString()
-			  }
+			  
 			 
-			  $('#total_raised').html('$' + newTotal);
+			  $('#total_raised').html('$' + total);
 			}
 		  });
         break;
