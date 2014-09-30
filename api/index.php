@@ -22,6 +22,10 @@ class MyAPI extends API{
 	}
 	
 	public function queryAPI($query, $identifier_query, $handler_function){
+		// Set limit and offset to null; They can always be updated later
+		$query["limit"] = " ";
+		$query["offset"] = " ";
+		
 		// See if args exist
 		if( sizeof($this -> args) > 0 ){
 			// If there's only one arg, it's an identifer
@@ -41,7 +45,7 @@ class MyAPI extends API{
 		
 		
 		// Run main query
-		$res = $this->mysqli -> query($query["select"] . $query["from"] . $query["join"] . $query["where"] . $query["group"] . $query["order"]);
+		$res = $this->mysqli -> query($query["select"] . $query["from"] . $query["join"] . $query["where"] . $query["group"] . $query["order"] . $query["limit"] . $query["offset"]);
 		
 		// Use special handler function if one is included, 
 		// otherwise parse results the default way
@@ -54,7 +58,7 @@ class MyAPI extends API{
 			}
 			
 			// Dump query in JSON for debugging
-			$output["sql"] = $this->formatSQL($query["select"] . $query["from"] . $query["join"] . $query["where"] . $query["group"] . $query["order"]);
+			$output["sql"] = $this->formatSQL($query["select"] . $query["from"] . $query["join"] . $query["where"] . $query["group"] . $query["order"] . $query["limit"] . $query["offset"]);
 			$output["results"] = $results;
 			return $output;
 		}
@@ -75,6 +79,7 @@ class MyAPI extends API{
 		$query["where"] = "WHERE 1=1 ";
 		$query["group"] = " ";
 		$query["order"] = " ";
+	
 		
 		return $this->queryAPI($query, "AND contributions.id = '%s' ", "");
 		
@@ -195,11 +200,19 @@ class MyAPI extends API{
 						candidates.party, 
 						candidates.year,
 						candidates.race,
+						filers.address1,
+						filers.address2,
+						filers.city,
+						filers.state,
+						filers.zip, 
+						filers.phone,
 						SUM(contributions.contribution) as total,
+						AVG(contributions.contribution) as average,
 						COUNT(contributions.contribution) as count
 					";
 		$query["from"] = "FROM campaign_finance.candidates ";
 		$query["join"] = "LEFT JOIN campaign_finance.contributions on contributions.filerid = candidates.filerid ";
+		$query["join"] .= "LEFT JOIN campaign_finance.filers on contributions.filerid = filers.filerid ";
 		$query["where"] = "WHERE 1=1 ";
 		$query["group"] = "GROUP BY candidates.name, candidates.year, candidates.race ";
 		$query["order"] = " ";
@@ -340,6 +353,14 @@ class MyAPI extends API{
 						case "endAmount":
 							$value = floatval($value);
 							$query["where"] .= "AND contributions.contribution <= " . $this->mysqli -> real_escape_string($value) . " "; 
+						break;
+						
+						case "limit":
+							$query["limit"] .= "LIMIT " . $this->mysqli -> real_escape_string($value) . " "; 
+						break;
+						
+						case "offset":
+							$query["offset"] .= "OFFSET " . $this->mysqli -> real_escape_string($value) . " "; 
 						break;
 						
 						case "monthly":
