@@ -156,8 +156,30 @@ $(document).ready(function() {
 	   
 	   
 				thinDivider.appendTo(container);
-	   
-	   
+				
+				container.append(thinDivider);
+				
+				container.append('<div class="row tabular"><div class="col-lg-12 col-md-12 col-sm-12"><h3>Other donations by ' + contribName +'</h3><form class="form-inline pull-right"><input type="search" class="form-control" placeholder="Search"><button type="submit" class="btn btn-default">Submit</button></form><table class="table table-hover sortable"><thead><tr><th>Donor</th> <th>Occupation, Employer</th><th>Amount</th></tr></thead><tbody></tbody></table></div></div> ');
+				
+				//get contributor data
+				$.getJSON("/api/contributors/" + contribNameRaw, function(data){
+					console.log(data.results[0].contributor);
+					console.log(data.results.length);
+					
+					var line;
+					for(var i =0; i < data.results.length; i++) {
+						var emp;
+						if (data.results[i].occupation == '') { //don't show comma if there's no occupation
+							emp = data.results[i].empName;
+						} else {
+							emp = data.results[i].occupation + ", " + data.results[i].empName;
+						}
+						line = "<tr><td>" + data.results[i].contributor + "</td><td>" +  emp  + "</td><td align='right'>$" + data.results[i].amount + "</td></tr>";
+						console.log(line);
+						$('tbody').append(line);
+					}
+					
+				});	   
 
 			});
 	   
