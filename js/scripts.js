@@ -39,6 +39,7 @@ $(document).ready(function() {
 		console.log("yoooooooo");
 		console.log("yoooooooo");
 		console.log("yoooooooo");
+		console.log("one more tiiiiiiiiiime");
 	break;
 	case "contributor":
        $('#bycontributor').addClass('active');
