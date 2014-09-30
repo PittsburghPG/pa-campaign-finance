@@ -34,7 +34,9 @@ $(document).ready(function() {
     case "county":
       $('#bycounty').addClass('active');
 	  var countyName = split[3];
-        break;
+		console.log("yoooooooo");
+	break;
+
 	case "contributor":
        $('#bycontributor').addClass('active');
 	   var contributorName = split[3];
