@@ -136,8 +136,8 @@ $(document).ready(function() {
 				
 				//tabular data
 				$('<div class="container" id="table"><div class="row tabular" id="tableHeightDiv" style="margin-bottom: 30px;"><div class="col-lg-12 col-md-12 col-sm-12"><h3>Donors</h3><form class="form-inline pull-right"><input type="search" class="form-control" placeholder="Search"><button type="submit" class="btn btn-default">Submit</button></form><table class="table table-hover sortable" id="donorTable"><thead><tr><th>Donor</th> <th>Occupation, Employer</th><th>Amount</th></tr></thead><tbody></tbody></table></div></div></div> ').insertAfter("#chartdivider");
-				var donorHeight = $("#tableHeightDiv").height();
-				$("#tableHeightDiv").css({'height': '500px', 'overflow':'hidden'});
+				var donorHeight;
+				
 				//container.append(thinDivider);
 				//get contributor data
 				$.ajax({
@@ -163,11 +163,28 @@ $(document).ready(function() {
 							line = "<tr><td><a href='/a/contributors/" + u.results[i].contributorid + "'>" + u.results[i].contributor + "</a></td><td>" +  emp  + "</td><td align='right'>$" + amount + "</td></tr>";
 							//console.log(line);
 							$('#donorTable tbody').append(line);
+							donorHeight = $("#tableHeightDiv").height();
 						}
+					
+						
 					}
 			    });
 				
-				$('<div class="container"><a href="">View all</a></div>').insertAfter('#table');
+				console.log(donorHeight);
+				$("#tableHeightDiv").css({'height': '500px', 'overflow':'hidden'});
+					
+				$('<div class="container" style="text-align: center;"><div id="viewall">View all</div></div>').insertAfter('#table');
+					console.log(donorHeight);
+					$('#viewall').click(function() {
+								$('#viewall').hide();
+								//$("#tableHeightDiv").css({'height': donorHeight + 'px', 'overflow':'visible'});
+								$("#tableHeightDiv").animate({height:donorHeight + 'px'},200);
+								
+					});
+					
+				
+				
+				
 			}
 		  });
 		 
@@ -200,7 +217,74 @@ $(document).ready(function() {
 				
 				container.append(thinDivider);
 				
-				container.append('<div class="row "><div class="col-lg-5 col-md-5 col-sm-4 col-xs-12"><img src="img/allegheny-co.png" alt="Allegheny County map" /></div><div class="col-lg-7 col-md-7 col-sm-8 top-totals">	<div class="row"><div class="col-lg-12 col-md-12 col-sm-12"><label>TOTAL CONTRIBUTIONS</label><h2 class="jumbo">$26.2 million</h2></div></div><div class="row"><div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 block first"><h3>88%</h3><label>Allegheny County represents 88% of total race contributions.</label></div><div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 block"><h3>12 cents</h3><label>Contributions represent 12 cents per capita in Allegheny County.</label></div><div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 block last"><label><strong>Corbett:</strong> $13.1 million <br>(75 donations)<br><br><strong>Wolfe:</strong> $13.1 million <br>(75 donations)</label></div></div></div></div>')
+				container.append('<div class="row "><div class="col-lg-5 col-md-5 col-sm-4 col-xs-12"><img src="img/allegheny-co.png" alt="Allegheny County map" /></div><div class="col-lg-7 col-md-7 col-sm-8 top-totals">	<div class="row"><div class="col-lg-12 col-md-12 col-sm-12"><label>TOTAL CONTRIBUTIONS</label><h2 class="jumbo" id="totalcontribs"></h2></div></div><div class="row"><div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 block first"><h3 id="thisCountyPercent"></h3><label id="percentExplainer"></label></div><div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 block"><h3 id="perCapita"></h3><label id="perCapitaExplainer"></label></div><div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 block last"><label><strong>Corbett:</strong> <span id="corbettamount"></span> <br>(<span id="corbettnumdonation"></span> donations)<br><br><strong>Wolfe:</strong> <span id="wolfeamount"></span> <br>(<span id="wolfenumdonations"></span> donations)</label></div></div></div></div>');
+				
+				var contrib1 = v.results[0].beneficiaries[0].amount;
+				contrib1 = parseFloat(contrib1);
+				contrib1 = Math.round(contrib1);
+				//console.log(v.results[1].beneficiaries[0].amount);
+				var contrib2 = v.results[1].beneficiaries[0].amount;
+				contrib2 = parseFloat(contrib2);
+				contrib2 = Math.round(contrib2);
+				var totalcontribs = contrib1 + contrib2;
+				formatTotalcontribs = totalcontribs.numberFormat(0);
+				
+				$('#totalcontribs').html("$" + formatTotalcontribs);
+				$('#corbettamount').html("$" + contrib1.numberFormat());
+				var corbettnumdonations = parseInt(v.results[0].beneficiaries[0].contributions);
+				corbettnumdonations = corbettnumdonations.numberFormat();
+				$('#corbettnumdonation').html(corbettnumdonations);
+				$('#wolfeamount').html("$" + contrib2.numberFormat());
+				var wolfenumdonations = parseInt(v.results[1].beneficiaries[0].contributions);
+				wolfenumdonations = wolfenumdonations.numberFormat();
+				$('#wolfenumdonations').html(wolfenumdonations);
+				
+				//get population - don't have right now
+				var population = 1229000;
+				
+				
+				$.ajax({
+					url: "api/counties",
+					dataType: "json",
+					type : "GET",
+					success : function(w) {
+						var totalCountyDonations = 0;
+						//console.log(w.results.length);
+						for (var i = 0; i< w.results.length; i++) {
+							totalCountyDonations += Math.round(parseFloat(w.results[i].amount));
+							//console.log(Math.round(parseFloat(w.results[i].amount)));
+						}
+						//console.log(totalCountyDonations);
+						//console.log(totalCountyDonations + " " + totalcontribs);
+						var thisCountyPercent = totalcontribs/totalCountyDonations*100;
+						thisCountyPercent = thisCountyPercent.numberFormat(1);
+						$('#thisCountyPercent').html(thisCountyPercent + '%');
+						$('#percentExplainer').html(countyName + " County represents " + thisCountyPercent + "% of total race contributions.");
+						
+						//per capita
+						var perCapita = totalcontribs/population;
+						perCapita = perCapita.numberFormat(2);
+						$('#perCapita').html("$" + perCapita);
+						//Contributions represent 12 cents per capita in Allegheny County.
+						$('#perCapitaExplainer').html("Contributions represent $"+ perCapita + " per capita in " + countyName + " County.");
+					}
+				});
+				
+				container.append(thinDivider);
+				
+				container.append('<div class="row divider"><div class="col-lg-6 col-md-6 col-sm-6 block"><h3>Contributions over time</h3><div class="well" id="timeline" style="width: 100%; height: 200px;"></div></div><div class="col-lg-6 col-md-6 col-sm-6 block"><h3>Contributions by type</h3><div class="well"></div></div></div>');
+				
+				makeTimeChart("timeline", "counties", countyName, "2013-01-01", "2014-09-01");
+				
+				$.ajax({
+					url: "api/contributors/counties/" + countyName,
+					dataType: "json",
+					type : "GET",
+					success : function(x) {
+						
+					}
+				});
+				
 			}
 	  });
 	  
