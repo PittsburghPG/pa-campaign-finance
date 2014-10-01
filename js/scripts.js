@@ -1,12 +1,13 @@
-var map;
 $(document).ready(function() {
- /* var mapOptions = {
-    zoom: 8,
-    center: new google.maps.LatLng(40.4450813, -80.00877459999998),
+/* var mapOptions = {
+  zoom: 8,
+  center: new google.maps.LatLng(40.4450813, -80.00877459999998),
 	disableDefaultUI: true
-  };
-  map = new google.maps.Map(document.getElementById('map_canvas'),
+ };
+ map = new google.maps.Map(document.getElementById('map_canvas'),
       mapOptions);*/
+      
+   
 
  //parse url
  var pathname = window.location.pathname; //get current url
@@ -26,54 +27,179 @@ $(document).ready(function() {
 		console.log("one more tiiiiiiiiiime");
 		console.log("we're gonna celebrate");
 	break;
-	case "contributor":
+	
+	
+	case "contributors":
        $('#bycontributor').addClass('active');
-	   var contributorName = split[3];
+	   var contribNameRaw = split[3];
 	   
-	   //intro row
-			var container = $("#main");
-			introRow = $("<div></div>").appendTo(container);	
-			introRow.addClass("row intro-row");
-			
-			var introLabel = $("<label>CONTRIBUTOR</label>");
-			introLabel.appendTo(introRow);
-			
-			var jumbotron = $("<div></div>").appendTo(introRow);
-			jumbotron.addClass("jumbotron");
-			
-			var headerAmt = $("<h1>" + contributionAmt + "</h1>");
-			headerAmt.appendTo(jumbotron);
-			
-			var thinDivider = $("<div class='thin-divider'></div>");
-			thinDivider.appendTo(jumbotron);
+	   $.getJSON("/api/contributors/" + contribNameRaw, function(data){
+	   		
+	   		//var need = "{need variable}";
+	   		
+	   		
+		   	//intro row
+				var container = $("#main");
+				introRow = $("<div></div>").appendTo(container);	
+				introRow.addClass("row intro-row");
+				
+				var introLabel = $("<label>CONTRIBUTOR</label>");
+				introLabel.appendTo(introRow);
+				
+				var jumbotron = $("<div></div>").appendTo(introRow);
+				jumbotron.addClass("jumbotron");
+				
+				var contribName = data.results[0].contributor;
+				
+				var headerAmt = $("<h1>" + contribName + "</h1>");
+				headerAmt.appendTo(jumbotron);
+				
+				var contribJob = data.results[0].occupation;
+				var contribEmp = data.results[0].empName;
+				
+				//console.log(contribJob.length);
+				
+				var contribTitle = "";
+				if((contribJob.length > 0) && (contribEmp.length > 0)){
+					contribTitle = "<small>" + contribJob + ", " + contribEmp + "</small>";
+				}else if ((contribJob.length > 0) && (contribEmp.length == 0)){
+					contribTitle = "<small>" + contribJob + "</small>";
+				}else if ((contribJob.length == 0) && (contribEmp.length > 0)){
+					contribTitle = ", <small>" + contribEmp + "</small>"; 
+				}else {
+					contribTitle = "";
+				};
+				$(contribTitle).appendTo(headerAmt);
+				
+				
+				var thinDivider = $("<div class='thin-divider'></div>");
+				thinDivider.appendTo(jumbotron);
 	   
 	   
+				// top totals row
+				var topTotals = $("<div class='row top-totals'></div>").appendTo(container);
+				
+				var topTotalsLeft = $("<div class='col-lg-4 col-md-4 col-sm-4 col-xs-12 block first'></div>").appendTo(topTotals);
+				
+				// Location block	
+				var locationCity = data.results[0].city;
+				var locationZip = data.results[0].zip;
+				var topTotalsLeftLocationBlock = $("<div class='row'><div class='col-lg-12 col-md-12 col-sm-12'><label>LOCATION</label><h3>" + locationCity + "</h3><p>" + locationZip + "</p></div></div>" ).appendTo(topTotalsLeft);
 	   
+				thinDivider.appendTo(topTotalsLeft);
+	   
+				//Top contributed block
+				var topTotalsContrib = $("<div class='row'></div>").appendTo(topTotalsLeft);
+				var topTotalsContribCol12 = $("<div class='col-lg-12 col-md-12 col-sm-12'></div>").appendTo(topTotalsContrib);
+	   
+				var contributionTotal = data.results[0].amount;
+				var topTotalsContribLabel = $("<label>TOP CONTRIBUTED</label><h3>" + contributionTotal + "</h3>").appendTo(topTotalsContribCol12);
+				
+				//Candidate breakdown table
+				var topTotalsContribCandidate = $("<div class='row'></div>").appendTo(topTotalsContribCol12);
+				var topTotalsContribCandidateCol12 = $("<div class='col-lg-12 col-md-12 col-sm-12'></div>").appendTo(topTotalsContribCandidate);
+				var topTotalsContribCandidateTable = $("<table class='horizontal-bar-graph'></table>").appendTo(topTotalsContribCandidateCol12);
+				
+				
+				
+				
+				//Corbett_Wolf variables and logic 
+				var wolfContributionAmt = "";
+				var wolfContributionNum = "";
+				var results = data.results[0].beneficiaries;
+				$.each(results, function(i, item){
+					if(results[i].filerid == "20130153"){
+						wolfContributionAmt = results[i].amount;
+						wolfContributionNum = results[i].contributions;
+					}else {
+						wolfContributionAmt = "0";
+						wolfContributionNum = "0";
+					}
+				});
+				
+				var corbettContributionAmt = "";
+				var corbettContributionNum = "";
+				var results = data.results[0].beneficiaries;
+				$.each(results, function(i, item){
+					if(results[i].filerid == "2009216"){
+						corbettContributionAmt = results[i].amount;
+						corbettContributionNum = results[i].contributions;
+					}else {
+						corbettContributionAmt = "0";
+						corbettContributionNum = "0";
+					}
+				});
+				
+				var wolfBarWidth = "";
+				var corbettBarWidth = "";
+				if(wolfContributionAmt > corbettContributionAmt){
+					wolfBarWidth = "100";
+					corbettBarWidth = (corbettContributionAmt)/(wolfContributionAmt);
+				}else if(corbettContributionAmt > wolfContributionAmt){
+					corbettBarWidth = "100";
+					wolfBarWidth = (wolfContributionAmt)/(corbettContributionAmt);
+				} else{
+					corbettBarWidth = "100";
+					wolfBarWidth = "100";
+				};
+				
+				
+				//Corbett row --> need to make graphic length respect amt donated 
+				var topTotalsCorbettRow = $("<tr><td><strong>Corbett</strong></td><td><div class='bar republican' style='width:" + corbettBarWidth +"%; color:#000000;'></div><span style='overflow:visible;'>" + corbettContributionAmt + " (" + corbettContributionNum + " donations)" + "</span></td></tr>").appendTo(topTotalsContribCandidateTable);
+				
+				
+				//Wolf row --> need to make graphic length respect amt donated
+				var topTotalsWolfRow = $("<tr><td><strong>Wolf</strong></td><td><div class='bar democrat' style='width:" + wolfBarWidth + "%; color:#000000;'></div><span style='overflow:visible;'>" + wolfContributionAmt + " (" + wolfContributionNum + " donations)" + "</span></td></tr>").appendTo(topTotalsContribCandidateTable);
+				
+				//Overtime
+				var topTotalsOvertime = $("<div class='col-lg-8 col-md-8 col-sm-8 col-xs-12 block last'>").appendTo(topTotals);
+				var topTotalsOvertimeGraph = $("<h3>Contributions over time</h3><img src='/img/over-time-linechart.png' alt='Contributions over time' />").appendTo(topTotalsOvertime);
+	   
+	   
+				thinDivider.appendTo(container);
+				
+				container.append(thinDivider);
+				
+				container.append('<div class="row tabular"><div class="col-lg-12 col-md-12 col-sm-12"><h3>Other donations by ' + contribName +'</h3><form class="form-inline pull-right"><input type="search" class="form-control" placeholder="Search"><button type="submit" class="btn btn-default">Submit</button></form><table class="table table-hover sortable"><thead><tr><th>Donor</th> <th>Occupation, Employer</th><th>Amount</th></tr></thead><tbody></tbody></table></div></div> ');
+				
+				//get contributor data
+				$.getJSON("/api/contributors/" + contribNameRaw, function(data){
+					console.log(data.results[0].contributor);
+					console.log(data.results.length);
+					
+					var line;
+					for(var i =0; i < data.results.length; i++) {
+						var emp;
+						if (data.results[i].occupation == '') { //don't show comma if there's no occupation
+							emp = data.results[i].empName;
+						} else {
+							emp = data.results[i].occupation + ", " + data.results[i].empName;
+						}
+						line = "<tr><td>" + data.results[i].contributor + "</td><td>" +  emp  + "</td><td align='right'>$" + data.results[i].amount + "</td></tr>";
+						console.log(line);
+						$('tbody').append(line);
+					}
+					
+				});	   
 
+			});
 	   
 	   
 	   
 	   
-	   
-	   
-	   
-	   
-	   
-	   
+	 
 	   
 	   
 	   
 	   
         break;
-	case "contributions":
+		case "contributions":
          $('#bycontributor').addClass('active');
 		  var contributionID = split[3];
         
 			$.getJSON("/api/contributions/" + contributionID, function(data){
 				var contribName = data.results[0].contributor;
 				var contributionAmt = "$" + data.results[0].contribution;
-				//var locationZip = data.results[0].newzip;
-				//var locationCity = data.results[0].city;
 				
 				var conDateRaw = data.results[0].date;
 				var d = new Date(conDateRaw);
@@ -87,7 +213,7 @@ $(document).ready(function() {
 				$.getJSON("/api/contributors/" + contribName, function(data){
 					 var locationCity = data.results[0].city;
 					 var locationZip = data.results[0].zip;
-					 locationZip.substring(0,5);
+					 locationZip = locationZip.substring(0,5);
 				
 				
 				
@@ -149,23 +275,27 @@ $(document).ready(function() {
 						var dateItem = $(h3).appendTo(contributionColumn);
 						dateItem.addClass("date-item");
 						var dateLabel = $("<strong>Date: </strong>").appendTo(dateItem);
-						//why can I not omit the <span> below?
 						var dateData = $("<span>" + contributionDate + "</span>").appendTo(dateItem);
 						
 						
 						var locationItem = $(h3).appendTo(contributionColumn);
 						locationItem.addClass("location-item");
 						var locationLabel = $("<strong>Location: </strong>").appendTo(locationItem);
-						//why can I not omit the <span> below?
 						var locationData = $("<span>" + locationCity + ", " + locationZip + "</span>").appendTo(locationItem);
 						
-						mapColumn = $("<div></div>").appendTo(contributionRow);
-						mapColumn.addClass(collg7 + " " + colmd7 + " " + colsm7);
+						function initialize() {
+					    var mapOptions = {
+					      center: { lat: -34.397, lng: 150.644},
+					      zoom: 8
+					    };
+					    var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+					  };
+						google.maps.event.addDomListener(window, 'load', initialize);
+						mapColumn = $("<div class='col-lg-7 col-md-7 col-sm-7' id='map-canvas' style='height:100%;'></div>").appendTo(contributionRow);
+						$(map).appendTo(mapColumn);
 						
-						var countyMap = $("<img>").appendTo(mapColumn);
-						countyMap.addClass("sm_county_map");
-						countyMap.attr("src", "/img/allegheny-map.png");
-						countyMap.attr("alt", "Allegheny County locator map");
+						//var countyMap = $("<img class='sm_county_map' src='/img/allegheny-map.png' alt='Allegheny County locator map'>").appendTo(mapColumn);
+						
 					
 					
 					
