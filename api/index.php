@@ -98,6 +98,7 @@ class MyAPI extends API{
 						contributions.city,
 						contributions.state,
 						contributions.zip,
+						contributions.county, 
 						contributions.occupation,
 						contributions.empName,
 						contributions.empAddress1,
@@ -125,7 +126,7 @@ class MyAPI extends API{
 		$query["order"] = "ORDER BY contributor ASC "; 
 							
 		$that = $this;
-		return $this->queryAPI($query, "AND contributions.contributor = '%s' ", function($res, $query) use ($that) {
+		return $this->queryAPI($query, "AND contributions.contributorid = '%s' ", function($res, $query) use ($that) {
 						
 			$results = Array();
 			while($row = mysqli_fetch_assoc($res)){
@@ -142,6 +143,7 @@ class MyAPI extends API{
 										"city" => $row["city"],
 										"state" => $row["state"],
 										"zip" => $row["zip"], 
+										"county" => $row["county"], 
 										"occupation" => $row["occupation"],
 										"empName" => $row["empName"],
 										"empAddress1" => $row["empAddress2"],
@@ -281,7 +283,7 @@ class MyAPI extends API{
 	public function addConditions($category, $arg){
 		switch($category){
 			case "contributors":
-				return "AND contributions.contributor = '" . $this->mysqli -> real_escape_string($arg) . "' ";
+				return "AND contributions.contributorid = '" . $this->mysqli -> real_escape_string($arg) . "' ";
 			break;
 			
 			case "filers":
@@ -317,7 +319,7 @@ class MyAPI extends API{
 			foreach( $parameters as $key => $value ){
 				if( $value ) {
 					switch($key) {
-						case "contributor":
+						case "contributorname":
 							$query["where"] .= "AND contributions.contributor LIKE '%" . $this->mysqli -> real_escape_string($value) . "%' ";
 						break;
 						
