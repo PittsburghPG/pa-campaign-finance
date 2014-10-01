@@ -172,13 +172,36 @@ table.horizontal-bar-graph {
 		display:inline;
 	}
 
+.county {
+	fill: #eee;
+	stroke: #aaa;
+	opacity:.8;
+}
+	
+	.county:hover{
+		opacity:1;
+		cursor:pointer;
+	}
+	
+	.county.selected{
+		fill:#256F5B;
+	}
+	
+	.county.DEM{
+		fill:#2E4272;
+	}
+	
+	.county.REP{
+		fill:#AA3939;
+	}
+
 .chart {
 	font-family:"Open Sans", sans-serif;
 
 }
 
 #tooltip {
-	position:absolute;
+	position:fixed;
 	background-color:rgba(255,255,255,.8);
 	padding:0;
 	border-radius:5px;
@@ -198,8 +221,35 @@ table.horizontal-bar-graph {
 		
 	}
 	
+	.table#tooltip {
+		padding:10px;
+		font-size:12pt;
+		text-align:left;
+	}
+	
+		.table#tooltip h4 {
+			margin:0px 0px 5px;
+		}
+		
+		.table#tooltip table {
+			font-size:10pt;
+			width:100%;
+			cell-spacing:0;
+			border-collapse:collapse;
+		}
+			
+			.table#tooltip table td {
+				border-bottom:1px solid lightgray;
+				padding:5px;
+			}
+			
+				.table#tooltip table tr:last-child td {
+					border:0;
+				}
+	
 	#tooltip .text{
 		padding:5px;
+		
 	}
 	
 @media screen and (max-width: 767px) {
