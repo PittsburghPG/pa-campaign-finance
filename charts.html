@@ -5,15 +5,30 @@
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/flot/0.8.2/jquery.flot.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/flot/0.8.2/jquery.flot.pie.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/flot/0.8.2/jquery.flot.time.min.js"></script>
 	<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 	<script src="js/scripts_andrew.js"></script>
 
 	<style type = "text/css">
+		@import url(http://fonts.googleapis.com/css?family=Open+Sans:300,700,400,600);
 		.county {
 			fill: #eee;
 			stroke: #aaa;
 		}
 	
+		.chart {
+			font-family:"Open Sans", sans-serif;
+		
+		}
+		
+		#tooltip {
+			position:absolute;
+			background-color:rgba(255,255,255,.8);
+			padding:5px;
+			border-radius:5px;
+			border:1px solid lightgray;
+			font-family:"Open Sans", sans-serif;
+		}
 	</style>
 	
 </head>
@@ -22,7 +37,9 @@
 
 <svg id = "map" style="width:500px; height:500px"></svg>
 
-<div id="pie" style="width:250px; height:150px;"></div>
+<div id="pie" class="chart" style="width:250px; height:150px;"></div>
+
+<div id="timechart" class="chart" style="width:250px; height:150px;"></div>
 
 </body>
 

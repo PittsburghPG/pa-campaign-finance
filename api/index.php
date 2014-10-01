@@ -1,5 +1,7 @@
 <?PHP
 
+date_default_timezone_set("America/New_York");
+
 // will want to add /year and /race endpoints at some point
 
 error_reporting(E_ALL);
@@ -22,6 +24,10 @@ class MyAPI extends API{
 	}
 	
 	public function queryAPI($query, $identifier_query, $handler_function){
+		// Set limit and offset to null; They can always be updated later
+		$query["limit"] = " ";
+		$query["offset"] = " ";
+		
 		// See if args exist
 		if( sizeof($this -> args) > 0 ){
 			// If there's only one arg, it's an identifer
@@ -41,7 +47,7 @@ class MyAPI extends API{
 		
 		
 		// Run main query
-		$res = $this->mysqli -> query($query["select"] . $query["from"] . $query["join"] . $query["where"] . $query["group"] . $query["order"]);
+		$res = $this->mysqli -> query($query["select"] . $query["from"] . $query["join"] . $query["where"] . $query["group"] . $query["order"] . $query["limit"] . $query["offset"]);
 		
 		// Use special handler function if one is included, 
 		// otherwise parse results the default way
@@ -54,7 +60,7 @@ class MyAPI extends API{
 			}
 			
 			// Dump query in JSON for debugging
-			$output["sql"] = $this->formatSQL($query["select"] . $query["from"] . $query["join"] . $query["where"] . $query["group"] . $query["order"]);
+			$output["sql"] = $this->formatSQL($query["select"] . $query["from"] . $query["join"] . $query["where"] . $query["group"] . $query["order"] . $query["limit"] . $query["offset"]);
 			$output["results"] = $results;
 			return $output;
 		}
@@ -64,6 +70,7 @@ class MyAPI extends API{
 		$query["select"] = "SELECT contributions.id,
 						contribution, 
 						contributor,
+						contributorid,
 						filers.name,
 						filers.filerid,
 						date, 
@@ -75,6 +82,7 @@ class MyAPI extends API{
 		$query["where"] = "WHERE 1=1 ";
 		$query["group"] = " ";
 		$query["order"] = " ";
+	
 		
 		return $this->queryAPI($query, "AND contributions.id = '%s' ", "");
 		
@@ -91,6 +99,7 @@ class MyAPI extends API{
 						contributions.city,
 						contributions.state,
 						contributions.zip,
+						contributions.county, 
 						contributions.occupation,
 						contributions.empName,
 						contributions.empAddress1,
@@ -118,7 +127,7 @@ class MyAPI extends API{
 		$query["order"] = "ORDER BY contributor ASC "; 
 							
 		$that = $this;
-		return $this->queryAPI($query, "AND contributions.contributor = '%s' ", function($res, $query) use ($that) {
+		return $this->queryAPI($query, "AND contributions.contributorid = '%s' ", function($res, $query) use ($that) {
 						
 			$results = Array();
 			while($row = mysqli_fetch_assoc($res)){
@@ -135,6 +144,7 @@ class MyAPI extends API{
 										"city" => $row["city"],
 										"state" => $row["state"],
 										"zip" => $row["zip"], 
+										"county" => $row["county"], 
 										"occupation" => $row["occupation"],
 										"empName" => $row["empName"],
 										"empAddress1" => $row["empAddress2"],
@@ -195,11 +205,19 @@ class MyAPI extends API{
 						candidates.party, 
 						candidates.year,
 						candidates.race,
+						filers.address1,
+						filers.address2,
+						filers.city,
+						filers.state,
+						filers.zip, 
+						filers.phone,
 						SUM(contributions.contribution) as total,
+						AVG(contributions.contribution) as average,
 						COUNT(contributions.contribution) as count
 					";
 		$query["from"] = "FROM campaign_finance.candidates ";
 		$query["join"] = "LEFT JOIN campaign_finance.contributions on contributions.filerid = candidates.filerid ";
+		$query["join"] .= "LEFT JOIN campaign_finance.filers on contributions.filerid = filers.filerid ";
 		$query["where"] = "WHERE 1=1 ";
 		$query["group"] = "GROUP BY candidates.name, candidates.year, candidates.race ";
 		$query["order"] = " ";
@@ -266,7 +284,7 @@ class MyAPI extends API{
 	public function addConditions($category, $arg){
 		switch($category){
 			case "contributors":
-				return "AND contributions.contributor = '" . $this->mysqli -> real_escape_string($arg) . "' ";
+				return "AND contributions.contributorid = '" . $this->mysqli -> real_escape_string($arg) . "' ";
 			break;
 			
 			case "filers":
@@ -302,7 +320,7 @@ class MyAPI extends API{
 			foreach( $parameters as $key => $value ){
 				if( $value ) {
 					switch($key) {
-						case "contributor":
+						case "contributorname":
 							$query["where"] .= "AND contributions.contributor LIKE '%" . $this->mysqli -> real_escape_string($value) . "%' ";
 						break;
 						
@@ -340,6 +358,14 @@ class MyAPI extends API{
 						case "endAmount":
 							$value = floatval($value);
 							$query["where"] .= "AND contributions.contribution <= " . $this->mysqli -> real_escape_string($value) . " "; 
+						break;
+						
+						case "limit":
+							$query["limit"] .= "LIMIT " . $this->mysqli -> real_escape_string($value) . " "; 
+						break;
+						
+						case "offset":
+							$query["offset"] .= "OFFSET " . $this->mysqli -> real_escape_string($value) . " "; 
 						break;
 						
 						case "monthly":

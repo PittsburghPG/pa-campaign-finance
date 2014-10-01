@@ -23,6 +23,7 @@ CREATE TABLE campaign_finance.contributions
 	`state` 			char varying(3) 	DEFAULT NULL,
 	`zip` 				char varying(10) 	DEFAULT NULL,
 	`newzip` 			char varying(10) 	DEFAULT NULL,
+	`county`			char varying(50)	DEFAULT NULL,
 	`occupation` 		char varying(100) 	DEFAULT NULL,
 	`empName` 			char varying(100) 	DEFAULT NULL,
 	`empAddress1` 		char varying(150) 	DEFAULT NULL,
