@@ -70,6 +70,7 @@ class MyAPI extends API{
 		$query["select"] = "SELECT contributions.id,
 						contribution, 
 						contributor,
+						contributorid,
 						filers.name,
 						filers.filerid,
 						date, 

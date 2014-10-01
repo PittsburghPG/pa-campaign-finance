@@ -51,7 +51,7 @@ $(document).ready(function() {
 				
 				var contribName = data.results[0].contributor;
 				
-				var headerAmt = $("<h1>" + contribName + "</h1>");
+				var headerAmt = $("<h1>" + contribName + "</h1><div class='thin-divider'></div>");
 				headerAmt.appendTo(jumbotron);
 				
 				var contribJob = data.results[0].occupation;
@@ -83,8 +83,15 @@ $(document).ready(function() {
 				
 				// Location block	
 				var locationCity = data.results[0].city;
-				var locationZip = data.results[0].zip;
-				var topTotalsLeftLocationBlock = $("<div class='row'><div class='col-lg-12 col-md-12 col-sm-12'><label>LOCATION</label><h3>" + locationCity + "</h3><p>" + locationZip + "</p></div></div>" ).appendTo(topTotalsLeft);
+				var locationCounty = data.results[0].county;
+				var topTotalsLeftLocationBlock = $("<div class='row'> \
+														<div class='col-lg-12 col-md-12 col-sm-12'> \
+															<label>LOCATION</label><h3>" + locationCity + "</h3> \
+															<p><a href='/a/counties/" + locationCounty + "'>" + locationCounty + " County</a></p> \
+														</div> \
+													</div> \
+													<div class='thin-divider'></div>"
+													).appendTo(topTotalsLeft);
 	   
 				thinDivider.appendTo(topTotalsLeft);
 	   
@@ -93,7 +100,7 @@ $(document).ready(function() {
 				var topTotalsContribCol12 = $("<div class='col-lg-12 col-md-12 col-sm-12'></div>").appendTo(topTotalsContrib);
 	   
 				var contributionTotal = data.results[0].amount;
-				var topTotalsContribLabel = $("<label>TOP CONTRIBUTED</label><h3>" + contributionTotal + "</h3>").appendTo(topTotalsContribCol12);
+				var topTotalsContribLabel = $("<label>TOTAL CONTRIBUTED</label><h3>" + toDollars(contributionTotal) + "</h3>").appendTo(topTotalsContribCol12);
 				
 				//Candidate breakdown table
 				var topTotalsContribCandidate = $("<div class='row'></div>").appendTo(topTotalsContribCol12);
@@ -145,11 +152,11 @@ $(document).ready(function() {
 				
 				
 				//Corbett row --> need to make graphic length respect amt donated 
-				var topTotalsCorbettRow = $("<tr><td><strong>Corbett</strong></td><td><div class='bar republican' style='width:" + corbettBarWidth +"%; color:#000000;'></div><span style='overflow:visible;'>" + corbettContributionAmt + " (" + corbettContributionNum + " donations)" + "</span></td></tr>").appendTo(topTotalsContribCandidateTable);
+				var topTotalsCorbettRow = $("<tr><td><strong>Corbett</strong></td><td><div class='bar republican' style='width:" + corbettBarWidth +"%; color:#000000;'></div><span style='overflow:visible;'>" + corbettContributionAmt + " (" + corbettContributionNum + " contributions)" + "</span></td></tr>").appendTo(topTotalsContribCandidateTable);
 				
 				
 				//Wolf row --> need to make graphic length respect amt donated
-				var topTotalsWolfRow = $("<tr><td><strong>Wolf</strong></td><td><div class='bar democrat' style='width:" + wolfBarWidth + "%; color:#000000;'></div><span style='overflow:visible;'>" + wolfContributionAmt + " (" + wolfContributionNum + " donations)" + "</span></td></tr>").appendTo(topTotalsContribCandidateTable);
+				var topTotalsWolfRow = $("<tr><td><strong>Wolf</strong></td><td><div class='bar democrat' style='width:" + wolfBarWidth + "%; color:#000000;'></div><span style='overflow:visible;'>" + wolfContributionAmt + " (" + wolfContributionNum + " contributions)" + "</span></td></tr>").appendTo(topTotalsContribCandidateTable);
 				
 				//Overtime
 				var topTotalsOvertime = $("<div class='col-lg-8 col-md-8 col-sm-8 col-xs-12 block last'>").appendTo(topTotals);
@@ -161,25 +168,32 @@ $(document).ready(function() {
 				
 				container.append(thinDivider);
 				
-				container.append('<div class="row tabular"><div class="col-lg-12 col-md-12 col-sm-12"><h3>Other donations by ' + contribName +'</h3><form class="form-inline pull-right"><input type="search" class="form-control" placeholder="Search"><button type="submit" class="btn btn-default">Submit</button></form><table class="table table-hover sortable"><thead><tr><th>Donor</th> <th>Occupation, Employer</th><th>Amount</th></tr></thead><tbody></tbody></table></div></div> ');
+				container.append('<div class="row tabular"> \
+									<div class="col-lg-12 col-md-12 col-sm-12"> \
+										<h3>All donations by ' + contribName +'</h3> \
+										<form class="form-inline pull-right"> \
+											<input type="search" class="form-control" placeholder="Search"> \
+											<button type="submit" class="btn btn-default">Submit</button> \
+										</form> \
+										<table class="table table-hover sortable"> \
+											<thead> \
+												<tr> \
+													<th>Date</th>\
+													<th>Candidate/PAC</th> \
+													<th>Amount</th> \
+												</tr> \
+											</thead> \
+											<tbody></tbody> \
+										</table> \
+									</div> \
+								</div> ');
 				
 				//get contributor data
-				$.getJSON("/api/contributors/" + contribID, function(data){
-					console.log(data.results[0].contributor);
-					console.log(data.results.length);
+				$.getJSON("/api/contributions/contributors/" + contribID, function(data){
 					
-					var line;
-					for(var i =0; i < data.results.length; i++) {
-						var emp;
-						if (data.results[i].occupation == '') { //don't show comma if there's no occupation
-							emp = data.results[i].empName;
-						} else {
-							emp = data.results[i].occupation + ", " + data.results[i].empName;
-						}
-						line = "<tr><td>" + data.results[i].contributor + "</td><td>" +  emp  + "</td><td align='right'>$" + data.results[i].amount + "</td></tr>";
-						console.log(line);
-						$('tbody').append(line);
-					}
+					$.each(data.results, function(i, result){
+						$('.tabular tbody').append("<tr><td><a href='/a/contributions/" + result.id + "'>" + result.date + "</a></td><td>" + result.name + "</td><td>" + toDollars(result.contribution) + "</td></tr>");
+					});
 					
 				});	   
 
@@ -200,6 +214,7 @@ $(document).ready(function() {
         
 			$.getJSON("/api/contributions/" + contributionID, function(data){
 				var contribName = data.results[0].contributor;
+				var contribID = data.results[0].contributorid;
 				var contributionAmt = "$" + data.results[0].contribution;
 				
 				var conDateRaw = data.results[0].date;
@@ -211,7 +226,7 @@ $(document).ready(function() {
 				
 				var filerID = data.results[0].filerid;
 				
-				$.getJSON("/api/contributors/" + contribName, function(data){
+				$.getJSON("/api/contributors/" + contribID, function(data){
 					 var locationCity = data.results[0].city;
 					 var locationZip = data.results[0].zip;
 					 locationZip = locationZip.substring(0,5);
@@ -263,9 +278,9 @@ $(document).ready(function() {
 						
 						var contribItem = $(h3).appendTo(contributionColumn);
 						contribItem.addClass("donor-item");
-						var contribLabel = $("<strong>Donor: </strong>").appendTo(contribItem);
+						var contribLabel = $("<strong>Contributor: </strong>").appendTo(contribItem);
 						var contribLink = $("<a>" + contribName + "</a>").appendTo(contribItem);
-						contribLink.attr("href", "/a/contributors/" + contribName);
+						contribLink.attr("href", "/a/contributors/" + contribID);
 						
 						var candidateItem = $(h3).appendTo(contributionColumn);
 						candidateItem.addClass("candidate-item");
@@ -337,7 +352,7 @@ function makeTimeChart(id, endpoint, target, startDate, endDate){
 		$.getJSON("api/months/" + endpoint + "/" + target + "?startDate=" + startDate + "&endDate=" + endDate, function(json){
 			data = [];
 			$.each(json.results, function(i, date){
-				data.push( [Date.parse(date["year"] + "-" + date["month"] + "-" + "01"), date["total"]] );
+				data.push( [Date.parse(date["year"] + "-" + date["month"] + "-" + "01 05:01:00"), date["total"]] );
 				$.plot("#" + id, [{ 
 					data: data, 
 					color:"seagreen"
@@ -378,7 +393,8 @@ function makeTimeChart(id, endpoint, target, startDate, endDate){
 						if( $("#tooltip").length == 0 ){
 							$("<div id='tooltip'></div>").appendTo( $("body") )
 								.css({top: item.pageY+5, left: item.pageX+5});
-							$("#tooltip").html("<div class='date'>" + new Date(item.datapoint[0]).getMonth() + "/" + new Date(item.datapoint[0]).getFullYear() + "</div><div class='text'>" + toDollars(item.datapoint[1]) + "</div>");
+							$("#tooltip").html("<div class='date'>" + ( new Date(item.datapoint[0]).getMonth() + 1 ) + "/" + new Date(item.datapoint[0]).getFullYear() + "</div><div class='text'>" + toDollars(item.datapoint[1]) + "</div>");
+							console.log(item.datapoint[0]);
 						}
 						else {
 							$("#tooltip").css({top: item.pageY-20, left: item.pageX+10});
