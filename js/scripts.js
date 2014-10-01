@@ -1,12 +1,4 @@
-$(document).ready(function() {
-/* var mapOptions = {
-  zoom: 8,
-  center: new google.maps.LatLng(40.4450813, -80.00877459999998),
-	disableDefaultUI: true
- };
- map = new google.maps.Map(document.getElementById('map_canvas'),
-      mapOptions);*/
-      
+$(document).ready(function() {      
    
 
  //parse url
@@ -230,90 +222,119 @@ $(document).ready(function() {
 				$.getJSON("/api/contributors/" + contribID, function(data){
 					 var locationCity = data.results[0].city;
 					 var locationZip = data.results[0].zip;
+					 var locationState = data.results[0].state;
 					 locationZip = locationZip.substring(0,5);
-				
-				
-				
-					$.getJSON("/api/candidates/", function(data){
+					 var locationAddress = data.results[0].address;
 						
-						var candidateName = "";
-						var results = data.results;
-						$.each(results, function(i, item){
-							if(results[i].filerid == filerID){
-								candidateName = results[i].name;
-							}
+					$.getJSON("https://maps.googleapis.com/maps/api/geocode/json?address=" + locationCity + "&components=postal_code:" + locationZip, function(geodata){	
+						console.log(geodata);
+						
+						var contribLAT = geodata.results[0].geometry.location.lat;
+						var contribLNG = geodata.results[0].geometry.location.lng;
+						/*var geoResults = geodata.results;
+						$.each(geoResults, function(g, location){
+							if(geoResults[g].address_components[4].short_name == locationZip){
+								contribLAT = geoResults[g].geometry.location.lat;
+								contribLNG = geoResults[g].geometry.location.lng;
+							}	
+						});*/
+						
+					 function initializeGmap() {	
+						  var mapOptions = {
+						    center: { lat: contribLAT, lng: contribLNG},
+						    zoom: 8,
+						    disableDefaultUI: true,
+						    scrollwheel: false,
+						    draggable: false
+						  };
+						  var Gmap = new google.maps.Map(document.getElementById('map-canvas'),
+						      mapOptions);
+						  
+						  var addressMarker = new google.maps.Marker({
+						    position: { lat: contribLAT, lng: contribLNG},
+						    map: Gmap,
+						    title:locationCity
+							});
+						}
+
+						
+				
+				
+						$.getJSON("/api/candidates/", function(data){
+													
+							var candidateName = "";
+							var results = data.results;
+							$.each(results, function(i, item){
+								if(results[i].filerid == filerID){
+									candidateName = results[i].name;
+								}
+							});
+							
+							
+							//intro row
+							var container = $("#main");
+							introRow = $("<div></div>").appendTo(container);	
+							introRow.addClass("row intro-row");
+							
+							var introLabel = $("<label>CONTRIBUTION</label>");
+							introLabel.appendTo(introRow);
+							
+							var jumbotron = $("<div></div>").appendTo(introRow);
+							jumbotron.addClass("jumbotron");
+							
+							var headerAmt = $("<h1>" + contributionAmt + "</h1>");
+							headerAmt.appendTo(jumbotron);
+							
+							var thinDivider = $("<div class='thin-divider'></div>");
+							thinDivider.appendTo(jumbotron);
+							
+							
+							//donation info row
+							contributionRow = $("<div></div>").appendTo(container);
+							contributionRow.addClass("row");
+							
+							var colmd5 = "col-md-5";
+							var collg7 = "col-lg-7";
+							var colmd7 = "col-md-7";
+							var colsm7 = "col-sm-7";
+							
+							contributionColumn = $("<div class='col-md-5 contrib-items'></div>").appendTo(contributionRow);
+							
+							var h3 = "<h3></h3>";
+							
+							var contribItem = $(h3).appendTo(contributionColumn);
+							contribItem.addClass("donor-item");
+							var contribLabel = $("<strong>Contributor: </strong>").appendTo(contribItem);
+							var contribLink = $("<a>" + contribName + "</a>").appendTo(contribItem);
+							contribLink.attr("href", "/a/contributors/" + contribID);
+							
+							var candidateItem = $(h3).appendTo(contributionColumn);
+							candidateItem.addClass("candidate-item");
+							var candidateLabel = $("<strong>Candidate: </strong>").appendTo(candidateItem);
+							var candidateLink = $("<a>" + candidateName + "</a>").appendTo(candidateItem);
+							candidateLink.attr("href", "/a/candidates/" + candidateName);
+							
+							var dateItem = $(h3).appendTo(contributionColumn);
+							dateItem.addClass("date-item");
+							var dateLabel = $("<strong>Date: </strong>").appendTo(dateItem);
+							var dateData = $("<span>" + contributionDate + "</span>").appendTo(dateItem);
+							
+							
+							var locationItem = $(h3).appendTo(contributionColumn);
+							locationItem.addClass("location-item");
+							var locationLabel = $("<strong>Location: </strong>").appendTo(locationItem);
+							var locationData = $("<span>" + locationCity + ", " + locationState + " " + locationZip + "</span>").appendTo(locationItem);
+							
+							mapColumn = $("<div class='col-lg-7 col-md-7 col-sm-7' id='map-canvas' style='height:500px;'></div>").appendTo(contributionRow);
+							initializeGmap();
+	
+							//$(Gmap).appendTo(mapColumn);
+							//console.log(map);
+							
+							//var countyMap = $("<img class='sm_county_map' src='/img/allegheny-map.png' alt='Allegheny County locator map'>").appendTo(mapColumn);
+							
+						
 						});
-						
-						
-						//intro row
-						var container = $("#main");
-						introRow = $("<div></div>").appendTo(container);	
-						introRow.addClass("row intro-row");
-						
-						var introLabel = $("<label>CONTRIBUTION</label>");
-						introLabel.appendTo(introRow);
-						
-						var jumbotron = $("<div></div>").appendTo(introRow);
-						jumbotron.addClass("jumbotron");
-						
-						var headerAmt = $("<h1>" + contributionAmt + "</h1>");
-						headerAmt.appendTo(jumbotron);
-						
-						var thinDivider = $("<div class='thin-divider'></div>");
-						thinDivider.appendTo(jumbotron);
-						
-						
-						//donation info row
-						contributionRow = $("<div></div>").appendTo(container);
-						contributionRow.addClass("row");
-						
-						var colmd5 = "col-md-5";
-						var collg7 = "col-lg-7";
-						var colmd7 = "col-md-7";
-						var colsm7 = "col-sm-7";
-						
-						contributionColumn = $("<div class='col-md-5 contrib-items'></div>").appendTo(contributionRow);
-						
-						var h3 = "<h3></h3>";
-						
-						var contribItem = $(h3).appendTo(contributionColumn);
-						contribItem.addClass("donor-item");
-						var contribLabel = $("<strong>Contributor: </strong>").appendTo(contribItem);
-						var contribLink = $("<a>" + contribName + "</a>").appendTo(contribItem);
-						contribLink.attr("href", "/a/contributors/" + contribID);
-						
-						var candidateItem = $(h3).appendTo(contributionColumn);
-						candidateItem.addClass("candidate-item");
-						var candidateLabel = $("<strong>Candidate: </strong>").appendTo(candidateItem);
-						var candidateLink = $("<a>" + candidateName + "</a>").appendTo(candidateItem);
-						candidateLink.attr("href", "/a/candidates/" + candidateName);
-						
-						var dateItem = $(h3).appendTo(contributionColumn);
-						dateItem.addClass("date-item");
-						var dateLabel = $("<strong>Date: </strong>").appendTo(dateItem);
-						var dateData = $("<span>" + contributionDate + "</span>").appendTo(dateItem);
-						
-						
-						var locationItem = $(h3).appendTo(contributionColumn);
-						locationItem.addClass("location-item");
-						var locationLabel = $("<strong>Location: </strong>").appendTo(locationItem);
-						var locationData = $("<span>" + locationCity + ", " + locationZip + "</span>").appendTo(locationItem);
-						
-						function initialize() {
-					    var mapOptions = {
-					      center: { lat: -34.397, lng: 150.644},
-					      zoom: 8
-					    };
-					    var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-					  };
-						google.maps.event.addDomListener(window, 'load', initialize);
-						mapColumn = $("<div class='col-lg-7 col-md-7 col-sm-7' id='map-canvas' style='height:100%;'></div>").appendTo(contributionRow);
-						$(map).appendTo(mapColumn);
-						
-						//var countyMap = $("<img class='sm_county_map' src='/img/allegheny-map.png' alt='Allegheny County locator map'>").appendTo(mapColumn);
-						
-					
-					
 					
 					});
 					
