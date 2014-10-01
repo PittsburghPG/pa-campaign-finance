@@ -31,9 +31,9 @@ $(document).ready(function() {
 	
 	case "contributors":
        $('#bycontributor').addClass('active');
-	   var contribNameRaw = split[3];
+	   var contribID = split[3];
 	   
-	   $.getJSON("/api/contributors/" + contribNameRaw, function(data){
+	   $.getJSON("/api/contributors/" + contribID, function(data){
 	   		
 	   		//var need = "{need variable}";
 	   		
@@ -153,7 +153,8 @@ $(document).ready(function() {
 				
 				//Overtime
 				var topTotalsOvertime = $("<div class='col-lg-8 col-md-8 col-sm-8 col-xs-12 block last'>").appendTo(topTotals);
-				var topTotalsOvertimeGraph = $("<h3>Contributions over time</h3><img src='/img/over-time-linechart.png' alt='Contributions over time' />").appendTo(topTotalsOvertime);
+				var topTotalsOvertimeGraph = $("<h3>Contributions over time</h3><div id='timechart' style='width:100%; height:400px'></div>").appendTo(topTotalsOvertime);
+				makeTimeChart("timechart", "contributors", contribID, "2013-01-01", "2014-11-01");
 	   
 	   
 				thinDivider.appendTo(container);
@@ -163,7 +164,7 @@ $(document).ready(function() {
 				container.append('<div class="row tabular"><div class="col-lg-12 col-md-12 col-sm-12"><h3>Other donations by ' + contribName +'</h3><form class="form-inline pull-right"><input type="search" class="form-control" placeholder="Search"><button type="submit" class="btn btn-default">Submit</button></form><table class="table table-hover sortable"><thead><tr><th>Donor</th> <th>Occupation, Employer</th><th>Amount</th></tr></thead><tbody></tbody></table></div></div> ');
 				
 				//get contributor data
-				$.getJSON("/api/contributors/" + contribNameRaw, function(data){
+				$.getJSON("/api/contributors/" + contribID, function(data){
 					console.log(data.results[0].contributor);
 					console.log(data.results.length);
 					
@@ -377,10 +378,9 @@ function makeTimeChart(id, endpoint, target, startDate, endDate){
 						if( $("#tooltip").length == 0 ){
 							$("<div id='tooltip'></div>").appendTo( $("body") )
 								.css({top: item.pageY+5, left: item.pageX+5});
-							$("#tooltip").html("<div class='date'>" + new Date(item.datapoint[0]).getMonth() + "/" + new Date(item.datapoint[0]).getFullYear() + "</div><div class='text'>" + toDollar(item.datapoint[1]) + "</div>");
+							$("#tooltip").html("<div class='date'>" + new Date(item.datapoint[0]).getMonth() + "/" + new Date(item.datapoint[0]).getFullYear() + "</div><div class='text'>" + toDollars(item.datapoint[1]) + "</div>");
 						}
 						else {
-							console.log(toDollar(item.datapoint[1]));
 							$("#tooltip").css({top: item.pageY-20, left: item.pageX+10});
 						}
 						x = item.datapoint[0].toFixed(2);
