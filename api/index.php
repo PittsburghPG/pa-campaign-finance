@@ -139,6 +139,7 @@ class MyAPI extends API{
 				}
 				else {
 					$results[] = Array("contributor" => $row["contributor"],
+										"contributorid" => $row["contributorid"],
 										"address" => $row["address"],
 										"address2" => $row["address2"],
 										"city" => $row["city"],
