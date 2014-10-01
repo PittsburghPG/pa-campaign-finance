@@ -1,5 +1,7 @@
 <?PHP
 
+date_default_timezone_set("America/New_York");
+
 // will want to add /year and /race endpoints at some point
 
 error_reporting(E_ALL);
