@@ -17,6 +17,7 @@ BEGIN
 	CREATE TABLE campaign_finance.contributors
 		(SELECT 	contributor, 
 					address, 
+					address2,
 					city, 
 					state, 
 					zip 
@@ -24,6 +25,7 @@ BEGIN
 		FROM 		campaign_finance.contributions 
 		GROUP BY contributor, 
 					address, 
+					address2,
 					city, 
 					state, 
 					zip);
@@ -35,6 +37,7 @@ BEGIN
 	JOIN 		campaign_finance.contributors 
 	ON 			contributions.contributor = contributors.contributor
 	AND 		contributions.address = contributors.address
+	AND 		contributions.address2 = contributors.address2
 	AND 		contributions.city = contributors.city
 	AND 		contributions.state = contributors.state
 	AND 		contributions.zip = contributors.zip
