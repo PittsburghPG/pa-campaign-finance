@@ -191,3 +191,74 @@ function toTitleCase(str)
 {
     return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 }
+
+// Converts XXXXXX.XXXXX to $XXX,XXX.XX
+function toDollars(x){
+	return "$" + numberWithCommas( Math.floor(x * 100) / 100 );
+}
+
+// Converts XXXXXXXX to XX,XXX,XXX
+function numberWithCommas(x){
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+function makeTimeChart(id, endpoint, target, startDate, endDate){
+		$.getJSON("api/months/" + endpoint + "/" + target + "?startDate=" + startDate + "&endDate=" + endDate, function(json){
+			data = [];
+			$.each(json.results, function(i, date){
+				data.push( [Date.parse(date["year"] + "-" + date["month"] + "-" + "01"), date["total"]] );
+				$.plot("#" + id, [{ 
+					data: data, 
+					color:"seagreen"
+				}], {
+					series: {
+						lines:{
+							lineWidth: 6,
+							show:true
+						},
+						points:{
+							show:true
+						}
+					},
+					xaxis: { 
+						mode: "time",
+						min: data[0][0]	
+					},
+					yaxis: {
+						tickFormatter: function(val, axis){
+							return "$" + numberWithCommas(val);
+						},
+						min: 0
+					},
+					grid: {
+						borderWidth: {
+							top: 0,
+							left: 1,
+							right: 0,
+							bottom: 1
+						},
+						hoverable: true
+					},
+					markings:0
+				});
+				
+				$("#" + id).bind("plothover", function(event, pos, item){
+					if( item ) {
+						if( $("#tooltip").length == 0 ){
+							$("<div id='tooltip'></div>").appendTo( $("body") )
+								.css({top: item.pageY+5, left: item.pageX+5});
+							$("#tooltip").html("<div class='date'>" + new Date(item.datapoint[0]).getMonth() + "/" + new Date(item.datapoint[0]).getFullYear() + "</div><div class='text'>" + toDollar(item.datapoint[1]) + "</div>");
+						}
+						else {
+							console.log(toDollar(item.datapoint[1]));
+							$("#tooltip").css({top: item.pageY-20, left: item.pageX+10});
+						}
+						x = item.datapoint[0].toFixed(2);
+						y = item.datapoint[1].toFixed(2);
+					}
+					else $("#tooltip").remove();
+				});
+			});	
+		});
+	}
+	
