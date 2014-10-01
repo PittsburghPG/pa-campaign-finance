@@ -61,25 +61,28 @@ $(document).ready(function() {
 			candName.appendTo(jumbotron);
 			
 			var thinDivider = $("<div class='thin-divider'></div>");
-			thinDivider.appendTo(jumbotron);
+			//thinDivider.appendTo(jumbotron);
 			  
 			 
 			 //banner image
 			  var n = name.split(" ");
 			  var lastName = n[1];
 			  lastName = lastName.toLowerCase();
-			  $( "<div class='banner-image'></div>" ).appendTo(container);
+			 // $( "<div class='banner-image'></div>" ).appendTo('body');
+			 $( "<div class='banner-image'></div>" ).insertAfter( "#main" );
 			  $('.banner-image').css('background-image', "url('/../img/" + lastName + "-header.jpg')");
 			  $('.banner-image').css('background-size', 'cover');
 			  
 			  //bio information
 			  $( "<div class='container' id='data'></div>" ).insertAfter( ".banner-image" );
+			// $( "<div class='container' id='data'></div>" ).insertAfter( "#main" );
 			  $('#data').append("<div class='row' id='bio_totals'></div>");
 			  $('#bio_totals').append("<div id='bio' class='col-lg-5 col-md-5 col-sm-5 col-xs-12'></div>");
 			  $('#bio').append('<p><span class="fa-stack fa-md"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-birthday-cake fa-stack-1x fa-inverse"></i></span><strong id="party"></strong><br><span class="fa-stack fa-md"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-phone fa-stack-1x fa-inverse"></i></span><strong id="phone"></strong><br><span class="fa-stack fa-md"><i class="fa fa-square fa-stack-2x"></i>	<i class="fa fa-envelope fa-stack-1x fa-inverse"></i></span><strong id="address"></strong><br></p><p class="lead">Tom Corbett! What a bro. </p>');
 			  $('#party').html(party);
 			  $('#address').html(address1 + address2 + ", " + city + ", " + state + " " + zip);
 			  $('#phone').html(phone);
+			  $("<div class='thin-divider' id='biodivider'></div>").insertAfter('#data');
 			  
 			  //totals
 			  $('#bio_totals').append('<div class="col-lg-6 col-md-6 col-sm-7 col-lg-offset-1 col-md-offset-1 top-totals"><div class="row no-margin-top"><div class="col-lg-12 col-md-12 col-sm-12"><label>TOTAL RAISED</label>		<h2 class="jumbo" id="total_raised"></h2></div></div><div class="row"><div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 block first"><label>$50 AND OVER</label><h3 id="over50"></h3></div><div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 block"><label>UNDER $50</label><h3 id="under50"></h3></div><div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 block last"><label>AVERAGE DONATION</label><h3 id="average"></h3></div></div></div>');
@@ -120,15 +123,22 @@ $(document).ready(function() {
 				flAverage = flAverage.numberFormat(0);
 				$('#average').html( "$" + flAverage );
 				
-				container.append(thinDivider);
-				//charts would go here
+				$("<div class='container'><div class='thin-divider' id='datadivider'></div></div>").insertAfter("#data");
+				
+				//charts 
+				//container.append('<div class="row graphs"><div class="col-lg-8 col-md-8 col-sm-8 block"><h3>County-by-county contributions <i class="fa fa-info-circle"></i></h3><div class="well"><img src="/../img/pa-heat-map.png" alt="County-by-county contribution" /></div></div><div class="col-lg-4 col-md-4 col-sm-4"><h3>Over time</h3><div class="well" id="timechart" style="width: 100%; height: 200px;"></div><h3>In state vs. out of state</h3><div class="well" id="pie" style="width: 100%; height: 200px;"></div></div></div>');
+				$('<div class="container" id="charts"><div class="row graphs"><div class="col-lg-8 col-md-8 col-sm-8 block"><h3>County-by-county contributions <i class="fa fa-info-circle"></i></h3><div class="well"><img src="/../img/pa-heat-map.png" alt="County-by-county contribution" /></div></div><div class="col-lg-4 col-md-4 col-sm-4"><h3>Over time</h3><div class="well" id="timechart" style="width: 100%; height: 200px;"></div><h3>In state vs. out of state</h3><div class="well" id="pie" style="width: 100%; height: 200px;"></div></div></div></div><div class="thin-divider"></div>').insertAfter( "#datadivider" );
+				makePieChart("pie", split[3], "PA");
+				makeTimeChart("timechart", "candidates", split[3], "2013-01-01", "2014-09-01");
+				
+				//$("<div class='thin-divider' id='chartdivider'></div>").insertAfter("#charts");
+				$("<div class='container'><div class='thin-divider' id='chartdivider'></div></div>").insertAfter("#charts");
 				
 				//tabular data
-				container.append(thinDivider);
-				
-				container.append('<div class="row tabular"  style="height: 500px; overflow: hidden; margin-bottom: 30px;"><div class="col-lg-12 col-md-12 col-sm-12"><h3>Donors</h3><form class="form-inline pull-right"><input type="search" class="form-control" placeholder="Search"><button type="submit" class="btn btn-default">Submit</button></form><table class="table table-hover sortable"><thead><tr><th>Donor</th> <th>Occupation, Employer</th><th>Amount</th></tr></thead><tbody></tbody></table></div></div> ');
-				
-				container.append(thinDivider);
+				$('<div class="container" id="table"><div class="row tabular" id="tableHeightDiv" style="margin-bottom: 30px;"><div class="col-lg-12 col-md-12 col-sm-12"><h3>Donors</h3><form class="form-inline pull-right"><input type="search" class="form-control" placeholder="Search"><button type="submit" class="btn btn-default">Submit</button></form><table class="table table-hover sortable" id="donorTable"><thead><tr><th>Donor</th> <th>Occupation, Employer</th><th>Amount</th></tr></thead><tbody></tbody></table></div></div></div> ').insertAfter("#chartdivider");
+				var donorHeight = $("#tableHeightDiv").height();
+				$("#tableHeightDiv").css({'height': '500px', 'overflow':'hidden'});
+				//container.append(thinDivider);
 				//get contributor data
 				$.ajax({
 					url: "api/contributors/filers/" + split[3],
@@ -152,11 +162,12 @@ $(document).ready(function() {
 							amount = amount.numberFormat(0);
 							line = "<tr><td><a href='/a/contributors/" + u.results[i].contributorid + "'>" + u.results[i].contributor + "</a></td><td>" +  emp  + "</td><td align='right'>$" + amount + "</td></tr>";
 							//console.log(line);
-							$('tbody').append(line);
+							$('#donorTable tbody').append(line);
 						}
 					}
 			    });
 				
+				$('<div class="container"><a href="">View all</a></div>').insertAfter('#table');
 			}
 		  });
 		 
@@ -164,6 +175,35 @@ $(document).ready(function() {
     case "counties":
       $('#bycounty').addClass('active');
 	  var countyName = split[3];
+	  //console.log(countyName);
+	  countyName = toTitleCase(countyName);
+	  $.ajax({
+			url: "api/" + apiURL,
+			dataType: "json",
+			type : "GET",
+			success : function(v) {
+				//console.log(v.results[0]);
+				var container = $("#main");
+				introRow = $("<div></div>").appendTo(container);	
+				introRow.addClass("row intro-row");
+				
+				var introLabel = $("<label>COUNTY</label>");
+				introLabel.appendTo(introRow);
+				
+				var jumbotron = $("<div></div>").appendTo(introRow);
+				jumbotron.addClass("jumbotron");
+				
+				var countyHead = $("<h1>" + countyName + "</h1>");
+				countyHead.appendTo(jumbotron);
+				
+				var thinDivider = $("<div class='thin-divider'></div>");
+				
+				container.append(thinDivider);
+				
+				container.append('<div class="row "><div class="col-lg-5 col-md-5 col-sm-4 col-xs-12"><img src="img/allegheny-co.png" alt="Allegheny County map" /></div><div class="col-lg-7 col-md-7 col-sm-8 top-totals">	<div class="row"><div class="col-lg-12 col-md-12 col-sm-12"><label>TOTAL CONTRIBUTIONS</label><h2 class="jumbo">$26.2 million</h2></div></div><div class="row"><div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 block first"><h3>88%</h3><label>Allegheny County represents 88% of total race contributions.</label></div><div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 block"><h3>12 cents</h3><label>Contributions represent 12 cents per capita in Allegheny County.</label></div><div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 block last"><label><strong>Corbett:</strong> $13.1 million <br>(75 donations)<br><br><strong>Wolfe:</strong> $13.1 million <br>(75 donations)</label></div></div></div></div>')
+			}
+	  });
+	  
         break;
 	case "contributors":
        $('#bycontributor').addClass('active');
@@ -172,35 +212,7 @@ $(document).ready(function() {
 	case "contributions":
          $('#bycontributor').addClass('active');
 		  var contributionID = split[3];
-         
-			$.getJSON("/api/contributions/" + contributionID, function(data){
-				var contributorName = data.results[0].contributor;
-				
-				var conDateRaw = data.results[0].date;
-				var d = new Date(conDateRaw);
-				var con_date = d.getDate(conDateRaw);
-				var con_month = d.getMonth(conDateRaw);
-				var con_year = d.getFullYear(conDateRaw);
-				var contributionDate = con_month + "/" + con_date + "/" + con_year;
-				
-				var filerID = data.results[0].filerid;
-				$.getJSON("/api/candidates/", function(data){
-					var candidateName = data.results[0].name;
-					console.log("Contribution by " + contributorName + " on " + contributionDate + " to " + candidateName);
-					
-				});
-				
-				
-				var donationStats = [];
-				$.each(data.results[0], function(key, val) {
-					donationStats.push( "<h3><strong>" + key + "</strong> <a href=''><strong>" + val + "</strong></a></h3>");
-				});
-				
-			});
-		
-		
-		
-		
+        
 		break;
     default:
         //default code block
