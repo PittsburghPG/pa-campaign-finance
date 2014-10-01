@@ -392,12 +392,12 @@ function makeTimeChart(id, endpoint, target, startDate, endDate){
 				if( item ) {
 					if( $("#tooltip").length == 0 ){
 						$("<div id='tooltip'></div>").appendTo( $("body") )
-							.css({top: item.pageY+5, left: item.pageX+5});
+							.css({top: item.clientY+5, left: item.clientX+5});
 						$("#tooltip").html("<div class='date'>" + ( new Date(item.datapoint[0]).getMonth() + 1 ) + "/" + new Date(item.datapoint[0]).getFullYear() + "</div><div class='text'>" + toDollars(item.datapoint[1]) + "</div>");
 						console.log(item.datapoint[0]);
 					}
 					else {
-						$("#tooltip").css({top: item.pageY-20, left: item.pageX+10});
+						$("#tooltip").css({top: item.clientY-20, left: item.clientX+10});
 					}
 					x = item.datapoint[0].toFixed(2);
 					y = item.datapoint[1].toFixed(2);
@@ -475,6 +475,54 @@ function drawCandidateMap( id ){
 					})
 					.on("click", function(d){
 						
+						window.location = "/a/counties/" + d.properties.NAME;
+					});
+					
+				// Detetct orientation of screen and scale map accordingly.
+				var bounds = d3.geo.path().bounds(json);
+				
+				// Chooses a mercator projection, sticks it roughly in the center of the screen,
+				// sets the center of Pennsylvania, scales it up based on bounds of map
+				projection = d3.geo.mercator().translate([ w / 2.2, h / 1.8]).center([-77.995133, 40.696298]).scale( 800 * w / (bounds[1][0] - bounds[0][0]) );	
+				
+				// Apply transformation
+				county.attr("d", d3.geo.path().projection(projection));
+			});
+		});
+}
+
+
+
+function drawLocatorMap( id, county ){
+	map = d3.select("#" + id);
+	w = $(map.node()).width();
+	h = $(map.node()).height();
+	
+			d3.json("js/min.pennsylvania.json", function(error, json) {
+				// Join shapefile data
+				county = d3.select("#map")
+				.selectAll("path")
+					.data(json.features)
+				.enter().append("path")
+					.attr("class", function(d){
+						var output = "county";
+						if(d.properties.NAME == county) output += " selected";
+						return output;
+					})
+					.on("mousemove", function(d){
+						d3.select("#tooltip").remove();
+						d3.select("body").append("div")
+							.attr("id", "tooltip")
+							.attr("class", "table")
+							.html("<h4>" + d.properties.NAME + "</h4>")
+							.style("left", d3.event.clientX + 10 + "px")
+							.style("top", d3.event.clientY - 20 + "px");
+						console.log(d3.event.clientX);
+					})
+					.on("mouseout", function(d){
+						d3.select("#tooltip").remove();
+					})
+					.on("click", function(d){
 						window.location = "/a/counties/" + d.properties.NAME;
 					});
 					
