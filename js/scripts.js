@@ -349,62 +349,80 @@ function numberWithCommas(x){
 }
 
 function makeTimeChart(id, endpoint, target, startDate, endDate){
-		$.getJSON("api/months/" + endpoint + "/" + target + "?startDate=" + startDate + "&endDate=" + endDate, function(json){
-			data = [];
-			$.each(json.results, function(i, date){
-				data.push( [Date.parse(date["year"] + "-" + date["month"] + "-" + "01 05:01:00"), date["total"]] );
-				$.plot("#" + id, [{ 
-					data: data, 
-					color:"seagreen"
-				}], {
-					series: {
-						lines:{
-							lineWidth: 6,
-							show:true
-						},
-						points:{
-							show:true
-						}
+	$.getJSON("api/months/" + endpoint + "/" + target + "?startDate=" + startDate + "&endDate=" + endDate, function(json){
+		data = [];
+		$.each(json.results, function(i, date){
+			data.push( [Date.parse(date["year"] + "-" + date["month"] + "-" + "01 05:01:00"), date["total"]] );
+			$.plot("#" + id, [{ 
+				data: data, 
+				color:"seagreen"
+			}], {
+				series: {
+					lines:{
+						lineWidth: 6,
+						show:true
 					},
-					xaxis: { 
-						mode: "time",
-						min: data[0][0]	
-					},
-					yaxis: {
-						tickFormatter: function(val, axis){
-							return "$" + numberWithCommas(val);
-						},
-						min: 0
-					},
-					grid: {
-						borderWidth: {
-							top: 0,
-							left: 1,
-							right: 0,
-							bottom: 1
-						},
-						hoverable: true
-					},
-					markings:0
-				});
-				
-				$("#" + id).bind("plothover", function(event, pos, item){
-					if( item ) {
-						if( $("#tooltip").length == 0 ){
-							$("<div id='tooltip'></div>").appendTo( $("body") )
-								.css({top: item.pageY+5, left: item.pageX+5});
-							$("#tooltip").html("<div class='date'>" + ( new Date(item.datapoint[0]).getMonth() + 1 ) + "/" + new Date(item.datapoint[0]).getFullYear() + "</div><div class='text'>" + toDollars(item.datapoint[1]) + "</div>");
-							console.log(item.datapoint[0]);
-						}
-						else {
-							$("#tooltip").css({top: item.pageY-20, left: item.pageX+10});
-						}
-						x = item.datapoint[0].toFixed(2);
-						y = item.datapoint[1].toFixed(2);
+					points:{
+						show:true
 					}
-					else $("#tooltip").remove();
-				});
-			});	
+				},
+				xaxis: { 
+					mode: "time",
+					min: data[0][0]	
+				},
+				yaxis: {
+					tickFormatter: function(val, axis){
+						return "$" + numberWithCommas(val);
+					},
+					min: 0
+				},
+				grid: {
+					borderWidth: {
+						top: 0,
+						left: 1,
+						right: 0,
+						bottom: 1
+					},
+					hoverable: true
+				},
+				markings:0
+			});
+			
+			$("#" + id).bind("plothover", function(event, pos, item){
+				if( item ) {
+					if( $("#tooltip").length == 0 ){
+						$("<div id='tooltip'></div>").appendTo( $("body") )
+							.css({top: item.pageY+5, left: item.pageX+5});
+						$("#tooltip").html("<div class='date'>" + ( new Date(item.datapoint[0]).getMonth() + 1 ) + "/" + new Date(item.datapoint[0]).getFullYear() + "</div><div class='text'>" + toDollars(item.datapoint[1]) + "</div>");
+						console.log(item.datapoint[0]);
+					}
+					else {
+						$("#tooltip").css({top: item.pageY-20, left: item.pageX+10});
+					}
+					x = item.datapoint[0].toFixed(2);
+					y = item.datapoint[1].toFixed(2);
+				}
+				else $("#tooltip").remove();
+			});
+		});	
+	});
+}
+
+function makePieChart(id, target, target_state){
+	$.getJSON("api/states/candidates/" + target, function(json) {
+		data = [];
+		$.each(json.results, function(i, state){ 
+			if( state.state == target_state ) data[1] = { label: "In-state", data: state.amount};
+			else if ( i == 0 ) data.push({ label: "Out of state", data: parseFloat(state.amount)}) 
+			else data[0].data += parseFloat(state.amount);
 		});
-	}
+		$.plot('#' + id, data, {
+			series: {
+				pie: {
+					show: true
+				}
+			}
+		});
+	});
+}
 	
