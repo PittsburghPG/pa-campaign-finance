@@ -50,6 +50,7 @@ $(document).ready(function() {
 				jumbotron.addClass("jumbotron");
 				
 				var contribName = data.results[0].contributor;
+				console.log(data.results);
 				
 				var headerAmt = $("<h1>" + contribName + "</h1><div class='thin-divider'></div>");
 				headerAmt.appendTo(jumbotron);
@@ -271,8 +272,7 @@ $(document).ready(function() {
 						var colmd7 = "col-md-7";
 						var colsm7 = "col-sm-7";
 						
-						contributionColumn = $("<div></div>").appendTo(contributionRow);
-						contributionColumn.addClass(colmd5);
+						contributionColumn = $("<div class='col-md-5 contrib-items'></div>").appendTo(contributionRow);
 						
 						var h3 = "<h3></h3>";
 						
