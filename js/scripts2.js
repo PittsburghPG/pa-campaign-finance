@@ -31,6 +31,7 @@ $(document).ready(function() {
 			  //console.log(r.results[0]);
 			  var name = r.results[0].name;
 			  var party = r.results[0].party;
+			  //console.log(party);
 			  if (party == 'REP') { party = "Republican";}
 			  if (party == 'DEM') { party = "Democratic";}
 			  var total = r.results[0].total;
@@ -39,10 +40,12 @@ $(document).ready(function() {
 			  var address2 = r.results[0].address2;
 			  var city = r.results[0].city;
 			  city = city.toLowerCase();
+			  city = toTitleCase(city);
 			  var state = r.results[0].state;
 			  var zip = r.results[0].zip;
 			  var phone = r.results[0].phone;
-			  
+			  phone = phone.insert(3, "."); //format phone number
+			  phone = phone.insert(7, ".");
 			  //intro row 
 			var container = $("#main");
 			introRow = $("<div></div>").appendTo(container);	
@@ -75,19 +78,28 @@ $(document).ready(function() {
 			  $('#bio_totals').append("<div id='bio' class='col-lg-5 col-md-5 col-sm-5 col-xs-12'></div>");
 			  $('#bio').append('<p><span class="fa-stack fa-md"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-birthday-cake fa-stack-1x fa-inverse"></i></span><strong id="party"></strong><br><span class="fa-stack fa-md"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-phone fa-stack-1x fa-inverse"></i></span><strong id="phone"></strong><br><span class="fa-stack fa-md"><i class="fa fa-square fa-stack-2x"></i>	<i class="fa fa-envelope fa-stack-1x fa-inverse"></i></span><strong id="address"></strong><br></p><p class="lead">Tom Corbett! What a bro. </p>');
 			  $('#party').html(party);
-			  $('#address').html(address1 + address2 + " " + city + ", " + state + " " + zip);
+			  $('#address').html(address1 + address2 + ", " + city + ", " + state + " " + zip);
 			  $('#phone').html(phone);
 			  
 			  //totals
 			  $('#bio_totals').append('<div class="col-lg-6 col-md-6 col-sm-7 col-lg-offset-1 col-md-offset-1 top-totals"><div class="row no-margin-top"><div class="col-lg-12 col-md-12 col-sm-12"><label>TOTAL RAISED</label>		<h2 class="jumbo" id="total_raised"></h2></div></div><div class="row"><div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 block first"><label>$50 AND OVER</label><h3 id="over50"></h3></div><div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 block"><label>UNDER $50</label><h3 id="under50"></h3></div><div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 block last"><label>AVERAGE DONATION</label><h3 id="average"></h3></div></div></div>');
-			  $('#total_raised').html('$' + total);
+			  //total raised
+			  var flTotal = parseFloat(total);
+			  flTotal = Math.round(flTotal);
+			  //flTotal = flTotal.toLocaleString();
+			  flTotal = flTotal.numberFormat(0);
+			  $('#total_raised').html('$' + flTotal);
 			  //over $50
 			   $.ajax({
 					url: "api/" + apiURL + "?startAmount=50",
 					dataType: "json",
 					type : "GET",
 					success : function(s) {
-						$('#over50').html( "$" + s.results[0].total );
+						var over50 = parseFloat(s.results[0].total);
+						over50 =  Math.round(over50);
+						over50 = over50.numberFormat(0);
+						$('#over50').html( "$" + over50);
+						
 					}
 			    });
 				//under $50
@@ -96,11 +108,17 @@ $(document).ready(function() {
 					dataType: "json",
 					type : "GET",
 					success : function(t) {
-						$('#under50').html( "$" + t.results[0].total );
+						var under50 = parseFloat(t.results[0].total);
+						under50 =  Math.round(under50);
+						under50 = under50.numberFormat(0);
+						$('#under50').html( "$" + under50);
 					}
 			    });
 				//average
-				$('#average').html( "$" + average );
+				var flAverage = parseFloat(average);
+				flAverage =  Math.round(flAverage);
+				flAverage = flAverage.numberFormat(0);
+				$('#average').html( "$" + flAverage );
 				
 				container.append(thinDivider);
 				//charts would go here
@@ -108,8 +126,9 @@ $(document).ready(function() {
 				//tabular data
 				container.append(thinDivider);
 				
-				container.append('<div class="row tabular"><div class="col-lg-12 col-md-12 col-sm-12"><h3>Donors</h3><form class="form-inline pull-right"><input type="search" class="form-control" placeholder="Search"><button type="submit" class="btn btn-default">Submit</button></form><table class="table table-hover sortable"><thead><tr><th>Donor</th> <th>Occupation, Employer</th><th>Amount</th></tr></thead><tbody></tbody></table></div></div> ');
+				container.append('<div class="row tabular"  style="height: 500px; overflow: hidden; margin-bottom: 30px;"><div class="col-lg-12 col-md-12 col-sm-12"><h3>Donors</h3><form class="form-inline pull-right"><input type="search" class="form-control" placeholder="Search"><button type="submit" class="btn btn-default">Submit</button></form><table class="table table-hover sortable"><thead><tr><th>Donor</th> <th>Occupation, Employer</th><th>Amount</th></tr></thead><tbody></tbody></table></div></div> ');
 				
+				container.append(thinDivider);
 				//get contributor data
 				$.ajax({
 					url: "api/contributors/filers/" + split[3],
@@ -124,9 +143,14 @@ $(document).ready(function() {
 							if (u.results[i].occupation == '') { //don't show comma if there's no occupation
 								emp = u.results[i].empName;
 							} else {
-								emp = u.results[i].occupation + ", " + u.results[i].empName;
+								emp = u.results[i].occupation;
+								if (u.results[i].empName != '') {
+									emp += ", " + u.results[i].empName;
+								}
 							}
-							line = "<tr><td>" + u.results[i].contributor + "</td><td>" +  emp  + "</td><td align='right'>$" + u.results[i].amount + "</td></tr>";
+							var amount = parseInt(u.results[i].amount);
+							amount = amount.numberFormat(0);
+							line = "<tr><td><a href='/a/contributors/" + u.results[i].contributorid + "'>" + u.results[i].contributor + "</a></td><td>" +  emp  + "</td><td align='right'>$" + amount + "</td></tr>";
 							//console.log(line);
 							$('tbody').append(line);
 						}
@@ -188,4 +212,21 @@ $(document).ready(function() {
 function toTitleCase(str)
 {
     return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+}
+//insert something into a string
+String.prototype.insert = function (index, string) {
+  if (index > 0)
+    return this.substring(0, index) + string + this.substring(index, this.length);
+  else
+    return string + this;
+};
+//add thousands commas to number
+Number.prototype.numberFormat = function(decimals, dec_point, thousands_sep) {
+    dec_point = typeof dec_point !== 'undefined' ? dec_point : '.';
+    thousands_sep = typeof thousands_sep !== 'undefined' ? thousands_sep : ',';
+
+    var parts = this.toFixed(decimals).split('.');
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousands_sep);
+
+    return parts.join(dec_point);
 }
