@@ -298,7 +298,7 @@ $(document).ready(function() {
 							var colmd7 = "col-md-7";
 							var colsm7 = "col-sm-7";
 							
-							contributionColumn = $("<div class='col-md-5 contrib-items'></div>").appendTo(contributionRow);
+							contributionColumn = $("<div class='col-md-7 contrib-items block'></div>").appendTo(contributionRow);
 							
 							var h3 = "<h3></h3>";
 							
@@ -325,7 +325,8 @@ $(document).ready(function() {
 							var locationLabel = $("<strong>Location: </strong>").appendTo(locationItem);
 							var locationData = $("<span>" + locationCity + ", " + locationState + " " + locationZip + "</span>").appendTo(locationItem);
 							
-							mapColumn = $("<div class='col-lg-7 col-md-7 col-sm-7' id='map-canvas' style='height:500px;'></div>").appendTo(contributionRow);
+							mapColumn = $("<div class='col-lg-5 col-md-5 col-sm-5 block'></div>").appendTo(contributionRow);
+							mapColumn.append("<div id='map-canvas' style='width:100%; border:1px solid lightgray; height:190px'></div>");
 							initializeGmap();
 	
 							//$(Gmap).appendTo(mapColumn);
