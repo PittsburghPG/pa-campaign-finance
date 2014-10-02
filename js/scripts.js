@@ -419,9 +419,25 @@ function makePieChart(id, target, target_state){
 		$.plot('#' + id, data, {
 			series: {
 				pie: {
-					show: true
+					show: true,
+					hoverable: true
 				}
+			},
+			grid: {
+				hoverable: true
 			}
+		});
+		$("#" + id).bind("plothover", function(e, pos, item){
+			if( item ) {
+				
+				if( $("#tooltip").length == 0 ){
+					$("<div id='tooltip'></div>").appendTo( $("body") );
+				}
+				$("#tooltip").css({top: pos.pageY-20, left: pos.pageX+10});
+				$("#tooltip").html("<div class='text'>" + Math.floor(item.datapoint[0]) + "%</div>");
+			}
+			
+			else $("#tooltip").remove();
 		});
 	});
 }
