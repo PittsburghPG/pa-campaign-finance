@@ -226,6 +226,50 @@ class MyAPI extends API{
 		return $this->queryAPI($query, "AND candidates.filerid = '%s' ", "");
 	}
 	
+	public function counties(){
+		$query["select"] = "SELECT contributions.county,
+						contributions.filerid,
+						filers.name,
+						filers.party,
+						SUM(contributions.contribution) as total,
+						AVG(contributions.contribution) as average,
+						COUNT(contributions.contribution) as count
+					";
+		$query["from"] = "FROM campaign_finance.candidates ";
+		$query["join"] = "LEFT JOIN campaign_finance.contributions on contributions.filerid = candidates.filerid ";
+		$query["join"] .= "LEFT JOIN campaign_finance.filers on contributions.filerid = filers.filerid ";
+		$query["where"] = "WHERE 1=1 ";
+		$query["group"] = "GROUP BY contributions.county, contributions.filerid ";
+		$query["order"] = "ORDER BY contributions.county ASC ";
+		
+		$that = $this;
+		return $this->queryAPI($query, "AND contributions.county = '%s' ", function($res, $query) use ($that) {
+						
+			$results = Array();
+			while($row = mysqli_fetch_assoc($res)){
+				
+				if( $i = $that->search_for_value_in_array($results, "county", $row["county"])) {
+					$results[$i]["contributions"] += $row["count"];
+					$results[$i]["amount"] += $row["total"];
+					$results[$i]["beneficiaries"][] = Array("name" => $row["name"], "filerid" => $row["filerid"], "party" => $row["party"], "contributions" => $row["count"], "amount" => $row["total"]);
+				}
+				else {
+					$results[] = Array("county" => $row["county"],
+										"contributions" => $row["count"],
+										"amount" => $row["total"],
+										"beneficiaries" => Array( Array("name" => $row["name"], "filerid" => $row["filerid"], "party" => $row["party"], "contributions" => $row["count"], "amount" => $row["total"]) )
+										);
+				}
+			}
+			// Dump query into JSON for debugging
+			$output["sql"] = $that->formatSQL($query["select"] . $query["from"] . $query["join"] . $query["where"] . $query["group"]);
+			$output["results"] = $results;
+			return $output;	
+			
+		});
+	
+	}
+	
 	public function states(){
 		$query["select"] = "SELECT contributions.state,
 						candidates.name,
