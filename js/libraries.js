@@ -178,10 +178,9 @@ function drawLocatorMap( id, county ){
 	w = $(map.node()).width();
 	h = $(map.node()).height();
 	
-	d3.json("js/min.pennsylvania.json", function(error, json) {
+	d3.json("/js/min.pennsylvania.json", function(error, json) {
 		// Join shapefile data
-		county = d3.select("#map")
-		.selectAll("path")
+		county = map.selectAll("path")
 			.data(json.features)
 		.enter().append("path")
 			.attr("class", function(d){
@@ -195,9 +194,8 @@ function drawLocatorMap( id, county ){
 					.attr("id", "tooltip")
 					.attr("class", "formap")
 					.html("<h4>" + d.properties.NAME + "</h4>")
-					.style("left", d3.event.pageX + 10 + "px")
-					.style("top", d3.event.pageY - 20 + "px");
-				console.log(d3.event.pageX);
+					.style("left", d3.event.clientX + 10 + "px")
+					.style("top", d3.event.clientY - 20 + "px");
 			})
 			.on("mouseout", function(d){
 				d3.select("#tooltip").remove();
@@ -205,5 +203,16 @@ function drawLocatorMap( id, county ){
 			.on("click", function(d){
 				window.location = "/a/counties/" + d.properties.NAME;
 			});
-		});
+		
+		// Detetct orientation of screen and scale map accordingly.
+		var bounds = d3.geo.path().bounds(json);
+		
+		// Chooses a mercator projection, sticks it roughly in the center of the screen,
+		// sets the center of Pennsylvania, scales it up based on bounds of map
+		projection = d3.geo.mercator().translate([ w / 2.2, h / 1.8]).center([-77.995133, 40.696298]).scale( 800 * w / (bounds[1][0] - bounds[0][0]) );	
+		
+		// Apply transformation
+		county.attr("d", d3.geo.path().projection(projection));
+		
+	});
 }
