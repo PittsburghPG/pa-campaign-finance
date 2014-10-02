@@ -216,3 +216,14 @@ function drawLocatorMap( id, county ){
 		
 	});
 }
+
+function getURLParameters(){
+	param = decodeURI(window.location.search);
+	param = param.split("?");
+	param = param[1].split("&");
+	param = param.map(function(a){ 
+		b = a.split("="); 
+		return { key: b[0], value: b[1] }
+	});
+	return param;
+}
