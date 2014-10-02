@@ -20,7 +20,84 @@ $(document).ready(function() {
 		console.log("we're gonna celebrate");
 	break;
 	
-	
+	case "race":
+		var race = split[3];
+		var container = $("#main");
+		var thinDivider = $("<div class='thin-divider'></div>");
+		
+		$.getJSON("api/candidates", function(canData){
+			
+			var results = canData.results;
+			console.log(results);
+			
+			var totalCandidateContrib = 0;
+			//var allCandidateContrib;
+			var colWidth;
+			var candidateBlock;
+			/*var candidateImg;
+			var candidateName;
+			var candidateLabel;
+			var candidateTotal;*/
+			
+			if(results.length <= 2){
+					colWidth = 6;
+				}else{
+					colWidth = 4;
+				};
+			
+			$.each( results, function(i, item) {
+				candidateContrib = parseFloat(results[i].total);
+				candidateContrib = Math.round(candidateContrib);
+				candidateContrib = candidateContrib.numberFormat(0);
+				totalCandidateContrib += candidateContrib;
+				
+				var img = results[i].img;
+				var name = results[i].name;
+				var party = results[i].party;
+				if (party == "DEM"){
+					party = "Democrat";
+				}else if(party == "REP"){
+					party = "Republican"
+				}
+				
+				candidateBlock = $("<div class='col-lg-" + colWidth + " col-md-" + colWidth + " col-sm-" + colWidth + " block'>");
+				candidateImg = $("<div class='banner-image' id='candidateImg'></div>").appendTo(candidateBlock);
+				candidateImg.attr("style", "background-image:url('../img/" + img + "'); background-size: cover; ");
+				candidateName = $("<h2>" + name + " <small>" + party + "</small></h2>").appendTo(candidateBlock);
+				candidateLabel = $("<label>Total contributed to " + name + "</label>").appendTo(candidateBlock);
+				candidateTotal = $("<h2 class='jumbo'>$" + candidateContrib + "</h2>").appendTo(candidateBlock);				
+			});
+			
+			console.log(parseFloat(results[0].total) + parseFloat(results[1].total));
+			
+			allCandidateContrib = "$" + candidateContrib;
+			
+			var projectIntro = $("<div class='row' id='project-intro'></div>").appendTo(container);
+			
+			var introText = $("\
+			<div class='col-lg-5 col-md-5 col-sm-5 lead'> \
+				<p>Causa similis loquor tation scisco. Ratis camur decet eu. Quibus et feugait ut gravis consequat duis. Quis jugis minim quis uxor dignissim. Comis vereor nimis. Wisi delenit feugait.</p>").appendTo(projectIntro);
+			
+			var totalContrib = $("<div class='col-lg-7 col-md-7 col-sm-7'></div>").appendTo(projectIntro);
+			
+			var totalContribAmt = $("<label>TOTAL CONTRIBUTIONS TO ALL CANDIDATES</label><h2 class='ultra-mega'>" + allCandidateContrib + "</h2>").appendTo(totalContrib);
+			
+			thinDivider.appendTo(container);
+			
+			var candidateVScandidate = $("<div class='row' id='candidate-vs-candidate'>").appendTo(container);
+			
+			candidateBlock.appendTo(candidateVScandidate);
+
+
+
+			
+						
+			
+			
+			
+						
+		}) // end case race getJSON api/candidates
+		break;
 	case "contributors":
        $('#bycontributor').addClass('active');
 	   var contribID = split[3];
