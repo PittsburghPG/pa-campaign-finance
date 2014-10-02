@@ -124,8 +124,15 @@ $(document).ready(function() {
 				$("<div class='container'><div class='thin-divider' id='datadivider'></div></div>").insertAfter("#data");
 				
 				//charts 
-				//container.append('<div class="row graphs"><div class="col-lg-8 col-md-8 col-sm-8 block"><h3>County-by-county contributions <i class="fa fa-info-circle"></i></h3><div class="well"><img src="/../img/pa-heat-map.png" alt="County-by-county contribution" /></div></div><div class="col-lg-4 col-md-4 col-sm-4"><h3>Over time</h3><div class="well" id="timechart" style="width: 100%; height: 200px;"></div><h3>In state vs. out of state</h3><div class="well" id="pie" style="width: 100%; height: 200px;"></div></div></div>');
-				$('<div class="container" id="charts"><div class="row graphs"><div class="col-lg-8 col-md-8 col-sm-8 block"><h3>County-by-county contributions <i class="fa fa-info-circle"></i></h3><div class="well"><img src="/../img/pa-heat-map.png" alt="County-by-county contribution" /></div></div><div class="col-lg-4 col-md-4 col-sm-4"><h3>Over time</h3><div class="well" id="timechart" style="width: 100%; height: 200px;"></div><h3>In state vs. out of state</h3><div class="well" id="pie" style="width: 100%; height: 200px;"></div></div></div></div><div class="thin-divider"></div>').insertAfter( "#datadivider" );
+				$('<div class="container" id="charts">\
+					<div class="row graphs">\
+						<div class="col-lg-8 col-md-8 col-sm-8 block"><h3>County-by-county contributions <i class="fa fa-info-circle"></i></h3><div >\
+							<img src="/../img/pa-heat-map.png" alt="County-by-county contribution" />\
+						</div></div>\
+						<div class="col-lg-4 col-md-4 col-sm-4"><h3>Over time</h3>\
+							<div id="timechart" style="width: 100%; height: 200px;"></div>\
+								<h3>In state vs. out of state</h3><div id="pie" style="width: 100%; height: 200px;"></div></div></div></div>\
+						<div class="thin-divider"></div>').insertAfter( "#datadivider" );
 				makePieChart("pie", split[3], "PA");
 				makeTimeChart("timechart", "candidates", split[3], "2013-01-01", "2014-09-01");
 				
@@ -133,7 +140,11 @@ $(document).ready(function() {
 				$("<div class='container'><div class='thin-divider' id='chartdivider'></div></div>").insertAfter("#charts");
 				
 				//tabular data
-				$('<div class="container" id="table"><div class="row tabular" id="tableHeightDiv" style="margin-bottom: 30px;"><div class="col-lg-12 col-md-12 col-sm-12"><h3>Donors</h3><form class="form-inline pull-right"><input type="search" class="form-control" placeholder="Search"><button type="submit" class="btn btn-default">Submit</button></form><table class="table table-hover sortable" id="donorTable"><thead><tr><th>Donor</th> <th>Occupation, Employer</th><th>Amount</th></tr></thead><tbody></tbody></table></div></div></div> ').insertAfter("#chartdivider");
+				$('<div class="container" id="table"> \
+				<div class="row tabular" id="tableHeightDiv" style="margin-bottom: 30px;"> \
+					<div class="col-lg-12 col-md-12 col-sm-12"><h3>Donors</h3>\
+						<form class="form-inline pull-right"><input type="search" class="form-control" placeholder="Search"><button type="submit" class="btn btn-default">Submit</button></form>\
+						<table class="table table-hover sortable" id="donorTable"><thead><tr><th>Donor</th> <th>Occupation, Employer</th><th>Amount</th></tr></thead><tbody></tbody></table></div></div></div> ').insertAfter("#chartdivider");
 				var donorHeight;
 				
 				//container.append(thinDivider);
@@ -166,17 +177,10 @@ $(document).ready(function() {
 					}
 				});
 				
-				console.log(donorHeight);
-				$("#tableHeightDiv").css({'height': '500px', 'overflow':'hidden'});
+				//console.log(donorHeight);
+				//$("#tableHeightDiv").css({'height': '500px', 'overflow':'hidden'});
 					
-				$('<div class="container" style="text-align: center;"><div id="viewall">View all</div></div>').insertAfter('#table');
-					console.log(donorHeight);
-					$('#viewall').click(function() {
-								$('#viewall').hide();
-								//$("#tableHeightDiv").css({'height': donorHeight + 'px', 'overflow':'visible'});
-								$("#tableHeightDiv").animate({height:donorHeight + 'px'},200);
-								
-					});
+				
 					
 				
 				
@@ -237,78 +241,47 @@ $(document).ready(function() {
 					</div> \
 				</div>');
 				
-				var contrib1 = v.results[0].beneficiaries[0].amount;
-				contrib1 = parseFloat(contrib1);
-				contrib1 = Math.round(contrib1);
-				//console.log(v.results[1].beneficiaries[0].amount);
-				var contrib2 = v.results[1].beneficiaries[0].amount;
-				contrib2 = parseFloat(contrib2);
-				contrib2 = Math.round(contrib2);
-				var totalcontribs = contrib1 + contrib2;
+				var corbettContributionAmt = v.results[0].beneficiaries[0].amount; //corbett's contribution amount
+				corbettContributionAmt = parseFloat(corbettContributionAmt);
+				corbettContributionAmt = Math.round(corbettContributionAmt);
+				
+				var wolfContributionAmt = v.results[1].beneficiaries[0].amount;//wolf's contribution amount
+				wolfContributionAmt = parseFloat(wolfContributionAmt);
+				wolfContributionAmt = Math.round(wolfContributionAmt);
+				
+				var totalcontribs = corbettContributionAmt + wolfContributionAmt;
 				formatTotalcontribs = totalcontribs.numberFormat(0);
 				
-				//$('#totalcontribs').html("$" + formatTotalcontribs);
-				//$('#corbettamount').html("$" + contrib1.numberFormat());
-				var corbettnumdonations = parseInt(v.results[0].beneficiaries[0].contributions);
-				corbettnumdonations = corbettnumdonations.numberFormat();
-				//$('#corbettnumdonation').html(corbettnumdonations);
-				//$('#wolfeamount').html("$" + contrib2.numberFormat());
-				var wolfenumdonations = parseInt(v.results[1].beneficiaries[0].contributions);
-				wolfenumdonations = wolfenumdonations.numberFormat();
-				//$('#wolfenumdonations').html(wolfenumdonations);
+				$('#totalcontributions').html("$" + formatTotalcontribs);
 				
-					$.getJSON("/api/candidates", function(canData){
-					
-							//Corbett_Wolf variables and logic 
-							/*var wolfContributionAmt = "";
-							var wolfContributionNum = "";
-							var results = canData.results[0].beneficiaries;
-							$.each(results, function(i, item){
-								if(results[i].filerid == "20130153"){
-									wolfContributionAmt = results[i].total;
-									wolfContributionNum = results[i].count;
-								}else {
-									wolfContributionAmt = "0";
-									wolfContributionNum = "0";
-								}
-							});
-							
-							var corbettContributionAmt = "";
-							var corbettContributionNum = "";
-							var results = canData.results[0].beneficiaries;
-							$.each(results, function(i, item){
-								if(results[i].filerid == "2009216"){
-									corbettContributionAmt = results[i].total;
-									corbettContributionNum = results[i].count;
-								}else {
-									corbettContributionAmt = "0";
-									corbettContributionNum = "0";
-								}
-							});
-							
-							
-							
-							var wolfBarWidth = "";
-							var corbettBarWidth = "";
-							if(wolfContributionAmt > corbettContributionAmt){
-								wolfBarWidth = "100";
-								corbettBarWidth = (corbettContributionAmt)/(wolfContributionAmt);
-							}else if(corbettContributionAmt > wolfContributionAmt){
-								corbettBarWidth = "100";
-								wolfBarWidth = (wolfContributionAmt)/(corbettContributionAmt);
-							} else{
-								corbettBarWidth = "100";
-								wolfBarWidth = "100";
-							};
-							
-							//Corbett row --> need to make graphic length respect amt donated 
-							var topTotalsCorbettRow = $("<tr><td><strong>Corbett</strong></td><td><div class='bar republican' style='width:" + corbettBarWidth +"%; color:#000000;'></div><span style='overflow:visible;'>" + corbettContributionAmt + " (" + corbettContributionNum + " contributions)" + "</span></td></tr>").appendTo("#candidate-bar-table");
-							//Wolf row --> need to make graphic length respect amt donated
-							var topTotalsWolfRow = $("<tr><td><strong>Wolf</strong></td><td><div class='bar democrat' style='width:" + wolfBarWidth + "%; color:#000000;'></div><span style='overflow:visible;'>" + wolfContributionAmt + " (" + wolfContributionNum + " contributions)" + "</span></td></tr>").appendTo("#candidate-bar-table");*/
-					}); //end .getJSON api/candidates
-							
-							//get population - don't have right now
-							var population = 1229000;
+				var corbettContributionNum = parseInt(v.results[0].beneficiaries[0].contributions);
+				corbettContributionNum = corbettContributionNum.numberFormat();
+				
+				var wolfContributionNum = parseInt(v.results[1].beneficiaries[0].contributions);
+				wolfContributionNum = wolfContributionNum.numberFormat();
+				
+				var wolfBarWidth = "";
+				var corbettBarWidth = "";
+				if(wolfContributionAmt > corbettContributionAmt){
+					wolfBarWidth = "100";
+					corbettBarWidth = (corbettContributionAmt)/(wolfContributionAmt)*100;
+				}else if(corbettContributionAmt > wolfContributionAmt){
+					corbettBarWidth = "100";
+					wolfBarWidth = (wolfContributionAmt)/(corbettContributionAmt) *100;
+					//console.log(wolfBarWidth);
+				} else{
+					corbettBarWidth = "100";
+					wolfBarWidth = "100";
+				};
+				
+				//Corbett row --> need to make graphic length respect amt donated 
+				var topTotalsCorbettRow = $("<tr><td><strong>Corbett</strong></td><td><div class='bar republican' style='width:" + corbettBarWidth +"%; color:#000000;'></div><span style='overflow:visible;'>$" + corbettContributionAmt.numberFormat() + " (" + corbettContributionNum + " contributions)" + "</span></td></tr>").appendTo("#candidate-bar-table");
+				//Wolf row --> need to make graphic length respect amt donated
+				var topTotalsWolfRow = $("<tr><td><strong>Wolf</strong></td><td><div class='bar democrat' style='width:" + wolfBarWidth + "%; color:#000000;'></div><span style='overflow:visible;'>$" + wolfContributionAmt.numberFormat() + " (" + wolfContributionNum + " contributions)" + "</span></td></tr>").appendTo("#candidate-bar-table");
+		
+				
+				//get population - don't have right now
+				var population = 1229000;
 							
 							
 							$.ajax({
@@ -316,15 +289,16 @@ $(document).ready(function() {
 								dataType: "json",
 								type : "GET",
 								success : function(w) {
-									var totalCountyDonations = 0;
-									//console.log(w.results.length);
+									var totalAllCountyDonations = 0; //total of all counties
+									//totalContributions = total for THIS county
+									
 									for (var i = 0; i< w.results.length; i++) {
-										totalCountyDonations += Math.round(parseFloat(w.results[i].amount));
+										totalAllCountyDonations += Math.round(parseFloat(w.results[i].amount));
 										//console.log(Math.round(parseFloat(w.results[i].amount)));
 									}
-									//console.log(totalCountyDonations);
-									//console.log(totalCountyDonations + " " + totalcontribs);
-									var thisCountyPercent = totalcontribs/totalCountyDonations*100;
+									//console.log(totalAllCountyDonations);
+									//console.log(totalAllCountyDonations + " " + totalcontribs);
+									var thisCountyPercent = totalcontribs/totalAllCountyDonations*100;
 									thisCountyPercent = thisCountyPercent.numberFormat(1);
 									
 									
@@ -334,19 +308,93 @@ $(document).ready(function() {
 									var perCapita = totalcontribs/population;
 									perCapita = perCapita.numberFormat(2);
 									
-									$("<h3>$" + perCapita + "</h3><label>Contributions represent $" + perCapita + " per capita in " + countyName + "County.</label>").appendTo("#county-per-capita")
+									$("<h3>$" + perCapita + "</h3><label>Contributions represent $" + perCapita + " per capita in " + countyName + " County.</label>").appendTo("#county-per-capita")
 									
 								}
 							}); //end counties case api/counties
 							
-							container.append(thinDivider);
+							container.append("<div class='thin-divider'></div>");
 							
-							container.append('<div class="row divider"><div class="col-lg-6 col-md-6 col-sm-6 block"><h3>Contributions over time</h3><div class="well" id="timeline" style="width: 100%; height: 200px;"></div></div><div class="col-lg-6 col-md-6 col-sm-6 block"><h3>Contributions by type</h3><div class="well"></div></div></div>');
+							container.append('<div class="row divider">\
+								<div class="col-lg-6 col-md-6 col-sm-6 block"><h3>Contributions over time</h3>\
+									<div id="timeline" style="width: 100%; height: 200px;"></div>\
+								</div>\
+								<div class="col-lg-6 col-md-6 col-sm-6 block"><h3>Contributions by type</h3>\
+									<div">\
+								</div></div></div>');
 							
 							makeTimeChart("timeline", "counties", countyName, "2013-01-01", "2014-09-01");
-					
-
-				}
+							
+							container.append("<div class='thin-divider'></div>");
+							container.append('<div class="row">\
+								<div class="col-lg-12 col-md-12 col-sm-12 ">\
+									<h3 class="section_header">Contributors</h3>\
+									<form class="form-inline pull-right">\
+										<input type="search" class="form-control" placeholder="Search">\
+										<button type="submit" class="btn btn-default">Submit</button>\
+									</form>\
+									<table class="table table-hover sortable" id="countyDonorTable">\
+										<thead>\
+											<tr>\
+											<th>Contributor</th>\
+											<th>Occupation, Employer</th>\
+											<th>Candidate</th>\
+											<th>Amount</th>\
+										  </tr>\
+										 </thead>\
+										\
+										<tbody>\
+										</tbody>\
+									</table>\
+								</div>\
+							</div> ');
+							
+							$.ajax({
+								url: "api/contributors/counties/" + countyName,
+								dataType: "json",
+								type : "GET",
+								success : function(u) {
+									//console.log(u.results[0].contributor);
+									//console.log(u.results.length);
+									var line;
+									for(var i =0; i < u.results.length; i++) {
+										var emp;
+										if (u.results[i].occupation == '') { //don't show comma if there's no occupation
+											emp = u.results[i].empName;
+										} else {
+											emp = u.results[i].occupation;
+											if (u.results[i].empName != '') {
+												emp += ", " + u.results[i].empName;
+											}
+										}
+										var amount = parseInt(u.results[i].amount);
+										amount = amount.numberFormat(0);
+										//line = "<tr><td><a href='/a/contributors/" + u.results[i].contributorid + "'>" + u.results[i].contributor + "</a></td><td>" +  emp  + "</td>";
+										for ( var j = 0; j < u.results[i].beneficiaries.length; j++) {
+											var amount = parseFloat(u.results[i].beneficiaries[j].amount);
+											amount = amount.numberFormat();
+											
+											var beneficiary = u.results[i].beneficiaries[j].name;
+											//console.log(beneficiary.indexOf("CORBETT"));
+											if (beneficiary.indexOf("CORBETT") > -1) {
+												beneficiary = "Corbett";
+											}
+											if (beneficiary.indexOf("Wolf") > -1) {
+												beneficiary = "Wolf";
+											}
+											line = "<tr><td><a href='/a/contributors/" + u.results[i].contributorid + "'>" + u.results[i].contributor + "</a></td><td>" +  emp  + "</td>";
+											line += "<td>" + beneficiary + "</td><td align='right'>$" + amount + "</td>";
+											line += "</tr>";
+										}
+										
+										//console.log(line);
+										$('#countyDonorTable tbody').append(line);
+										donorHeight = $("#tableHeightDiv").height();
+									}
+								}
+							});
+							
+				}//end success
 		  }); // end counties case api/ + apiURL
 	  
 			break;
