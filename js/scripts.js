@@ -391,14 +391,15 @@ function makeTimeChart(id, endpoint, target, startDate, endDate){
 			
 			$("#" + id).bind("plothover", function(event, pos, item){
 				if( item ) {
+					console.log(item);
 					if( $("#tooltip").length == 0 ){
 						$("<div id='tooltip'></div>").appendTo( $("body") )
-							.css({top: item.clientY+5, left: item.clientX+5});
+							.css({top: item.pageY+5, left: item.pageX+5});
 						$("#tooltip").html("<div class='date'>" + ( new Date(item.datapoint[0]).getMonth() + 1 ) + "/" + new Date(item.datapoint[0]).getFullYear() + "</div><div class='text'>" + toDollars(item.datapoint[1]) + "</div>");
 						console.log(item.datapoint[0]);
 					}
 					else {
-						$("#tooltip").css({top: item.clientY-20, left: item.clientX+10});
+						$("#tooltip").css({top: item.pageY-20, left: item.pageX+10});
 					}
 					x = item.datapoint[0].toFixed(2);
 					y = item.datapoint[1].toFixed(2);
@@ -430,7 +431,7 @@ function makePieChart(id, target, target_state){
 		});
 		$("#" + id).bind("plothover", function(e, pos, item){
 			if( item ) {
-				
+				console.log(e);
 				if( $("#tooltip").length == 0 ){
 					$("<div id='tooltip'></div>").appendTo( $("body") );
 				}
@@ -449,14 +450,14 @@ function drawCandidateMap( id ){
 	h = $(map.node()).height();
 	
 	var counties = [];
-	$.getJSON("api/counties", function(countiesJSON){
+	$.getJSON("/api/counties", function(countiesJSON){
 		$.each(countiesJSON.results, function(i, county){
 			county.beneficiaries.sort(function(a,b){
 				return +b.amount - +a.amount;
 			});
 			counties[county.county] = { county: county.county, winner: county.beneficiaries[0].party, candidates: county.beneficiaries };
 		});
-		d3.json("js/min.pennsylvania.json", function(error, json) {
+		d3.json("/js/min.pennsylvania.json", function(error, json) {
 			// Join shapefile data
 			county = d3.select("#map")
 			.selectAll("path")
