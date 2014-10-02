@@ -420,9 +420,25 @@ function makePieChart(id, target, target_state){
 		$.plot('#' + id, data, {
 			series: {
 				pie: {
-					show: true
+					show: true,
+					hoverable: true
 				}
+			},
+			grid: {
+				hoverable: true
 			}
+		});
+		$("#" + id).bind("plothover", function(e, pos, item){
+			if( item ) {
+				
+				if( $("#tooltip").length == 0 ){
+					$("<div id='tooltip'></div>").appendTo( $("body") );
+				}
+				$("#tooltip").css({top: pos.pageY-20, left: pos.pageX+10});
+				$("#tooltip").html("<div class='text'>" + Math.floor(item.datapoint[0]) + "%</div>");
+			}
+			
+			else $("#tooltip").remove();
 		});
 	});
 }
@@ -433,110 +449,96 @@ function drawCandidateMap( id ){
 	h = $(map.node()).height();
 	
 	var counties = [];
-		$.getJSON("api/counties", function(countiesJSON){
-			$.each(countiesJSON.results, function(i, county){
-				county.beneficiaries.sort(function(a,b){
-					return +b.amount - +a.amount;
-				});
-				counties[county.county] = { county: county.county, winner: county.beneficiaries[0].party, candidates: county.beneficiaries };
+	$.getJSON("api/counties", function(countiesJSON){
+		$.each(countiesJSON.results, function(i, county){
+			county.beneficiaries.sort(function(a,b){
+				return +b.amount - +a.amount;
 			});
-			d3.json("js/min.pennsylvania.json", function(error, json) {
-				// Join shapefile data
-				county = d3.select("#map")
-				.selectAll("path")
-					.data(json.features)
-				.enter().append("path")
-					.attr("class", function(d){
-						var output = "county";
-						if(counties[d.properties.NAME]){
-							output += " " + counties[d.properties.NAME].winner;
-						}
-						return output;
-					})
-					.on("mousemove", function(d){
-						d3.select("#tooltip").remove();
-						d3.select("body").append("div")
-							.attr("id", "tooltip")
-							.attr("class", "table")
-							.html(function(){
-								output = "<h4>" + d.properties.NAME + "</h4><table><tbody>";
-								if( counties[d.properties.NAME] ){
-									$.each(	counties[d.properties.NAME].candidates, function(i, candidate){
-										output += "<tr><td>" + candidate.name + "</td><td><strong>" + toDollars(candidate.amount) + "</td></tr>";
-									});
-								}
-								return output + "</tbody></table>";
-							})
-							.style("left", d3.event.clientX + 10 + "px")
-							.style("top", d3.event.clientY - 20 + "px");
-						console.log(d3.event.clientX);
-					})
-					.on("mouseout", function(d){
-						d3.select("#tooltip").remove();
-					})
-					.on("click", function(d){
-						
-						window.location = "/a/counties/" + d.properties.NAME;
-					});
-					
-				// Detetct orientation of screen and scale map accordingly.
-				var bounds = d3.geo.path().bounds(json);
-				
-				// Chooses a mercator projection, sticks it roughly in the center of the screen,
-				// sets the center of Pennsylvania, scales it up based on bounds of map
-				projection = d3.geo.mercator().translate([ w / 2.2, h / 1.8]).center([-77.995133, 40.696298]).scale( 800 * w / (bounds[1][0] - bounds[0][0]) );	
-				
-				// Apply transformation
-				county.attr("d", d3.geo.path().projection(projection));
-			});
+			counties[county.county] = { county: county.county, winner: county.beneficiaries[0].party, candidates: county.beneficiaries };
 		});
+		d3.json("js/min.pennsylvania.json", function(error, json) {
+			// Join shapefile data
+			county = d3.select("#map")
+			.selectAll("path")
+				.data(json.features)
+			.enter().append("path")
+				.attr("class", function(d){
+					var output = "county";
+					if(counties[d.properties.NAME]){
+						output += " " + counties[d.properties.NAME].winner;
+					}
+					return output;
+				})
+				.on("mousemove", function(d){
+					d3.select("#tooltip").remove();
+					d3.select("body").append("div")
+						.attr("id", "tooltip")
+						.attr("class", "table")
+						.html(function(){
+							output = "<h4>" + d.properties.NAME + "</h4><table><tbody>";
+							if( counties[d.properties.NAME] ){
+								$.each(	counties[d.properties.NAME].candidates, function(i, candidate){
+									output += "<tr><td>" + candidate.name + "</td><td><strong>" + toDollars(candidate.amount) + "</td></tr>";
+								});
+							}
+							return output + "</tbody></table>";
+						})
+						.style("left", d3.event.clientX + 10 + "px")
+						.style("top", d3.event.clientY - 20 + "px");
+					console.log(d3.event.clientX);
+				})
+				.on("mouseout", function(d){
+					d3.select("#tooltip").remove();
+				})
+				.on("click", function(d){
+					
+					window.location = "/a/counties/" + d.properties.NAME;
+				});
+				
+			// Detetct orientation of screen and scale map accordingly.
+			var bounds = d3.geo.path().bounds(json);
+			
+			// Chooses a mercator projection, sticks it roughly in the center of the screen,
+			// sets the center of Pennsylvania, scales it up based on bounds of map
+			projection = d3.geo.mercator().translate([ w / 2.2, h / 1.8]).center([-77.995133, 40.696298]).scale( 800 * w / (bounds[1][0] - bounds[0][0]) );	
+			
+			// Apply transformation
+			county.attr("d", d3.geo.path().projection(projection));
+		});
+	});
 }
-
-
 
 function drawLocatorMap( id, county ){
 	map = d3.select("#" + id);
 	w = $(map.node()).width();
 	h = $(map.node()).height();
 	
-			d3.json("js/min.pennsylvania.json", function(error, json) {
-				// Join shapefile data
-				county = d3.select("#map")
-				.selectAll("path")
-					.data(json.features)
-				.enter().append("path")
-					.attr("class", function(d){
-						var output = "county";
-						if(d.properties.NAME == county) output += " selected";
-						return output;
-					})
-					.on("mousemove", function(d){
-						d3.select("#tooltip").remove();
-						d3.select("body").append("div")
-							.attr("id", "tooltip")
-							.attr("class", "table")
-							.html("<h4>" + d.properties.NAME + "</h4>")
-							.style("left", d3.event.clientX + 10 + "px")
-							.style("top", d3.event.clientY - 20 + "px");
-						console.log(d3.event.clientX);
-					})
-					.on("mouseout", function(d){
-						d3.select("#tooltip").remove();
-					})
-					.on("click", function(d){
-						window.location = "/a/counties/" + d.properties.NAME;
-					});
-					
-				// Detetct orientation of screen and scale map accordingly.
-				var bounds = d3.geo.path().bounds(json);
-				
-				// Chooses a mercator projection, sticks it roughly in the center of the screen,
-				// sets the center of Pennsylvania, scales it up based on bounds of map
-				projection = d3.geo.mercator().translate([ w / 2.2, h / 1.8]).center([-77.995133, 40.696298]).scale( 800 * w / (bounds[1][0] - bounds[0][0]) );	
-				
-				// Apply transformation
-				county.attr("d", d3.geo.path().projection(projection));
+	d3.json("js/min.pennsylvania.json", function(error, json) {
+		// Join shapefile data
+		county = d3.select("#map")
+		.selectAll("path")
+			.data(json.features)
+		.enter().append("path")
+			.attr("class", function(d){
+				var output = "county";
+				if(d.properties.NAME == county) output += " selected";
+				return output;
+			})
+			.on("mousemove", function(d){
+				d3.select("#tooltip").remove();
+				d3.select("body").append("div")
+					.attr("id", "tooltip")
+					.attr("class", "table")
+					.html("<h4>" + d.properties.NAME + "</h4>")
+					.style("left", d3.event.clientX + 10 + "px")
+					.style("top", d3.event.clientY - 20 + "px");
+				console.log(d3.event.clientX);
+			})
+			.on("mouseout", function(d){
+				d3.select("#tooltip").remove();
+			})
+			.on("click", function(d){
+				window.location = "/a/counties/" + d.properties.NAME;
 			});
 		});
 }
->>>>>>> origin/frontend-andrew
