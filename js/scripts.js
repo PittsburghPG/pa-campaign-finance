@@ -448,7 +448,6 @@ function drawCandidateMap( id ){
 	map = d3.select("#" + id);
 	w = $(map.node()).width();
 	h = $(map.node()).height();
-	
 	var counties = [];
 	$.getJSON("/api/counties", function(countiesJSON){
 		$.each(countiesJSON.results, function(i, county){
@@ -474,7 +473,7 @@ function drawCandidateMap( id ){
 					d3.select("#tooltip").remove();
 					d3.select("body").append("div")
 						.attr("id", "tooltip")
-						.attr("class", "table")
+						.attr("class", "formap")
 						.html(function(){
 							output = "<h4>" + d.properties.NAME + "</h4><table><tbody>";
 							if( counties[d.properties.NAME] ){
@@ -529,11 +528,11 @@ function drawLocatorMap( id, county ){
 				d3.select("#tooltip").remove();
 				d3.select("body").append("div")
 					.attr("id", "tooltip")
-					.attr("class", "table")
+					.attr("class", "formap")
 					.html("<h4>" + d.properties.NAME + "</h4>")
-					.style("left", d3.event.clientX + 10 + "px")
-					.style("top", d3.event.clientY - 20 + "px");
-				console.log(d3.event.clientX);
+					.style("left", d3.event.pageX + 10 + "px")
+					.style("top", d3.event.pageY - 20 + "px");
+				console.log(d3.event.pageX);
 			})
 			.on("mouseout", function(d){
 				d3.select("#tooltip").remove();

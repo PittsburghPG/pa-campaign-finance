@@ -344,6 +344,10 @@ class MyAPI extends API{
 				return "AND state = '" . $this->mysqli -> real_escape_string($arg) . "' ";
 			break;
 			
+			case "counties":
+				return "AND county = '" . $this->mysqli -> real_escape_string($arg) . "' ";
+			break;
+			
 			// for now, year just works with /candidates
 			case "years":
 				return "AND candidates.year = '" . $this->mysqli -> real_escape_string($arg) . "' ";

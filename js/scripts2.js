@@ -127,7 +127,7 @@ $(document).ready(function() {
 				$('<div class="container" id="charts">\
 					<div class="row graphs">\
 						<div class="col-lg-8 col-md-8 col-sm-8 block"><h3>County-by-county contributions <i class="fa fa-info-circle"></i></h3><div >\
-							<div id="map" style = "width:100%; height:400px;"></div>\
+							<svg id="map" style = "width:100%; height:465px;"></svg>\
 						</div></div>\
 						<div class="col-lg-4 col-md-4 col-sm-4"><h3>Over time</h3>\
 							<div id="timechart" style="width: 100%; height: 200px;"></div>\
