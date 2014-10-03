@@ -90,12 +90,8 @@ $(document).ready(function() {
 			
 			var mapTopChart = $("<div class='row' id='map-top-chart'>").appendTo(container);
 			
-<<<<<<< HEAD
-			results.push(candidateBlock).appendTo(candidateVScandidate);
-=======
 			var candidateMap = $("<div class='col-lg-7 col-md-7 col-sm-7'><svg id='map' style = 'width:100%; height:465px;'></svg>\</div>").appendTo(mapTopChart);
 			drawCandidateMap("map");
->>>>>>> origin/allie
 
 			var countiesTable = $("<div class='col-lg-5 col-md-5 col-sm-5 tabular'>").appendTo(mapTopChart);
 			var countiesTableLabel = $("<h3>Top contributions by county</h3>").appendTo(countiesTable);
@@ -160,13 +156,13 @@ $(document).ready(function() {
 				var contribName = data.results[0].contributor;
 				console.log(data.results);
 				
-				var headerAmt = $("<h1>" + contribName + "</h1><div class='thin-divider'></div>");
+				var headerAmt = $("<h1>" + contribName + "</h1>");
 				headerAmt.appendTo(jumbotron);
+				headerAmt.after("<div class='thin-divider'></div>");
 				
 				var contribJob = data.results[0].occupation;
 				var contribEmp = data.results[0].empName;
 				
-				//console.log(contribJob.length);
 				
 				var contribTitle = "";
 				if((contribJob.length > 0) && (contribEmp.length > 0)){
@@ -471,11 +467,3 @@ $(document).ready(function() {
 	  
 });
 
-<<<<<<< HEAD
-function toTitleCase(str)
-{
-    return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-}
-
-=======
->>>>>>> origin/allie

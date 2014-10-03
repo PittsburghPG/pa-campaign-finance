@@ -91,7 +91,15 @@ figcaption{
 	}
 	
 .jumbotron h1{
-	margin-top:0;
+	margin:5px 0px 25px;
+	line-height:.8em;
+	}
+	
+	.jumbotron h1 small{
+		font-size: .5em;
+		font-weight: 100;
+		color: rgba(0,0,0,.4);
+		margin-lefT: 16px;
 	}
 
 #search-menu{
@@ -120,6 +128,7 @@ figcaption{
 	font-weight: bold;
 	margin-top: 0;
 }
+
 	
 .top-totals h2,
 .top-totals h3{
@@ -289,7 +298,7 @@ table.horizontal-bar-graph {
 
 }
 
-@media (max-width: 480px){
+@media (max-width: 480px) {
 	.block{
 		border-right:none;
 		border-bottom:#d1d1d1 1px dotted; 
