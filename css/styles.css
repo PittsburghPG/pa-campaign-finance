@@ -112,7 +112,14 @@ figcaption{
 	
 .jumbo{
 	font-size:4em;
+	margin-top:0;
 	}
+	
+.ultra-mega{
+	font-size: 6em;
+	font-weight: bold;
+	margin-top: 0;
+}
 	
 .top-totals h2,
 .top-totals h3{
@@ -126,6 +133,7 @@ figcaption{
 	
 label{
 	font-weight: 200;
+	margin-bottom:0;
 	}
 
 table.horizontal-bar-graph {
@@ -281,8 +289,23 @@ table.horizontal-bar-graph {
 
 }
 
-@media (max-width: 480px) and (orientation: landscape) {
-
+@media (max-width: 480px){
+	.block{
+		border-right:none;
+		border-bottom:#d1d1d1 1px dotted; 
+		margin-bottom:2em;
+	}
+	.xs-no-block{
+		border:none;
+	}
+	.jumbo{
+		font-size: 3em;
+	}
+	
+	.ultra-mega{
+		font-size: 4em;
+	}
+	
 }
 
 @media (min-width: 768px) {

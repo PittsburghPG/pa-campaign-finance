@@ -62,7 +62,7 @@
 		<link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 		
 		<!-- Internal stylesheet -->
-		<link href="/css/styles.css" rel="stylesheet" type="text/css" />
+		<link href="../css/styles.css" rel="stylesheet" type="text/css" />
 		
 		<!-- Latest compiled and minified JavaScript -->
 		<!-- Bootstrap -->
@@ -82,7 +82,6 @@
 		<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 		
 		<!-- Internal scripts -->
-		<script type="text/javascript" src="/js/libraries.js"></script>
 		<script type="text/javascript" src="/js/scripts.js"></script>
 		<script type="text/javascript" src="/js/scripts2.js"></script>
 		
@@ -196,10 +195,96 @@
 	
 	<div class="container" id="main">
 	
-	</div>
+		<div class="row" id="project-intro">
+		
+			<div class="col-lg-5 col-md-5 col-sm-5 lead">
+				<p>Causa similis loquor tation scisco. Ratis camur decet eu. Quibus et feugait ut gravis consequat duis. Quis jugis minim quis uxor dignissim. Comis vereor nimis. Wisi delenit feugait.</p>
+			</div>
+			
+			<div class="col-lg-7 col-md-7 col-sm-7">
+				<label>TOTAL CONTRIBUTIONS TO ALL CANDIDATES</label>
+				<h2 class="ultra-mega">$60,501,983</h2>
+			</div>
+			
+		</div> <!-- end project-intro row-->
+		
+		<div class="thin-divider"></div>
+		
+		<div class="row" id="candidate-vs-candidate">
+		
+			<div class="col-lg-6 col-md-6 col-sm-6 block">
+				<div class="banner-image" style="background-image: url('../img/corbett-header.jpg'); background-size: cover; "></div>
+				<h2>Tom Corbett <small>Republican</small></h2>
+				<label>Total contributed to Corbett</label>
+				<h2 class="jumbo">$12,192,524</h2>
+			</div>
+			
+			<div class="col-lg-6 col-md-6 col-sm-6">
+				<div class="banner-image" style="background-image: url('../img/corbett-header.jpg'); background-size: cover; "></div>
+				<h2>Tom Wolf <small>Democrat</small></h2>
+				<label>Total contributed to Wolf</label>
+				<h2 class="jumbo">$17,878,541</h2>
+			</div>
+			
+		</div> <!-- end candidate-vs-candidate row -->
+		
+		<div class="thin-divider"></div>
+		
+		<div class="row" id="map-top-chart">
+			<div class="col-lg-7 col-md-7 col-sm-7">
+				<img src="../img/pa-heat-map.png" alt="PA race map" />
+			</div>
+			
+			<div class="col-lg-5 col-md-5 col-sm-5 tabular">
+	
+				<h3>Top contributions by county</h3>
+				
+				<table class="table table-hover sortable">
+					<thead>
+						<tr>
+							<th>County</th> 
+							<th>Total contributed</th>
+							<th>Majority contributed to</th>
+						</tr>
+					</thead>
+					
+					<tbody>
+					<tr>
+				    <td>Allegheny</td> 
+				    <td data-value="10716119">$10,716,119</td>
+				    <td>Corbett</td>
+				  </tr>
+				  <tr>
+				    <td>Philadelphia</td> 
+				    <td data-value="8823536">$8,823,536</td>
+				    <td>Wolf</td>
+				  </tr>
+				  <tr>
+				    <td>Dauphin</td> 
+				    <td data-value="6773600">$6,773,600</td>
+				    <td>Corbett</td>
+				  </tr>
+				  <tr>
+				    <td>Berks</td> 
+				    <td data-value="6573622">$6,573,622</td>
+				    <td>Corbett</td>
+				  </tr>
+				  <tr>
+				    <td>Chester</td> 
+				    <td data-value="4768112">$4,768,112</td>
+				    <td>Wolf</td>
+				  </tr>
+				 </tbody>
+				</table>
+					
+			</div> <!-- end tabular -->
+			
+		</div><!-- end map-top-chart row -->
+		
+		<div class="thin-divider"></div>
+	
+	
+	</div> <!-- end container -->
 	
 	</body>
-	<script>
-		google.maps.event.addDomListener(window, 'load', initializeGmap);
-	</script>
 </html>

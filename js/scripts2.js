@@ -33,27 +33,32 @@ $(document).ready(function() {
 			  var address2 = r.results[0].address2;
 			  var city = r.results[0].city;
 			  city = city.toLowerCase();
+			  city = toTitleCase(city);
 			  var state = r.results[0].state;
 			  var zip = r.results[0].zip;
 			  var phone = r.results[0].phone;
+			  phone = phone.insert(3, "."); //format phone number
+			  phone = phone.insert(7, ".");
 			  
 			  //intro row 
-			var container = $("#main");
-			introRow = $("<div></div>").appendTo(container);	
-			introRow.addClass("row intro-row");
-			
-			var introLabel = $("<label>CANDIDATE</label>");
-			introLabel.appendTo(introRow);
-			
-			var jumbotron = $("<div></div>").appendTo(introRow);
-			jumbotron.addClass("jumbotron");
-			
-			var candName = $("<h1>" + name + "</h1>");
-			candName.appendTo(jumbotron);
-			
-			var thinDivider = $("<div class='thin-divider'></div>");
-			//thinDivider.appendTo(jumbotron);			  
-			
+
+				var container = $("#main");
+				introRow = $("<div></div>").appendTo(container);	
+				introRow.addClass("row intro-row");
+				
+				var introLabel = $("<label>CANDIDATE</label>");
+				introLabel.appendTo(introRow);
+				
+				var jumbotron = $("<div></div>").appendTo(introRow);
+				jumbotron.addClass("jumbotron");
+				
+				var candName = $("<h1>" + name + "</h1>");
+				candName.appendTo(jumbotron);
+				
+				var thinDivider = $("<div class='thin-divider'></div>");
+				
+				//thinDivider.appendTo(jumbotron);
+			  
 			 //banner image
 			  var n = name.split(" ");
 			  var lastName = n[1];
@@ -70,6 +75,7 @@ $(document).ready(function() {
 
 			// $( "<div class='container' id='data'></div>" ).insertAfter( "#main" );
 
+			// $( "<div class='container' id='data'></div>" ).insertAfter( "#main" );
 			  $('#data').append("<div class='row' id='bio_totals'></div>");
 			  $('#bio_totals').append("<div id='bio' class='col-lg-5 col-md-5 col-sm-5 col-xs-12'></div>");
 			  $('#bio').append('<p><span class="fa-stack fa-md"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-birthday-cake fa-stack-1x fa-inverse"></i></span><strong id="party"></strong><br><span class="fa-stack fa-md"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-phone fa-stack-1x fa-inverse"></i></span><strong id="phone"></strong><br><span class="fa-stack fa-md"><i class="fa fa-square fa-stack-2x"></i>	<i class="fa fa-envelope fa-stack-1x fa-inverse"></i></span><strong id="address"></strong><br></p><p class="lead">Tom Corbett! What a bro. </p>');
@@ -128,6 +134,7 @@ $(document).ready(function() {
 					<div class="row graphs">\
 						<div class="col-lg-8 col-md-8 col-sm-8 block"><h3>County-by-county contributions <i class="fa fa-info-circle"></i></h3><div >\
 							<svg id="map" style = "width:100%; height:465px;"></svg>\
+							<img src="/../img/pa-heat-map.png" alt="County-by-county contribution" />\
 						</div></div>\
 						<div class="col-lg-4 col-md-4 col-sm-4"><h3>Over time</h3>\
 							<div id="timechart" style="width: 100%; height: 200px;"></div>\
@@ -147,7 +154,6 @@ $(document).ready(function() {
 						<form class="form-inline pull-right"><input type="search" class="form-control" placeholder="Search"><button type="submit" class="btn btn-default">Submit</button></form>\
 						<table class="table table-hover sortable" id="donorTable"><thead><tr><th>Donor</th> <th>Occupation, Employer</th><th>Amount</th></tr></thead><tbody></tbody></table></div></div></div> ').insertAfter("#chartdivider");
 				var donorHeight;
-				
 				//container.append(thinDivider);
 				//get contributor data
 				$.ajax({
@@ -251,7 +257,7 @@ $(document).ready(function() {
 				var wolfContributionAmt = v.results[1].beneficiaries[0].amount;//wolf's contribution amount
 				wolfContributionAmt = parseFloat(wolfContributionAmt);
 				wolfContributionAmt = Math.round(wolfContributionAmt);
-				
+		
 				var totalcontribs = corbettContributionAmt + wolfContributionAmt;
 				formatTotalcontribs = totalcontribs.numberFormat(0);
 				
