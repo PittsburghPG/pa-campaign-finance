@@ -86,6 +86,7 @@ CREATE TABLE campaign_finance.candidates
 	`race`				char varying(50)	DEFAULT NULL,
 	`name`				char varying(50)	DEFAULT NULL,
 	`party`				char varying(50)	DEFAULT NULL,	
+	`img`				char varying(255)	DEFAULT NULL,	
 	PRIMARY KEY (`id`),
 	UNIQUE KEY `id` (`id`)
 );
