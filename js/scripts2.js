@@ -8,7 +8,43 @@ $(document).ready(function() {
  var apiURL = split[2] + "/" + split[3];
  //console.log(apiURL);
  //case statement
+
  switch(split[2]) { //the second item in the array will be the type of page this will be
+    case "search":
+		var content = $("#main");
+		urlparameters = getURLParameters();
+		console.log(urlparameters);
+		// Start it off with dummy value so the rest can just start with &'s
+		var parameters = "?limit=100";
+		$.each(urlparameters, function(i, parameter){
+			parameters += "&" + parameter.key + "=" + parameter.value;
+		});
+		console.log(parameters);
+		$.getJSON("/api/contributions/" + parameters, function(data){
+			console.log(data);
+			content.append('<div class="col-lg-12 col-md-12 col-sm-12" id = "contributions"> \
+								<h3>Contributions matching search</h3> \
+								<table class="table table-hover sortable"> \
+									<thead> \
+										<tr><th>Date</th><th>Contributor</th><th>Candidate/PAC</th><th>County</th><th>Amount</th></tr> \
+									</thead> \
+									<tbody></tbody> \
+								</table> \
+							</div>'); 
+			$.each(data.results, function(i, contribution){
+				$("#contributions tbody").append("<tr> \
+													<td><a href='/a/contributions/" + contribution.id + "'>" + contribution.date + "</a></td> \
+													<td><a href='/a/contributors/" + contribution.contributorid + "'>" + contribution.contributor + "</a></td> \
+													<td><a href='/a/candidates/" + contribution.filerid + "'>" + contribution.name + "</a></td> \
+													<td><a href='a/counties/" + contribution.county + "'>" + contribution.county + "</a></td> \
+													<td>" + contribution.contribution + "</td> \
+												</tr>");
+			});
+		});
+	
+		
+	break;
+	
     case "candidates":
         $('#bycandidate').addClass('active'); //make the dropdown menu active on the correct item
 				//var candName = decodeURIComponent(split[3]); //grab the candidate name from the url
@@ -134,7 +170,6 @@ $(document).ready(function() {
 					<div class="row graphs">\
 						<div class="col-lg-8 col-md-8 col-sm-8 block"><h3>County-by-county contributions <i class="fa fa-info-circle"></i></h3><div >\
 							<svg id="map" style = "width:100%; height:465px;"></svg>\
-							<img src="/../img/pa-heat-map.png" alt="County-by-county contribution" />\
 						</div></div>\
 						<div class="col-lg-4 col-md-4 col-sm-4"><h3>Over time</h3>\
 							<div id="timechart" style="width: 100%; height: 200px;"></div>\

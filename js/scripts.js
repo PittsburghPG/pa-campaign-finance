@@ -1,4 +1,5 @@
 $(document).ready(function() {      
+   
 
  //parse url
  var pathname = window.location.pathname; //get current url
@@ -85,7 +86,7 @@ $(document).ready(function() {
 			
 			var candidateVScandidate = $("<div class='row' id='candidate-vs-candidate'>").appendTo(container);
 			
-			candidateBlock.appendTo(candidateVScandidate);
+			results.push(candidateBlock).appendTo(candidateVScandidate);
 
 
 
@@ -430,3 +431,9 @@ $(document).ready(function() {
  
 	  
 });
+
+function toTitleCase(str)
+{
+    return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+}
+

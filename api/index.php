@@ -71,6 +71,7 @@ class MyAPI extends API{
 						contribution, 
 						contributor,
 						contributorid,
+						contributions.county,
 						filers.name,
 						filers.filerid,
 						date, 
@@ -81,7 +82,7 @@ class MyAPI extends API{
 		$query["join"] .= "LEFT JOIN campaign_finance.candidates on contributions.filerid = candidates.filerid  ";
 		$query["where"] = "WHERE 1=1 ";
 		$query["group"] = " ";
-		$query["order"] = " ";
+		$query["order"] = "ORDER BY date DESC ";
 	
 		
 		return $this->queryAPI($query, "AND contributions.id = '%s' ", "");
@@ -124,7 +125,7 @@ class MyAPI extends API{
 							contributions.zip,
 							filers.filerid
 							";
-		$query["order"] = "ORDER BY contributor ASC "; 
+		$query["order"] = "ORDER BY total_contribution DESC "; 
 							
 		$that = $this;
 		return $this->queryAPI($query, "AND contributions.contributorid = '%s' ", function($res, $query) use ($that) {
@@ -384,6 +385,10 @@ class MyAPI extends API{
 						
 						case "contributor_zip":
 							$query["where"] .= "AND contributions.zip LIKE '%" . $this->mysqli -> real_escape_string($value) . "%' "; 
+						break;
+						
+						case "county":
+							$query["where"] .= "AND contributions.county LIKE '%" . $this->mysqli -> real_escape_string($value) . "%' "; 
 						break;
 						
 						case "employer":

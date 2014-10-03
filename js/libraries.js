@@ -17,61 +17,68 @@ function makeTimeChart(id, endpoint, target, startDate, endDate){
 
 	$.getJSON("api/months/" + endpoint + "/" + target + "?startDate=" + startDate + "&endDate=" + endDate, function(json){
 		data = [];
+		count = 0;
 		$.each(json.results, function(i, date){
 			data.push( [Date.parse(date["year"] + "-" + date["month"] + "-" + "01 05:01:00"), date["total"]] );
-			$.plot("#" + id, [{ 
-				data: data, 
-				color:"seagreen"
-			}], {
-				series: {
-					lines:{
-						lineWidth: 6,
-						show:true
-					},
-					points:{
-						show:true
-					}
-				},
-				xaxis: { 
-					mode: "time",
-					min: data[0][0]	
-				},
-				yaxis: {
-					tickFormatter: function(val, axis){
-						return "$" + numberWithCommas(val);
-					},
-					min: 0
-				},
-				grid: {
-					borderWidth: {
-						top: 0,
-						left: 1,
-						right: 0,
-						bottom: 1
-					},
-					hoverable: true
-				},
-				markings:0
-			});
-			
-			$("#" + id).bind("plothover", function(event, pos, item){
-				if( item ) {
-					console.log(item);
-					if( $("#tooltip").length == 0 ){
-						$("<div id='tooltip'></div>").appendTo( $("body") )
-							.css({top: item.pageY+5, left: item.pageX+5});
-						$("#tooltip").html("<div class='date'>" + ( new Date(item.datapoint[0]).getMonth() + 1 ) + "/" + new Date(item.datapoint[0]).getFullYear() + "</div><div class='text'>" + toDollars(item.datapoint[1]) + "</div>");
-						console.log(item.datapoint[0]);
-					}
-					else {
-						$("#tooltip").css({top: item.pageY-20, left: item.pageX+10});
-					}
-					x = item.datapoint[0].toFixed(2);
-					y = item.datapoint[1].toFixed(2);
-				}
-				else $("#tooltip").remove();
-			});
+			count = i;
 		});	
+		
+		
+		$.plot("#" + id, [{ 
+			data: data, 
+			color:"seagreen"
+		}], {
+			series: {
+				bars:{
+					lineWidth: 6,
+					show:true
+				},
+				points:{
+					show:true
+				}
+			},
+			xaxis: { 
+				mode: "time",
+				min: 1357014127000,
+				max: 1417321327000
+				//min: data[0][0] - 100000000,
+				//max: data[count][0] + 100000000
+			},
+			yaxis: {
+				tickFormatter: function(val, axis){
+					return "$" + numberWithCommas(val);
+				},
+				min: 0
+			},
+			grid: {
+				borderWidth: {
+					top: 0,
+					left: 1,
+					right: 0,
+					bottom: 1
+				},
+				hoverable: true
+			},
+			markings:0
+		});
+		
+		$("#" + id).bind("plothover", function(event, pos, item){
+			if( item ) {
+				console.log(item);
+				if( $("#tooltip").length == 0 ){
+					$("<div id='tooltip'></div>").appendTo( $("body") )
+						.css({top: item.pageY+5, left: item.pageX+5});
+					$("#tooltip").html("<div class='date'>" + ( new Date(item.datapoint[0]).getMonth() + 1 ) + "/" + new Date(item.datapoint[0]).getFullYear() + "</div><div class='text'>" + toDollars(item.datapoint[1]) + "</div>");
+					console.log(item.datapoint[0]);
+				}
+				else {
+					$("#tooltip").css({top: item.pageY-20, left: item.pageX+10});
+				}
+				x = item.datapoint[0].toFixed(2);
+				y = item.datapoint[1].toFixed(2);
+			}
+			else $("#tooltip").remove();
+		});
 	});
 }
 
