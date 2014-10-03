@@ -8,7 +8,99 @@ $(document).ready(function() {
  var apiURL = split[2] + "/" + split[3];
  //console.log(apiURL);
  //case statement
+
  switch(split[2]) { //the second item in the array will be the type of page this will be
+    case "search":
+		
+		function appendContributions(data) {
+			$.each(data.results, function(i, contribution){
+				$("#contributions tbody").append("<tr> \
+													<td><a href='/a/contributions/" + contribution.id + "'>" + contribution.date + "</a></td> \
+													<td><a href='/a/contributors/" + contribution.contributorid + "'>" + contribution.contributor + "</a></td> \
+													<td><a href='/a/candidates/" + contribution.filerid + "'>" + contribution.name + "</a></td> \
+													<td><a href='a/counties/" + contribution.county + "'>" + contribution.county + "</a></td> \
+													<td style='text-align:right'  data-value='" + parseFloat(contribution.contribution)	 + "'>" + toDollars(contribution.contribution) + "</td> \
+												</tr>");
+			});
+		}
+		
+		function appendContributors(data){
+			$.each(data.results, function(i, contributor){
+				$("#contributors tbody").append("<tr> \
+													<td><a href='/a/contributors/" + contributor.contributorid + "'>" + contributor.contributor + "</a></td> \
+													<td>" + contributor.city + "</td> \
+													<td><a href='a/counties/" + contributor.county + "'>" + contributor.county + "</a></td> \
+													<td>" + contributor.state + "</td> \
+													<td>" + contributor.occupation + "</td> \
+													<td>" + contributor.empName + "</td> \
+													<td style='text-align:right' data-value='" + parseFloat(contributor.amount) + "'>" + toDollars(contributor.amount) + "</td> \
+												</tr>");
+			});
+		}
+		
+		var content = $("#main");
+		urlparameters = getURLParameters();
+		console.log(urlparameters);
+		// Start it off with dummy value so the rest can just start with &'s
+		var parameters = "?";
+		$.each(urlparameters, function(i, parameter){
+			parameters += "&" + parameter.key + "=" + parameter.value;
+		});
+		console.log(parameters);
+		// Contributions portion
+		$.getJSON("/api/contributions/" + parameters + "&limit=25", function(data){
+			console.log(data);
+			content.append('<div class = "row"> \
+								<div class="col-lg-12 col-md-12 col-sm-12" id = "contributions"> \
+									<h3>Contributions matching search</h3> \
+									<table class="table table-hover sortable"> \
+										<thead> \
+											<tr><th data-defaultsort = "DESC">Date</th><th>Contributor</th><th>Candidate/PAC</th><th>County</th><th style="text-align:right">Amount</th></tr> \
+										</thead> \
+										<tbody></tbody> \
+									</table> \
+								</div> \
+							</div>'); 
+			appendContributions(data);
+			
+			button = $('<button type="button" class="btn btn-default btn-md btn-block">More results</button>').appendTo($("#contributions"))
+				.on("click", function(){
+				this.remove();
+				$.getJSON("/api/contributions/" + parameters + "&limit=9999999&offset=25", function(data){
+					appendContributions(data);
+					$.bootstrapSortable(applyLast=true);
+				});
+			});
+			$.bootstrapSortable();
+			content.append('<div class="thin-divider"></div>');
+			
+			// Contributor time
+			$.getJSON("/api/contributors/" + parameters + "&limit=25", function(data){
+				content.append('<div class = "row"> \
+									<div class="col-lg-12 col-md-12 col-sm-12" id = "contributors"> \
+										<h3>Contributors matching search</h3> \
+										<table class="table table-hover sortable"> \
+											<thead> \
+												<tr><th>Contributor</th><th>City</th><th>County</th><th>State</th><th>Occupation</th><th>empName</th><th style="text-align:right" data-defaultsort="DESC">Total contributed</th></tr> \
+											</thead> \
+											<tbody></tbody> \
+										</table> \
+									</div> \
+								</div>'); 
+				appendContributors(data);
+				button = $('<button type="button" class="btn btn-default btn-md btn-block">More results</button>').appendTo($("#contributors"))
+					.on("click", function(){
+						this.remove();
+					$.getJSON("/api/contributors/" + parameters + "&limit=9999999&offset=25", function(data){
+						appendContributors(data);
+						$.bootstrapSortable(applyLast=true);
+					});
+				});
+				$.bootstrapSortable();
+			});
+		});
+	break;
+	
     case "candidates":
         $('#bycandidate').addClass('active'); //make the dropdown menu active on the correct item
 				//var candName = decodeURIComponent(split[3]); //grab the candidate name from the url
@@ -41,6 +133,7 @@ $(document).ready(function() {
 			  phone = phone.insert(7, ".");
 			  
 			  //intro row 
+
 				var container = $("#main");
 				introRow = $("<div></div>").appendTo(container);	
 				introRow.addClass("row intro-row");
@@ -58,23 +151,28 @@ $(document).ready(function() {
 				
 				//thinDivider.appendTo(jumbotron);
 			  
-			 
 			 //banner image
 			  var n = name.split(" ");
 			  var lastName = n[1];
 			  lastName = lastName.toLowerCase();
+
 			 // $( "<div class='banner-image'></div>" ).appendTo('body');
 			 	$( "<div class='banner-image'></div>" ).insertAfter( "#main" );
+
 			  $('.banner-image').css('background-image', "url('/../img/" + lastName + "-header.jpg')");
 			  $('.banner-image').css('background-size', 'cover');
 			  
 			  //bio information
 			  $( "<div class='container' id='data'></div>" ).insertAfter( ".banner-image" );
+
+			// $( "<div class='container' id='data'></div>" ).insertAfter( "#main" );
+
 			// $( "<div class='container' id='data'></div>" ).insertAfter( "#main" );
 			  $('#data').append("<div class='row' id='bio_totals'></div>");
 			  $('#bio_totals').append("<div id='bio' class='col-lg-5 col-md-5 col-sm-5 col-xs-12'></div>");
 			  $('#bio').append('<p><span class="fa-stack fa-md"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-birthday-cake fa-stack-1x fa-inverse"></i></span><strong id="party"></strong><br><span class="fa-stack fa-md"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-phone fa-stack-1x fa-inverse"></i></span><strong id="phone"></strong><br><span class="fa-stack fa-md"><i class="fa fa-square fa-stack-2x"></i>	<i class="fa fa-envelope fa-stack-1x fa-inverse"></i></span><strong id="address"></strong><br></p><p class="lead">Tom Corbett! What a bro. </p>');
 			  $('#party').html(party);
+
 			  $('#address').html(address1 + address2 + ", " + city + ", " + state + " " + zip);
 			  $('#phone').html(phone);
 			  $("<div class='thin-divider' id='biodivider'></div>").insertAfter('#data');
@@ -101,7 +199,7 @@ $(document).ready(function() {
 						
 					}
 				});
-				
+
 				//under $50
 				$.ajax({
 					url: "api/" + apiURL + "?endAmount=49",
@@ -127,7 +225,7 @@ $(document).ready(function() {
 				$('<div class="container" id="charts">\
 					<div class="row graphs">\
 						<div class="col-lg-8 col-md-8 col-sm-8 block"><h3>County-by-county contributions <i class="fa fa-info-circle"></i></h3><div >\
-							<img src="/../img/pa-heat-map.png" alt="County-by-county contribution" />\
+							<svg id="map" style = "width:100%; height:465px;"></svg>\
 						</div></div>\
 						<div class="col-lg-4 col-md-4 col-sm-4"><h3>Over time</h3>\
 							<div id="timechart" style="width: 100%; height: 200px;"></div>\
@@ -135,6 +233,7 @@ $(document).ready(function() {
 						<div class="thin-divider"></div>').insertAfter( "#datadivider" );
 				makePieChart("pie", split[3], "PA");
 				makeTimeChart("timechart", "candidates", split[3], "2013-01-01", "2014-09-01");
+				drawCandidateMap("map");
 				
 				//$("<div class='thin-divider' id='chartdivider'></div>").insertAfter("#charts");
 				$("<div class='container'><div class='thin-divider' id='chartdivider'></div></div>").insertAfter("#charts");
@@ -146,11 +245,10 @@ $(document).ready(function() {
 						<form class="form-inline pull-right"><input type="search" class="form-control" placeholder="Search"><button type="submit" class="btn btn-default">Submit</button></form>\
 						<table class="table table-hover sortable" id="donorTable"><thead><tr><th>Donor</th> <th>Occupation, Employer</th><th>Amount</th></tr></thead><tbody></tbody></table></div></div></div> ').insertAfter("#chartdivider");
 				var donorHeight;
-				
 				//container.append(thinDivider);
 				//get contributor data
 				$.ajax({
-					url: "api/contributors/filers/" + split[3],
+					url: "api/contributors/filers/" + split[3] + "?limit=50",
 					dataType: "json",
 					type : "GET",
 					success : function(u) {
@@ -174,6 +272,7 @@ $(document).ready(function() {
 							$('#donorTable tbody').append(line);
 							donorHeight = $("#tableHeightDiv").height();
 						}
+						$.bootstrapSortable();
 					}
 				});
 				
@@ -218,7 +317,7 @@ $(document).ready(function() {
 					
 					container.append('<div class="row "> \
 					<div class="col-lg-5 col-md-5 col-sm-4 col-xs-12"> \
-						<img src="img/allegheny-co.png" alt="Allegheny County map" /> \
+						<svg id="map" style="width:100%; height:425px;"></svg> \
 					</div> \
 					<div class="col-lg-7 col-md-7 col-sm-8 top-totals"> \
 						<div class="row"> \
@@ -241,6 +340,8 @@ $(document).ready(function() {
 					</div> \
 				</div>');
 				
+				drawLocatorMap("map", countyName);
+				
 				var corbettContributionAmt = v.results[0].beneficiaries[0].amount; //corbett's contribution amount
 				corbettContributionAmt = parseFloat(corbettContributionAmt);
 				corbettContributionAmt = Math.round(corbettContributionAmt);
@@ -248,7 +349,7 @@ $(document).ready(function() {
 				var wolfContributionAmt = v.results[1].beneficiaries[0].amount;//wolf's contribution amount
 				wolfContributionAmt = parseFloat(wolfContributionAmt);
 				wolfContributionAmt = Math.round(wolfContributionAmt);
-				
+		
 				var totalcontribs = corbettContributionAmt + wolfContributionAmt;
 				formatTotalcontribs = totalcontribs.numberFormat(0);
 				

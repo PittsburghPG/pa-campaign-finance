@@ -31,13 +31,8 @@ $(document).ready(function() {
 			console.log(results);
 			
 			var totalCandidateContrib = 0;
-			//var allCandidateContrib;
 			var colWidth;
 			var candidateBlock;
-			/*var candidateImg;
-			var candidateName;
-			var candidateLabel;
-			var candidateTotal;*/
 			
 			if(results.length <= 2){
 					colWidth = 6;
@@ -45,11 +40,14 @@ $(document).ready(function() {
 					colWidth = 4;
 				};
 			
+			var candidateVScandidate = $("<div class='row' id='candidate-vs-candidate'>")
+			
 			$.each( results, function(i, item) {
 				candidateContrib = parseFloat(results[i].total);
 				candidateContrib = Math.round(candidateContrib);
-				candidateContrib = candidateContrib.numberFormat(0);
 				totalCandidateContrib += candidateContrib;
+				
+				//$(selector).toNumber().formatCurrency();
 				
 				var img = results[i].img;
 				var name = results[i].name;
@@ -65,12 +63,14 @@ $(document).ready(function() {
 				candidateImg.attr("style", "background-image:url('../img/" + img + "'); background-size: cover; ");
 				candidateName = $("<h2>" + name + " <small>" + party + "</small></h2>").appendTo(candidateBlock);
 				candidateLabel = $("<label>Total contributed to " + name + "</label>").appendTo(candidateBlock);
-				candidateTotal = $("<h2 class='jumbo'>$" + candidateContrib + "</h2>").appendTo(candidateBlock);				
+				candidateTotal = $("<h2 class='jumbo'>" + toDollars(candidateContrib) + "</h2>").appendTo(candidateBlock);
+				
+				candidateBlock.appendTo(candidateVScandidate);			
 			});
 			
-			console.log(parseFloat(results[0].total) + parseFloat(results[1].total));
+			//console.log(parseFloat(results[0].total) + parseFloat(results[1].total));
 			
-			allCandidateContrib = "$" + candidateContrib;
+			var allCandidateContrib = toDollars(totalCandidateContrib);
 			
 			var projectIntro = $("<div class='row' id='project-intro'></div>").appendTo(container);
 			
@@ -84,19 +84,54 @@ $(document).ready(function() {
 			
 			thinDivider.appendTo(container);
 			
-			var candidateVScandidate = $("<div class='row' id='candidate-vs-candidate'>").appendTo(container);
+			candidateVScandidate.appendTo(container);
 			
-			candidateBlock.appendTo(candidateVScandidate);
+			thinDivider.appendTo(container);
+			
+			var mapTopChart = $("<div class='row' id='map-top-chart'>").appendTo(container);
+			
+			var candidateMap = $("<div class='col-lg-7 col-md-7 col-sm-7'><svg id='map' style = 'width:100%; height:465px;'></svg>\</div>").appendTo(mapTopChart);
+			drawCandidateMap("map");
+
+			var countiesTable = $("<div class='col-lg-5 col-md-5 col-sm-5 tabular'>").appendTo(mapTopChart);
+			var countiesTableLabel = $("<h3>Top contributions by county</h3>").appendTo(countiesTable);
+			var countiesTableTable = $("<table class='table table-hover sortable'></table>").appendTo(countiesTable);
+			var countiesTableHeader = $("<thead><tr><th>County</th><th>Total contributed</th><th>Majority contributed to</th></tr></thead>").appendTo(countiesTableTable);
+			
+			var countiesTableBody = $("<tbody></tbody>").appendTo(countiesTableTable);
+
+			$.getJSON("/api/counties", function(countyData){
+				
+				countyResults = countyData.results;
+				var countyName = "";
+				
+				console.log(countyResults);
+				countyResults.sort( function(a, b){ 
+					return (a.beneficiaries[0].amount - b.beneficiaries[0].amount);
+					
+					//$.each(countyResults, function(c, county){
+						//countyName = "<tr><td>" + countyResults[c].county + "</td></tr>";
+						//$(countyName).appendTo(countiesTableBody);
+					//});
+				});
+				console.log(countyResults);				
+
+				
+				//console.log(countyName);
+				
+				
+			});
+				
+				
+				
+				
+			
 
 
 
 			
 						
-			
-			
-			
-						
-		}) // end case race getJSON api/candidates
+		}); // end case race getJSON api/candidates
 		break;
 	case "contributors":
        $('#bycontributor').addClass('active');
@@ -431,98 +466,4 @@ $(document).ready(function() {
  
 	  
 });
-
-function toTitleCase(str)
-{
-    return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-}
-
-// Converts XXXXXX.XXXXX to $XXX,XXX.XX
-function toDollars(x){
-	return "$" + numberWithCommas( Math.floor(x * 100) / 100 );
-}
-
-// Converts XXXXXXXX to XX,XXX,XXX
-function numberWithCommas(x){
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
-
-function makeTimeChart(id, endpoint, target, startDate, endDate){
-
-	$.getJSON("api/months/" + endpoint + "/" + target + "?startDate=" + startDate + "&endDate=" + endDate, function(json){
-		data = [];
-		$.each(json.results, function(i, date){
-			data.push( [Date.parse(date["year"] + "-" + date["month"] + "-" + "01 05:01:00"), date["total"]] );
-			$.plot("#" + id, [{ 
-				data: data, 
-				color:"seagreen"
-			}], {
-				series: {
-					lines:{
-						lineWidth: 6,
-						show:true
-					},
-					points:{
-						show:true
-					}
-				},
-				xaxis: { 
-					mode: "time",
-					min: data[0][0]	
-				},
-				yaxis: {
-					tickFormatter: function(val, axis){
-						return "$" + numberWithCommas(val);
-					},
-					min: 0
-				},
-				grid: {
-					borderWidth: {
-						top: 0,
-						left: 1,
-						right: 0,
-						bottom: 1
-					},
-					hoverable: true
-				},
-				markings:0
-			});
-			
-			$("#" + id).bind("plothover", function(event, pos, item){
-				if( item ) {
-					if( $("#tooltip").length == 0 ){
-						$("<div id='tooltip'></div>").appendTo( $("body") )
-							.css({top: item.pageY+5, left: item.pageX+5});
-						$("#tooltip").html("<div class='date'>" + ( new Date(item.datapoint[0]).getMonth() + 1 ) + "/" + new Date(item.datapoint[0]).getFullYear() + "</div><div class='text'>" + toDollars(item.datapoint[1]) + "</div>");
-						console.log(item.datapoint[0]);
-					}
-					else {
-						$("#tooltip").css({top: item.pageY-20, left: item.pageX+10});
-					}
-					x = item.datapoint[0].toFixed(2);
-					y = item.datapoint[1].toFixed(2);
-				}
-				else $("#tooltip").remove();
-			});
-		});	
-	});
-}
-
-function makePieChart(id, target, target_state){
-	$.getJSON("api/states/candidates/" + target, function(json) {
-		data = [];
-		$.each(json.results, function(i, state){ 
-			if( state.state == target_state ) data[1] = { label: "In-state", data: state.amount};
-			else if ( i == 0 ) data.push({ label: "Out of state", data: parseFloat(state.amount)}) 
-			else data[0].data += parseFloat(state.amount);
-		});
-		$.plot('#' + id, data, {
-			series: {
-				pie: {
-					show: true
-				}
-			}
-		});
-	});
-}
 
