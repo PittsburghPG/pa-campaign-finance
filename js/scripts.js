@@ -31,13 +31,8 @@ $(document).ready(function() {
 			console.log(results);
 			
 			var totalCandidateContrib = 0;
-			//var allCandidateContrib;
 			var colWidth;
 			var candidateBlock;
-			/*var candidateImg;
-			var candidateName;
-			var candidateLabel;
-			var candidateTotal;*/
 			
 			if(results.length <= 2){
 					colWidth = 6;
@@ -45,11 +40,14 @@ $(document).ready(function() {
 					colWidth = 4;
 				};
 			
+			var candidateVScandidate = $("<div class='row' id='candidate-vs-candidate'>")
+			
 			$.each( results, function(i, item) {
 				candidateContrib = parseFloat(results[i].total);
 				candidateContrib = Math.round(candidateContrib);
-				candidateContrib = candidateContrib.numberFormat(0);
 				totalCandidateContrib += candidateContrib;
+				
+				//$(selector).toNumber().formatCurrency();
 				
 				var img = results[i].img;
 				var name = results[i].name;
@@ -65,12 +63,14 @@ $(document).ready(function() {
 				candidateImg.attr("style", "background-image:url('../img/" + img + "'); background-size: cover; ");
 				candidateName = $("<h2>" + name + " <small>" + party + "</small></h2>").appendTo(candidateBlock);
 				candidateLabel = $("<label>Total contributed to " + name + "</label>").appendTo(candidateBlock);
-				candidateTotal = $("<h2 class='jumbo'>$" + candidateContrib + "</h2>").appendTo(candidateBlock);				
+				candidateTotal = $("<h2 class='jumbo'>" + toDollars(candidateContrib) + "</h2>").appendTo(candidateBlock);
+				
+				candidateBlock.appendTo(candidateVScandidate);			
 			});
 			
-			console.log(parseFloat(results[0].total) + parseFloat(results[1].total));
+			//console.log(parseFloat(results[0].total) + parseFloat(results[1].total));
 			
-			allCandidateContrib = "$" + candidateContrib;
+			var allCandidateContrib = toDollars(totalCandidateContrib);
 			
 			var projectIntro = $("<div class='row' id='project-intro'></div>").appendTo(container);
 			
@@ -84,19 +84,58 @@ $(document).ready(function() {
 			
 			thinDivider.appendTo(container);
 			
-			var candidateVScandidate = $("<div class='row' id='candidate-vs-candidate'>").appendTo(container);
+			candidateVScandidate.appendTo(container);
 			
+			thinDivider.appendTo(container);
+			
+			var mapTopChart = $("<div class='row' id='map-top-chart'>").appendTo(container);
+			
+<<<<<<< HEAD
 			results.push(candidateBlock).appendTo(candidateVScandidate);
+=======
+			var candidateMap = $("<div class='col-lg-7 col-md-7 col-sm-7'><svg id='map' style = 'width:100%; height:465px;'></svg>\</div>").appendTo(mapTopChart);
+			drawCandidateMap("map");
+>>>>>>> origin/allie
+
+			var countiesTable = $("<div class='col-lg-5 col-md-5 col-sm-5 tabular'>").appendTo(mapTopChart);
+			var countiesTableLabel = $("<h3>Top contributions by county</h3>").appendTo(countiesTable);
+			var countiesTableTable = $("<table class='table table-hover sortable'></table>").appendTo(countiesTable);
+			var countiesTableHeader = $("<thead><tr><th>County</th><th>Total contributed</th><th>Majority contributed to</th></tr></thead>").appendTo(countiesTableTable);
+			
+			var countiesTableBody = $("<tbody></tbody>").appendTo(countiesTableTable);
+
+			$.getJSON("/api/counties", function(countyData){
+				
+				countyResults = countyData.results;
+				var countyName = "";
+				
+				console.log(countyResults);
+				countyResults.sort( function(a, b){ 
+					return (a.beneficiaries[0].amount - b.beneficiaries[0].amount);
+					
+					//$.each(countyResults, function(c, county){
+						//countyName = "<tr><td>" + countyResults[c].county + "</td></tr>";
+						//$(countyName).appendTo(countiesTableBody);
+					//});
+				});
+				console.log(countyResults);				
+
+				
+				//console.log(countyName);
+				
+				
+			});
+				
+				
+				
+				
+			
 
 
 
 			
 						
-			
-			
-			
-						
-		}) // end case race getJSON api/candidates
+		}); // end case race getJSON api/candidates
 		break;
 	case "contributors":
        $('#bycontributor').addClass('active');
@@ -432,8 +471,11 @@ $(document).ready(function() {
 	  
 });
 
+<<<<<<< HEAD
 function toTitleCase(str)
 {
     return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 }
 
+=======
+>>>>>>> origin/allie

@@ -223,8 +223,6 @@ $(document).ready(function() {
 				//$("<div class='thin-divider' id='chartdivider'></div>").insertAfter("#charts");
 				$("<div class='thin-divider' id='chartdivider'></div>").insertAfter("#charts");
 				
-				
-				
 				//container.append(thinDivider);
 				//get contributor data
 				$.ajax({
@@ -324,6 +322,8 @@ $(document).ready(function() {
 					</div> \
 				</div>');
 			
+				drawLocatorMap("map", countyName);
+				
 				drawLocatorMap("map", countyName);
 				
 				var corbettContributionAmt = v.results[0].beneficiaries[0].amount; //corbett's contribution amount

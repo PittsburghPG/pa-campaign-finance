@@ -1,8 +1,8 @@
 $(document).ready(function(){
 	
 	// MAP SECTION
-	
 	drawLocatorMap( "map", "Berks" );
+
 	
 function drawLocatorMap( id, county ){
 	map = d3.select("#" + id);
