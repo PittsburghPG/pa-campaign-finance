@@ -1,4 +1,7 @@
 var map;
+
+
+
 $(document).ready(function() {
 
  //parse url
@@ -11,32 +14,6 @@ $(document).ready(function() {
 
  switch(split[2]) { //the second item in the array will be the type of page this will be
     case "search":
-		
-		function appendContributions(data) {
-			$.each(data.results, function(i, contribution){
-				$("#contributions tbody").append("<tr> \
-													<td><a href='/a/contributions/" + contribution.id + "'>" + contribution.date + "</a></td> \
-													<td><a href='/a/contributors/" + contribution.contributorid + "'>" + contribution.contributor + "</a></td> \
-													<td><a href='/a/candidates/" + contribution.filerid + "'>" + contribution.name + "</a></td> \
-													<td><a href='a/counties/" + contribution.county + "'>" + contribution.county + "</a></td> \
-													<td>" + toDollars(contribution.contribution) + "</td> \
-												</tr>");
-			});
-		}
-		
-		function appendContributors(data){
-			$.each(data.results, function(i, contributor){
-				$("#contributors tbody").append("<tr> \
-													<td><a href='/a/contributors/" + contributor.contributorid + "'>" + contributor.contributor + "</a></td> \
-													<td>" + contributor.city + "</td> \
-													<td><a href='a/counties/" + contributor.county + "'>" + contributor.county + "</a></td> \
-													<td>" + contributor.state + "</td> \
-													<td>" + contributor.occupation + "</td> \
-													<td>" + contributor.empName + "</td> \
-													<td style='text-align:right'>" + toDollars(contributor.amount) + "</td> \
-												</tr>");
-			});
-		}
 		
 		var content = $("#main");
 		urlparameters = getURLParameters();
@@ -55,21 +32,27 @@ $(document).ready(function() {
 									<h3>Contributions matching search</h3> \
 									<table class="table table-hover sortable"> \
 										<thead> \
-											<tr><th>Date</th><th>Contributor</th><th>Candidate/PAC</th><th>County</th><th>Amount</th></tr> \
+											<tr><th data-defaultsort = "DESC">Date</th><th>Contributor</th><th>Candidate/PAC</th><th>County</th><th style="text-align:right">Amount</th></tr> \
 										</thead> \
 										<tbody></tbody> \
 									</table> \
 								</div> \
 							</div>'); 
-			appendContributions(data);
+			appendRows(data, $("#contributions"), "contributions");
 			
-			button = $('<button type="button" class="btn btn-default btn-md btn-block">More results</button>').appendTo($("#contributions"));
-			button.on("click", function(){
-				button.remove();
-				$.getJSON("/api/contributions/" + parameters + "&limit=9999999&offset=25", function(data){
-					appendContributions(data);
+			// Only insert "more" button if there are exactly 25 rows. I know this is hacky but I don't feel 
+			// like making a better solution. <3 andrew
+			if(data.results.length >= 25) {
+				button = $('<button type="button" class="btn btn-default btn-md btn-block">More results</button>').appendTo($("#contributions"))
+					.on("click", function(){
+					this.remove();
+					$.getJSON("/api/contributions/" + parameters + "&limit=9999999&offset=25", function(data){
+						appendRows(data, $("#contributions"), "contributions");
+						$.bootstrapSortable(applyLast=true);
+					});
 				});
-			});
+			}
+			$.bootstrapSortable();
 			content.append('<div class="thin-divider"></div>');
 			
 			// Contributor time
@@ -79,20 +62,24 @@ $(document).ready(function() {
 										<h3>Contributors matching search</h3> \
 										<table class="table table-hover sortable"> \
 											<thead> \
-												<tr><th>Contributor</th><th>City</th><th>County</th><th>State</th><th>Occupation</th><th>empName</th><th style="text-align:right">Total contributed</th></tr> \
+												<tr><th>Contributor</th><th>City</th><th>County</th><th>State</th><th>Occupation</th><th>empName</th><th style="text-align:right" data-defaultsort="DESC">Total contributed</th></tr> \
 											</thead> \
 											<tbody></tbody> \
 										</table> \
 									</div> \
 								</div>'); 
-				appendContributors(data);
-				button = $('<button type="button" class="btn btn-default btn-md btn-block">More results</button>').appendTo($("#contributors"));
-				button.on("click", function(){
-					button.remove();
-					$.getJSON("/api/contributors/" + parameters + "&limit=9999999&offset=25", function(data){
-						appendContributors(data);
+				appendRows(data, $("#contributors"), "contributors");
+				if(data.results.length >= 25) {
+					button = $('<button type="button" class="btn btn-default btn-md btn-block">More results</button>').appendTo($("#contributors"))
+						.on("click", function(){
+							this.remove();
+						$.getJSON("/api/contributors/" + parameters + "&limit=9999999&offset=25", function(data){
+							appendRows(data, $("#contributors"), "contributors");
+							$.bootstrapSortable(applyLast=true);
+						});
 					});
-				});
+				}
+				$.bootstrapSortable();
 			});
 		});
 	break;
@@ -161,9 +148,6 @@ $(document).ready(function() {
 			  //bio information
 			  $( "<div class='container' id='data'></div>" ).insertAfter( ".banner-image" );
 
-			// $( "<div class='container' id='data'></div>" ).insertAfter( "#main" );
-
-			// $( "<div class='container' id='data'></div>" ).insertAfter( "#main" );
 			  $('#data').append("<div class='row' id='bio_totals'></div>");
 			  $('#bio_totals').append("<div id='bio' class='col-lg-5 col-md-5 col-sm-5 col-xs-12'></div>");
 			  $('#bio').append('<p><span class="fa-stack fa-md"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-birthday-cake fa-stack-1x fa-inverse"></i></span><strong id="party"></strong><br><span class="fa-stack fa-md"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-phone fa-stack-1x fa-inverse"></i></span><strong id="phone"></strong><br><span class="fa-stack fa-md"><i class="fa fa-square fa-stack-2x"></i>	<i class="fa fa-envelope fa-stack-1x fa-inverse"></i></span><strong id="address"></strong><br></p><p class="lead">Tom Corbett! What a bro. </p>');
@@ -215,59 +199,63 @@ $(document).ready(function() {
 				flAverage = flAverage.numberFormat(0);
 				$('#average').html( "$" + flAverage );
 				
-				$("<div class='container'><div class='thin-divider' id='datadivider'></div></div>").insertAfter("#data");
+				$("<div class='thin-divider' id='datadivider'></div>").appendTo($("#data"));
 				
 				//charts 
-				$('<div class="container" id="charts">\
-					<div class="row graphs">\
-						<div class="col-lg-8 col-md-8 col-sm-8 block"><h3>County-by-county contributions <i class="fa fa-info-circle"></i></h3><div >\
-							<svg id="map" style = "width:100%; height:465px;"></svg>\
-						</div></div>\
-						<div class="col-lg-4 col-md-4 col-sm-4"><h3>Over time</h3>\
-							<div id="timechart" style="width: 100%; height: 200px;"></div>\
-								<h3>In state vs. out of state</h3><div id="pie" style="width: 100%; height: 200px;"></div></div></div></div>\
-						<div class="thin-divider"></div>').insertAfter( "#datadivider" );
+				$(' \
+				<div class="row graphs"> \
+					<div class="col-lg-8 col-md-8 col-sm-8 block"> \
+						<h3>County-by-county contributions</h3> \
+						<svg id="map" style = "width:100%; height:465px;"></svg> \
+					</div> \
+					<div class="col-lg-4 col-md-4 col-sm-4"> \
+						<h3>Over time</h3>\
+						<div id="timechart" style="width: 100%; height: 200px;"></div>\
+						<h3>In state vs. out of state</h3> \
+						<div id="pie" style="width: 100%; height: 200px;"></div> \
+					</div> \
+				</div> \
+				<div class="thin-divider"></div>').appendTo( $("#data") );
 				makePieChart("pie", split[3], "PA");
 				makeTimeChart("timechart", "candidates", split[3], "2013-01-01", "2014-09-01");
 				drawCandidateMap("map");
 				
 				//$("<div class='thin-divider' id='chartdivider'></div>").insertAfter("#charts");
-				$("<div class='container'><div class='thin-divider' id='chartdivider'></div></div>").insertAfter("#charts");
+				$("<div class='thin-divider' id='chartdivider'></div>").insertAfter("#charts");
 				
-				//tabular data
-				$('<div class="container" id="table"> \
-				<div class="row tabular" id="tableHeightDiv" style="margin-bottom: 30px;"> \
-					<div class="col-lg-12 col-md-12 col-sm-12"><h3>Donors</h3>\
-						<form class="form-inline pull-right"><input type="search" class="form-control" placeholder="Search"><button type="submit" class="btn btn-default">Submit</button></form>\
-						<table class="table table-hover sortable" id="donorTable"><thead><tr><th>Donor</th> <th>Occupation, Employer</th><th>Amount</th></tr></thead><tbody></tbody></table></div></div></div> ').insertAfter("#chartdivider");
-				var donorHeight;
+				
+				
 				//container.append(thinDivider);
 				//get contributor data
 				$.ajax({
-					url: "api/contributors/filers/" + split[3] + "?limit=50",
+					url: "api/contributors/filers/" + split[3] + "?limit=25",
 					dataType: "json",
 					type : "GET",
 					success : function(u) {
-						//console.log(u.results[0].contributor);
-						//console.log(u.results.length);
-						var line;
-						for(var i =0; i < u.results.length; i++) {
-							var emp;
-							if (u.results[i].occupation == '') { //don't show comma if there's no occupation
-								emp = u.results[i].empName;
-							} else {
-								emp = u.results[i].occupation;
-								if (u.results[i].empName != '') {
-									emp += ", " + u.results[i].empName;
-								}
-							}
-							var amount = parseInt(u.results[i].amount);
-							amount = amount.numberFormat(0);
-							line = "<tr><td><a href='/a/contributors/" + u.results[i].contributorid + "'>" + u.results[i].contributor + "</a></td><td>" +  emp  + "</td><td align='right'>$" + amount + "</td></tr>";
-							//console.log(line);
-							$('#donorTable tbody').append(line);
-							donorHeight = $("#tableHeightDiv").height();
+						$("#data").append(' \
+						<div class = "row"> \
+							<div class="col-lg-12 col-md-12 col-sm-12" id = "contributors"> \
+								<h3>Contributors</h3> \
+								<table class="table table-hover sortable"> \
+									<thead> \
+										<tr><th>Contributor</th><th>City</th><th>County</th><th>State</th><th>Occupation</th><th>Employer name</th><th style="text-align:right" data-defaultsort="DESC">Total contributed</th></tr> \
+									</thead> \
+									<tbody></tbody> \
+								</table> \
+							</div> \
+						</div>'); 
+						appendRows(u, $("#contributors"), "contributors");
+						if(u.results.length >= 25) {
+							button = $('<button type="button" class="btn btn-default btn-md btn-block">More results</button>').appendTo($("#contributors"))
+								.on("click", function(){
+									this.remove();
+								$.getJSON("/api/contributors/filers/" +  + split[3] + "&limit=9999999&offset=25", function(data){
+									appendRows(data, $("#contributors"), "contributors");
+									$.bootstrapSortable(applyLast=true);
+								});
+							});
 						}
+						$.bootstrapSortable();
 					}
 				});
 				
@@ -284,33 +272,34 @@ $(document).ready(function() {
 		 
 			break;
     case "counties":
-      $('#bycounty').addClass('active');
-			var countyName = split[3];
-			countyName = toTitleCase(countyName);
-		  $.ajax({
-				url: "api/" + apiURL,
-				dataType: "json",
-				type : "GET",
-				success : function(v) {
-					//console.log(v.results[0]);
-					var container = $("#main");
-					introRow = $("<div></div>").appendTo(container);	
-					introRow.addClass("row intro-row");
-					
-					var introLabel = $("<label>COUNTY</label>");
-					introLabel.appendTo(introRow);
-					
-					var jumbotron = $("<div></div>").appendTo(introRow);
-					jumbotron.addClass("jumbotron");
-					
-					var countyHead = $("<h1>" + countyName + "</h1>");
-					countyHead.appendTo(jumbotron);
-					
-					var thinDivider = $("<div class='thin-divider'></div>");
-					
-					container.append(thinDivider);
-					
-					container.append('<div class="row "> \
+		$('#bycounty').addClass('active');
+		var countyName = split[3];
+		countyName = toTitleCase(countyName);
+		 $.ajax({
+			url: "api/" + apiURL,
+			dataType: "json",
+			type : "GET",
+			success : function(v) {
+				//console.log(v.results[0]);
+				var container = $("#main");
+				introRow = $("<div></div>").appendTo(container);	
+				introRow.addClass("row intro-row");
+				
+				var introLabel = $("<label>COUNTY</label>");
+				introLabel.appendTo(introRow);
+				
+				var jumbotron = $("<div></div>").appendTo(introRow);
+				jumbotron.addClass("jumbotron");
+				
+				var countyHead = $("<h1>" + countyName + "</h1>");
+				countyHead.appendTo(jumbotron);
+				
+				var thinDivider = $("<div class='thin-divider'></div>");
+				
+				container.append(thinDivider);
+				
+				container.append(' \
+				<div class="row "> \
 					<div class="col-lg-5 col-md-5 col-sm-4 col-xs-12"> \
 						<svg id="map" style="width:100%; height:425px;"></svg> \
 					</div> \
@@ -334,7 +323,7 @@ $(document).ready(function() {
 						</div> \
 					</div> \
 				</div>');
-				
+			
 				drawLocatorMap("map", countyName);
 				
 				var corbettContributionAmt = v.results[0].beneficiaries[0].amount; //corbett's contribution amount
@@ -378,122 +367,87 @@ $(document).ready(function() {
 				
 				//get population - don't have right now
 				var population = 1229000;
-							
-							
-							$.ajax({
-								url: "api/counties",
-								dataType: "json",
-								type : "GET",
-								success : function(w) {
-									var totalAllCountyDonations = 0; //total of all counties
-									//totalContributions = total for THIS county
-									
-									for (var i = 0; i< w.results.length; i++) {
-										totalAllCountyDonations += Math.round(parseFloat(w.results[i].amount));
-										//console.log(Math.round(parseFloat(w.results[i].amount)));
-									}
-									//console.log(totalAllCountyDonations);
-									//console.log(totalAllCountyDonations + " " + totalcontribs);
-									var thisCountyPercent = totalcontribs/totalAllCountyDonations*100;
-									thisCountyPercent = thisCountyPercent.numberFormat(1);
-									
-									
-									$("<h3>" + thisCountyPercent + "%</h3><label>" + countyName + " County represents " + thisCountyPercent + "% of total race contributions.</label>").appendTo("#county-percent-total");
-									
-									//per capita
-									var perCapita = totalcontribs/population;
-									perCapita = perCapita.numberFormat(2);
-									
-									$("<h3>$" + perCapita + "</h3><label>Contributions represent $" + perCapita + " per capita in " + countyName + " County.</label>").appendTo("#county-per-capita")
-									
-								}
-							}); //end counties case api/counties
-							
-							container.append("<div class='thin-divider'></div>");
-							
-							container.append('<div class="row divider">\
-								<div class="col-lg-6 col-md-6 col-sm-6 block"><h3>Contributions over time</h3>\
-									<div id="timeline" style="width: 100%; height: 200px;"></div>\
-								</div>\
-								<div class="col-lg-6 col-md-6 col-sm-6 block"><h3>Contributions by type</h3>\
-									<div">\
-								</div></div></div>');
-							
-							makeTimeChart("timeline", "counties", countyName, "2013-01-01", "2014-09-01");
-							
-							container.append("<div class='thin-divider'></div>");
-							container.append('<div class="row">\
-								<div class="col-lg-12 col-md-12 col-sm-12 ">\
-									<h3 class="section_header">Contributors</h3>\
-									<form class="form-inline pull-right">\
-										<input type="search" class="form-control" placeholder="Search">\
-										<button type="submit" class="btn btn-default">Submit</button>\
-									</form>\
-									<table class="table table-hover sortable" id="countyDonorTable">\
-										<thead>\
-											<tr>\
-											<th>Contributor</th>\
-											<th>Occupation, Employer</th>\
-											<th>Candidate</th>\
-											<th>Amount</th>\
-										  </tr>\
-										 </thead>\
-										\
-										<tbody>\
-										</tbody>\
-									</table>\
-								</div>\
-							</div> ');
-							
-							$.ajax({
-								url: "api/contributors/counties/" + countyName,
-								dataType: "json",
-								type : "GET",
-								success : function(u) {
-									//console.log(u.results[0].contributor);
-									//console.log(u.results.length);
-									var line;
-									for(var i =0; i < u.results.length; i++) {
-										var emp;
-										if (u.results[i].occupation == '') { //don't show comma if there's no occupation
-											emp = u.results[i].empName;
-										} else {
-											emp = u.results[i].occupation;
-											if (u.results[i].empName != '') {
-												emp += ", " + u.results[i].empName;
-											}
-										}
-										var amount = parseInt(u.results[i].amount);
-										amount = amount.numberFormat(0);
-										//line = "<tr><td><a href='/a/contributors/" + u.results[i].contributorid + "'>" + u.results[i].contributor + "</a></td><td>" +  emp  + "</td>";
-										for ( var j = 0; j < u.results[i].beneficiaries.length; j++) {
-											var amount = parseFloat(u.results[i].beneficiaries[j].amount);
-											amount = amount.numberFormat();
-											
-											var beneficiary = u.results[i].beneficiaries[j].name;
-											//console.log(beneficiary.indexOf("CORBETT"));
-											if (beneficiary.indexOf("CORBETT") > -1) {
-												beneficiary = "Corbett";
-											}
-											if (beneficiary.indexOf("Wolf") > -1) {
-												beneficiary = "Wolf";
-											}
-											line = "<tr><td><a href='/a/contributors/" + u.results[i].contributorid + "'>" + u.results[i].contributor + "</a></td><td>" +  emp  + "</td>";
-											line += "<td>" + beneficiary + "</td><td align='right'>$" + amount + "</td>";
-											line += "</tr>";
-										}
-										
-										//console.log(line);
-										$('#countyDonorTable tbody').append(line);
-										donorHeight = $("#tableHeightDiv").height();
-									}
-								}
+				
+				
+				$.ajax({
+					url: "api/counties",
+					dataType: "json",
+					type : "GET",
+					success : function(w) {
+						var totalAllCountyDonations = 0; //total of all counties
+						//totalContributions = total for THIS county
+						
+						for (var i = 0; i< w.results.length; i++) {
+							totalAllCountyDonations += Math.round(parseFloat(w.results[i].amount));
+							//console.log(Math.round(parseFloat(w.results[i].amount)));
+						}
+						//console.log(totalAllCountyDonations);
+						//console.log(totalAllCountyDonations + " " + totalcontribs);
+						var thisCountyPercent = totalcontribs/totalAllCountyDonations*100;
+						thisCountyPercent = thisCountyPercent.numberFormat(1);
+						
+						
+						$("<h3>" + thisCountyPercent + "%</h3><label>" + countyName + " County represents " + thisCountyPercent + "% of total race contributions.</label>").appendTo("#county-percent-total");
+						
+						//per capita
+						var perCapita = totalcontribs/population;
+						perCapita = perCapita.numberFormat(2);
+						
+						$("<h3>$" + perCapita + "</h3><label>Contributions represent $" + perCapita + " per capita in " + countyName + " County.</label>").appendTo("#county-per-capita")
+						
+					}
+				}); //end counties case api/counties
+				
+				container.append("<div class='thin-divider'></div>");
+				
+				container.append('<div class="row divider">\
+					<div class="col-lg-6 col-md-6 col-sm-6 block"><h3>Contributions over time</h3>\
+						<div id="timeline" style="width: 100%; height: 200px;"></div>\
+					</div>\
+					<div class="col-lg-6 col-md-6 col-sm-6 block"><h3>Contributions by type</h3>\
+						<div">\
+					</div></div></div>');
+				
+				makeTimeChart("timeline", "counties", countyName, "2013-01-01", "2014-09-01");
+				
+				container.append("<div class='thin-divider'></div>");
+				
+				$.ajax({
+					url: "api/contributors/counties/" + countyName + "?limit=25",
+					dataType: "json",
+					type : "GET",
+					success : function(u) {
+						$("#main").append(' \
+						<div class = "row"> \
+							<div class="col-lg-12 col-md-12 col-sm-12" id = "contributors"> \
+								<h3>Contributors</h3> \
+								<table class="table table-hover sortable"> \
+									<thead> \
+										<tr><th>Contributor</th><th>City</th><th>County</th><th>State</th><th>Occupation</th><th>Employer name</th><th style="text-align:right" data-defaultsort="DESC">Total contributed</th></tr> \
+									</thead> \
+									<tbody></tbody> \
+								</table> \
+							</div> \
+						</div>'); 
+						appendRows(u, $("#contributors"), "contributors");
+						if(u.results.length >= 25) {
+							button = $('<button type="button" class="btn btn-default btn-md btn-block">More results</button>').appendTo($("#contributors"))
+								.on("click", function(){
+									this.remove();
+								$.getJSON("/api/contributors/filers/" +  + split[3] + "&limit=9999999&offset=25", function(data){
+									appendRows(data, $("#contributors"), "contributors");
+									$.bootstrapSortable(applyLast=true);
+								});
 							});
+						}
+						$.bootstrapSortable();
+					}
+				});
 							
-				}//end success
-		  }); // end counties case api/ + apiURL
+			}//end success
+		}); // end counties case api/ + apiURL
 	  
-			break;
+	break;
 	case "contributors":
 			$('#bycontributor').addClass('active');
 			var contributorName = split[3];

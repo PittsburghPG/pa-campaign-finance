@@ -232,3 +232,36 @@ function getURLParameters(){
 	});
 	return param;
 }
+
+function appendRows(data, parent, type){
+	switch(type){
+		case "contributions":
+			$.each(data.results, function(i, contribution){
+				$(parent).find("tbody").append("\
+				<tr> \
+					<td><a href='/a/contributions/" + contribution.id + "'>" + contribution.date + "</a></td> \
+					<td><a href='/a/contributors/" + contribution.contributorid + "'>" + contribution.contributor + "</a></td> \
+					<td><a href='/a/candidates/" + contribution.filerid + "'>" + contribution.name + "</a></td> \
+					<td><a href='a/counties/" + contribution.county + "'>" + contribution.county + "</a></td> \
+					<td style='text-align:right'  data-value='" + parseFloat(contribution.contribution)	 + "'>" + toDollars(contribution.contribution) + "</td> \
+				</tr>");
+			});
+		break;
+		
+		case "contributors":
+			$.each(data.results, function(i, contributor){
+				$(parent).find("tbody").append("\
+				<tr> \
+					<td><a href='/a/contributors/" + contributor.contributorid + "'>" + contributor.contributor + "</a></td> \
+					<td>" + contributor.city + "</td> \
+					<td><a href='a/counties/" + contributor.county + "'>" + contributor.county + "</a></td> \
+					<td>" + contributor.state + "</td> \
+					<td>" + contributor.occupation + "</td> \
+					<td>" + contributor.empName + "</td> \
+					<td style='text-align:right' data-value='" + parseFloat(contributor.amount) + "'>" + toDollars(contributor.amount) + "</td> \
+				</tr>");
+			});
+		break;
+	
+	}
+}

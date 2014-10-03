@@ -23,6 +23,7 @@ class MyAPI extends API{
 		}
 	}
 	
+	
 	public function queryAPI($query, $identifier_query, $handler_function){
 		// Set limit and offset to null; They can always be updated later
 		$query["limit"] = " ";
@@ -44,6 +45,7 @@ class MyAPI extends API{
 		
 		// Check for parameters
 		$query = $this -> addParameters(array_slice($this -> request, 1), $query);
+		
 		
 		
 		// Run main query
@@ -347,7 +349,7 @@ class MyAPI extends API{
 			break;
 			
 			case "counties":
-				return "AND county = '" . $this->mysqli -> real_escape_string($arg) . "' ";
+				return "AND contributions.county = '" . $this->mysqli -> real_escape_string($arg) . "' ";
 			break;
 			
 			// for now, year just works with /candidates
@@ -406,11 +408,13 @@ class MyAPI extends API{
 						break;
 						
 						case "startAmount":
+							$value = str_replace(",", "", $value);
 							$value = floatval($value);
 							$query["where"] .= "AND contributions.contribution >= " . $this->mysqli -> real_escape_string($value) . " "; 
 						break;
 						
 						case "endAmount":
+							$value = str_replace(",", "", $value);
 							$value = floatval($value);
 							$query["where"] .= "AND contributions.contribution <= " . $this->mysqli -> real_escape_string($value) . " "; 
 						break;
