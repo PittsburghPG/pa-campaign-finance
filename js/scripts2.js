@@ -11,38 +11,90 @@ $(document).ready(function() {
 
  switch(split[2]) { //the second item in the array will be the type of page this will be
     case "search":
-		var content = $("#main");
-		urlparameters = getURLParameters();
-		console.log(urlparameters);
-		// Start it off with dummy value so the rest can just start with &'s
-		var parameters = "?limit=100";
-		$.each(urlparameters, function(i, parameter){
-			parameters += "&" + parameter.key + "=" + parameter.value;
-		});
-		console.log(parameters);
-		$.getJSON("/api/contributions/" + parameters, function(data){
-			console.log(data);
-			content.append('<div class="col-lg-12 col-md-12 col-sm-12" id = "contributions"> \
-								<h3>Contributions matching search</h3> \
-								<table class="table table-hover sortable"> \
-									<thead> \
-										<tr><th>Date</th><th>Contributor</th><th>Candidate/PAC</th><th>County</th><th>Amount</th></tr> \
-									</thead> \
-									<tbody></tbody> \
-								</table> \
-							</div>'); 
+		
+		function appendContributions(data) {
 			$.each(data.results, function(i, contribution){
 				$("#contributions tbody").append("<tr> \
 													<td><a href='/a/contributions/" + contribution.id + "'>" + contribution.date + "</a></td> \
 													<td><a href='/a/contributors/" + contribution.contributorid + "'>" + contribution.contributor + "</a></td> \
 													<td><a href='/a/candidates/" + contribution.filerid + "'>" + contribution.name + "</a></td> \
 													<td><a href='a/counties/" + contribution.county + "'>" + contribution.county + "</a></td> \
-													<td>" + contribution.contribution + "</td> \
+													<td>" + toDollars(contribution.contribution) + "</td> \
 												</tr>");
 			});
-		});
-	
+		}
 		
+		function appendContributors(data){
+			$.each(data.results, function(i, contributor){
+				$("#contributors tbody").append("<tr> \
+													<td><a href='/a/contributors/" + contributor.contributorid + "'>" + contributor.contributor + "</a></td> \
+													<td>" + contributor.city + "</td> \
+													<td><a href='a/counties/" + contributor.county + "'>" + contributor.county + "</a></td> \
+													<td>" + contributor.state + "</td> \
+													<td>" + contributor.occupation + "</td> \
+													<td>" + contributor.empName + "</td> \
+													<td style='text-align:right'>" + toDollars(contributor.amount) + "</td> \
+												</tr>");
+			});
+		}
+		
+		var content = $("#main");
+		urlparameters = getURLParameters();
+		console.log(urlparameters);
+		// Start it off with dummy value so the rest can just start with &'s
+		var parameters = "?";
+		$.each(urlparameters, function(i, parameter){
+			parameters += "&" + parameter.key + "=" + parameter.value;
+		});
+		console.log(parameters);
+		// Contributions portion
+		$.getJSON("/api/contributions/" + parameters + "&limit=25", function(data){
+			console.log(data);
+			content.append('<div class = "row"> \
+								<div class="col-lg-12 col-md-12 col-sm-12" id = "contributions"> \
+									<h3>Contributions matching search</h3> \
+									<table class="table table-hover sortable"> \
+										<thead> \
+											<tr><th>Date</th><th>Contributor</th><th>Candidate/PAC</th><th>County</th><th>Amount</th></tr> \
+										</thead> \
+										<tbody></tbody> \
+									</table> \
+								</div> \
+							</div>'); 
+			appendContributions(data);
+			
+			button = $('<button type="button" class="btn btn-default btn-md btn-block">More results</button>').appendTo($("#contributions"));
+			button.on("click", function(){
+				button.remove();
+				$.getJSON("/api/contributions/" + parameters + "&limit=9999999&offset=25", function(data){
+					appendContributions(data);
+				});
+			});
+			content.append('<div class="thin-divider"></div>');
+			
+			// Contributor time
+			$.getJSON("/api/contributors/" + parameters + "&limit=25", function(data){
+				content.append('<div class = "row"> \
+									<div class="col-lg-12 col-md-12 col-sm-12" id = "contributors"> \
+										<h3>Contributors matching search</h3> \
+										<table class="table table-hover sortable"> \
+											<thead> \
+												<tr><th>Contributor</th><th>City</th><th>County</th><th>State</th><th>Occupation</th><th>empName</th><th style="text-align:right">Total contributed</th></tr> \
+											</thead> \
+											<tbody></tbody> \
+										</table> \
+									</div> \
+								</div>'); 
+				appendContributors(data);
+				button = $('<button type="button" class="btn btn-default btn-md btn-block">More results</button>').appendTo($("#contributors"));
+				button.on("click", function(){
+					button.remove();
+					$.getJSON("/api/contributors/" + parameters + "&limit=9999999&offset=25", function(data){
+						appendContributors(data);
+					});
+				});
+			});
+		});
 	break;
 	
     case "candidates":

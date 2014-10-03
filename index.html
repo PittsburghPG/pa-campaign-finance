@@ -140,12 +140,12 @@
 	      </ul>
 	      
 	      <div id="search-menu" class="collapse nav navbar-nav navbar-right">
-	      	<form role="form">
+	      	<form role="form" action = "/a/search/">
 						<h4>Filter by:</h4>
 						<div class="row">
 							<div class="form-group col-lg-6 col-md-6 col-sm-6">
 								<h5 for="candidate">Candidate</h5>
-								<input class="form-control" name="candidate" type="text" placeholder="Candidate">
+								<input class="form-control" name="filername" type="text" placeholder="Candidate">
 							</div>
 							<div class="form-group col-lg-6 col-md-6 col-sm-6">
 								<h5 for="county">County</h5>
@@ -154,40 +154,41 @@
 						</div>
 						<div class="row">
 							<div class="form-group col-lg-6 col-md-6 col-sm-6">
-								<h5 for="donor">Donor</h5>
-								<input class="form-control" name="donor" type="text" placeholder="Donor">
+								<h5 for="contributorname">Contributor</h5>
+								<input class="form-control" name="contributorname" type="text" placeholder="Donor">
 							</div>
 							<div class="form-group col-lg-6 col-md-6 col-sm-6">
-								<h5 for="employer">Employer</h5>
-								<input class="form-control" name="employer" type="text" placeholder="Employer">
+								<h5 for="empName">Employer</h5>
+								<input class="form-control" name="empName" type="text" placeholder="Employer">
 							</div>
 						</div>
 						<div class="row">
 							<div class="form-group col-lg-6 col-md-6 col-sm-6">
-								<h5 for="start date">Start date</h5>
-								<input class="form-control" type="date" name="start date" id="start date">
+								<h5 for="startDate">Start date</h5>
+								<input class="form-control" type="date" name="startDate" id="start date">
 							</div>
 							<div class="form-group col-lg-6 col-md-6 col-sm-6">
-								<h5 for="end date">End date</h5>
-								<input class="form-control" type="date" name="end date" id="end date">
+								<h5 for="endDate">End date</h5>
+								<input class="form-control" type="date" name="endDate" id="end date">
 							</div>
 						</div>
 						<div class="row">
 							<div class="form-group col-lg-6 col-md-6 col-sm-6">
-								<h5 for="amtstart">Amount start</h5>
+								<h5 for="startAmount">Amount start</h5>
 								<div class="input-group">
 									<span class="input-group-addon">$</span>
-									<input class="form-control" type="text" name="amtstart" id="amtstart">
+									<input class="form-control" type="text" name="startAmount" id="amtstart">
 								</div>
 							</div>
 							<div class="form-group col-lg-6 col-md-6 col-sm-6">
-								<h5 for="amend">Amount end</h5>
+								<h5 for="endAmount">Amount end</h5>
 								<div class="input-group">
 									<span class="input-group-addon">$</span>
-									<input class="form-control" type="text" name="amend" id="amend">
+									<input class="form-control" type="text" name="endAmount" id="amend">
 								</div>
 							</div>
 						</div>
+						<button type="submit" class="btn btn-primary">Search</button>
 					</form>
 				</div>   
 

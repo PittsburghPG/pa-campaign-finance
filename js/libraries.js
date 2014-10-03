@@ -30,11 +30,10 @@ function makeTimeChart(id, endpoint, target, startDate, endDate){
 		}], {
 			series: {
 				bars:{
-					lineWidth: 6,
-					show:true
-				},
-				points:{
-					show:true
+					barWidth: 1000000000,
+					fillColor: "seagreen",
+					show: true,
+					order: 1
 				}
 			},
 			xaxis: { 
@@ -63,6 +62,7 @@ function makeTimeChart(id, endpoint, target, startDate, endDate){
 		});
 		
 		$("#" + id).bind("plothover", function(event, pos, item){
+			console.log(item);
 			if( item ) {
 				console.log(item);
 				if( $("#tooltip").length == 0 ){
@@ -74,8 +74,6 @@ function makeTimeChart(id, endpoint, target, startDate, endDate){
 				else {
 					$("#tooltip").css({top: item.pageY-20, left: item.pageX+10});
 				}
-				x = item.datapoint[0].toFixed(2);
-				y = item.datapoint[1].toFixed(2);
 			}
 			else $("#tooltip").remove();
 		});
