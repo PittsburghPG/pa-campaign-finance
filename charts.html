@@ -1,0 +1,109 @@
+<!doctype html>
+<html>
+
+<head>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/flot/0.8.2/jquery.flot.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/flot/0.8.2/jquery.flot.pie.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/flot/0.8.2/jquery.flot.time.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/flot/0.8.2/jquery.flot.resize.min.js"></script>
+	<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+	<script src="js/scripts_andrew.js"></script>
+
+	<style type = "text/css">
+		@import url(http://fonts.googleapis.com/css?family=Open+Sans:300,700,400,600);
+		.county {
+			fill: #eee;
+			stroke: #aaa;
+			opacity:.8;
+		}
+			
+			.county:hover{
+				opacity:1;
+				cursor:pointer;
+			}
+			
+			.county.selected{
+				fill:#256F5B;
+			}
+			
+			.county.DEM{
+				fill:#2E4272;
+			}
+			
+			.county.REP{
+				fill:#AA3939;
+			}
+	
+		.chart {
+			font-family:"Open Sans", sans-serif;
+		
+		}
+		
+		#tooltip {
+			position:fixed;
+			background-color:rgba(255,255,255,.8);
+			padding:0;
+			border-radius:5px;
+			border:1px solid lightgray;
+			font-family:"Open Sans", sans-serif;
+			font-size:14pt;
+			font-weight:400;
+			overflow:hidden;
+			text-align:Center;
+		}
+			#tooltip .date{
+				font-weight:100;
+				font-size:10pt;
+				width:100%;
+				background-color:seagreen;
+				color:white;
+				
+			}
+			
+			.table#tooltip {
+				padding:10px;
+				font-size:12pt;
+				text-align:left;
+			}
+			
+				.table#tooltip h4 {
+					margin:0px 0px 5px;
+				}
+				
+				.table#tooltip table {
+					font-size:10pt;
+					width:100%;
+					cell-spacing:0;
+					border-collapse:collapse;
+				}
+					
+					.table#tooltip table td {
+						border-bottom:1px solid lightgray;
+						padding:5px;
+					}
+					
+						.table#tooltip table tr:last-child td {
+							border:0;
+						}
+			
+			#tooltip .text{
+				padding:5px;
+				
+			}
+				
+	</style>
+	
+</head>
+
+<body>
+
+<svg id = "map" style="width:500px; height:500px"></svg>
+
+<div id="pie" class="chart" style="width:250px; height:150px;"></div>
+
+<div id="timechart" class="chart" style="width:250px; height:150px;"></div>
+
+</body>
+
+</html>

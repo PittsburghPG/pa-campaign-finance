@@ -1,6 +1,11 @@
- /* Create contribution schema */
+/* Create contribution schema */
 DROP DATABASE IF EXISTS campaign_finance;
 CREATE DATABASE campaign_finance;
+
+/* Add api acccess to database */
+CREATE USER 'api' IDENTIFIED BY 'api';
+GRANT SELECT ON campaign_finance.* to 'api'@'localhost';
+FLUSH PRIVILEGES;
 
 /* Create main contributions table */
 DROP TABLE IF EXISTS campaign_finance.contributions;
@@ -9,7 +14,7 @@ CREATE TABLE campaign_finance.contributions
 	`id` 				bigint(20) unsigned NOT NULL AUTO_INCREMENT,
 	`filerid` 			char varying(8) 	DEFAULT NULL,
 	`year` 				int(11) 			DEFAULT NULL,
-	`cycle` 			char varying(1) 	DEFAULT NULL,
+	`cycle` 			char varying(5) 	DEFAULT NULL,
 	`section` 			char varying(2) 	DEFAULT NULL,
 	`contributor` 		char varying(100) 	DEFAULT NULL,
 	`address` 			char varying(150) 	DEFAULT NULL,
@@ -18,6 +23,7 @@ CREATE TABLE campaign_finance.contributions
 	`state` 			char varying(3) 	DEFAULT NULL,
 	`zip` 				char varying(10) 	DEFAULT NULL,
 	`newzip` 			char varying(10) 	DEFAULT NULL,
+	`county`			char varying(50)	DEFAULT NULL,
 	`occupation` 		char varying(100) 	DEFAULT NULL,
 	`empName` 			char varying(100) 	DEFAULT NULL,
 	`empAddress1` 		char varying(150) 	DEFAULT NULL,
@@ -37,9 +43,9 @@ CREATE TABLE campaign_finance.contributions
 DROP TABLE IF EXISTS campaign_finance.filers;
 CREATE TABLE campaign_finance.filers
 (
-	`filerid` 			char varying(8)		DEFAULT NULL,
+	`filerid` 			char varying(10)		DEFAULT NULL,
 	`type`				int					DEFAULT NULL,
-	`name`				char varying(100)	DEFAULT NULL,
+	`name`				char varying(200)	DEFAULT NULL,
 	`office`			char varying(100)	DEFAULT NULL,
 	`district`			char varying(50)	DEFAULT NULL,
 	`party`				char varying(50)	DEFAULT NULL,
@@ -66,6 +72,21 @@ CREATE TABLE campaign_finance.filings
 	`beginning`			float				DEFAULT NULL,
 	`monetary`			float				DEFAULT NULL,
 	`inkind`			float				DEFAULT NULL,
+	PRIMARY KEY (`id`),
+	UNIQUE KEY `id` (`id`)
+);
+
+/* CREATE candidate table */
+DROP TABLE IF EXISTS campaign_finance.candidates;
+CREATE TABLE campaign_finance.candidates
+(
+	`id` 				bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+	`filerid` 			char varying(8)		DEFAULT NULL,
+	`year`				int					DEFAULT NULL,
+	`race`				char varying(50)	DEFAULT NULL,
+	`name`				char varying(50)	DEFAULT NULL,
+	`party`				char varying(50)	DEFAULT NULL,	
+	`img`				char varying(255)	DEFAULT NULL,	
 	PRIMARY KEY (`id`),
 	UNIQUE KEY `id` (`id`)
 );
