@@ -101,7 +101,7 @@ class MyAPI extends API{
 						contributions.address2,
 						contributions.city,
 						contributions.state,
-						contributions.zip,
+						contributions.newzip,
 						contributions.county, 
 						contributions.occupation,
 						contributions.empName,
@@ -124,7 +124,7 @@ class MyAPI extends API{
 							contributions.address2,
 							contributions.city,
 							contributions.state,
-							contributions.zip,
+							contributions.newzip,
 							filers.filerid
 							";
 		$query["order"] = "ORDER BY total_contribution DESC "; 
@@ -147,7 +147,7 @@ class MyAPI extends API{
 										"address2" => $row["address2"],
 										"city" => $row["city"],
 										"state" => $row["state"],
-										"zip" => $row["zip"], 
+										"zip" => $row["newzip"], 
 										"county" => $row["county"], 
 										"occupation" => $row["occupation"],
 										"empName" => $row["empName"],

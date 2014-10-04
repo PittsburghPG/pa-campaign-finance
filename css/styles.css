@@ -133,7 +133,7 @@ figcaption{
 .top-totals h2,
 .top-totals h3{
 	margin-top:0;
-	margin-bottom:0;
+	//margin-bottom:0;
 	}
 	
 .thin-divider{
@@ -276,6 +276,11 @@ table.horizontal-bar-graph {
 		padding:5px;
 		
 	}
+	
+#map-canvas{
+	width: 100%;
+	border: 1px solid rgb(211, 211, 211);
+}
 	
 @media screen and (max-width: 767px) {
 	.top-totals .col-lg-4 h3{
