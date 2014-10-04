@@ -62,7 +62,6 @@ function makeTimeChart(id, endpoint, target, startDate, endDate){
 		});
 		
 		$("#" + id).bind("plothover", function(event, pos, item){
-			console.log(item);
 			if( item ) {
 				console.log(item);
 				if( $("#tooltip").length == 0 ){
@@ -269,5 +268,103 @@ function appendRows(data, parent, type){
 function sizeToMatch(item, target){
 	
 	item.height( target.height() );
-	console.log(item.height);
+	console.log("Afadasdas");
+}
+
+function makeGoogleMap(locationCity, locationZip, id){
+	$.getJSON("https://maps.googleapis.com/maps/api/geocode/json?address=" + locationCity + "&components=postal_code:" + locationZip, function(geodata){
+		console.log(locationZip);
+		var contribLAT = geodata.results[0].geometry.location.lat;
+		var contribLNG = geodata.results[0].geometry.location.lng;
+		var mapOptions = {
+			center: { lat: contribLAT, lng: contribLNG},
+			zoom: 8,
+			disableDefaultUI: true,
+			scrollwheel: false,
+			draggable: false
+		};
+		var Gmap = new google.maps.Map(document.getElementById(id), mapOptions);
+		  
+		var addressMarker = new google.maps.Marker({
+			position: { lat: contribLAT, lng: contribLNG},
+			map: Gmap,
+			title:locationCity
+		});
+	
+	});
+}
+
+function makeCandidateTimeChart(id, startDate, endDate){
+	dataCollection = [];
+	$.getJSON("api/candidates/", function(json){
+		$.each(json.results, function(i, candidate){
+			var data = [];
+			$.getJSON("api/months/candidates/" + candidate.filerid + "?startDate=" + startDate + "&endDate=" + endDate, function(subjson){
+				$.each(subjson.results, function(j, date){
+					data.push( [Date.parse(date["year"] + "-" + date["month"] + "-" + "01 05:01:00"), +date["total"]] );
+				});	
+				dataCollection.push({ label: candidate.name, data: data});
+				
+				$.plot("#" + id, dataCollection, { 
+							legend:	{
+								show:true
+							},
+							series:  {
+								lines:{
+									lineWidth: 5,
+									fillColor: "seagreen",
+									show: true,
+									order: 1
+								},
+								points:{
+									show: true
+								}
+							},
+							xaxis: { 
+								mode: "time",
+								min: 1357014127000,
+								max: 1417321327000
+								//min: data[0][0] - 100000000,
+								//max: data[count][0] + 100000000
+							},
+							yaxis: {
+								tickFormatter: function(val, axis){
+									return "$" + numberWithCommas(val);
+								},
+								min: 0
+							},
+							grid: {
+								borderWidth: {
+									top: 0,
+									left: 1,
+									right: 0,
+									bottom: 1
+								},
+								hoverable: true
+							},
+							markings:0,
+							colors: [ "#2E4272", "#AA3939"]
+						});
+				
+			});			
+		});
+		
+		
+		
+		$("#" + id).bind("plothover", function(event, pos, item){
+			if( item ) {
+				console.log(item);
+				if( $("#tooltip").length == 0 ){
+					$("<div id='tooltip'></div>").appendTo( $("body") )
+						.css({top: item.pageY+5, left: item.pageX+5});
+					$("#tooltip").html("<div class='date'>" + ( new Date(item.datapoint[0]).getMonth() + 1 ) + "/" + new Date(item.datapoint[0]).getFullYear() + "</div><div class='text'>" + toDollars(item.datapoint[1]) + "</div>");
+					console.log(item.datapoint[0]);
+				}
+				else {
+					$("#tooltip").css({top: item.pageY-20, left: item.pageX+10});
+				}
+			}
+			else $("#tooltip").remove();
+		});
+	});
 }

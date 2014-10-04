@@ -101,36 +101,31 @@ $(document).ready(function() {
 			var countiesTableBody = $("<tbody></tbody>").appendTo(countiesTableTable);
 
 			$.getJSON("/api/counties", function(countyData){
-				
 				countyResults = countyData.results;
 				var countyName = "";
-				
-				console.log(countyResults);
+			
 				countyResults.sort( function(a, b){ 
-					return (a.beneficiaries[0].amount - b.beneficiaries[0].amount);
-					
-					//$.each(countyResults, function(c, county){
-						//countyName = "<tr><td>" + countyResults[c].county + "</td></tr>";
-						//$(countyName).appendTo(countiesTableBody);
-					//});
+					return (b.amount - a.amount);
 				});
-				console.log(countyResults);				
-
 				
-				//console.log(countyName);
+				$.each(countyResults, function(c, county){
+					county.beneficiaries.sort(function(a,b){ return b.amount - a.amount; });
+					countyName = "<tr><td>" + countyResults[c].county + "</td><td>" + toDollars(county.amount) + "</td><td>" + county.beneficiaries[0].name + "</td></tr>";
+					$(countyName).appendTo(countiesTableBody);
+					if( c == 10) return false;
+				});
 				
-				
+				sizeToMatch($("#map"), countiesTable);
 			});
-				
-				
-				
-				
 			
-
-
+			$("<div class='thin-divider'></div>").appendTo(container);
+			
+			chartRow = $("<div class='row'></div>").appendTo(container);
+			chartColumn = $("<div class='col-lg-12 col-md-12 col-sm-12'><div id = 'chart' style = 'width:100%; height:300px'></div>").appendTo(chartRow);
+			makeCandidateTimeChart("chart", "2012-01-01", "2014-11-30");
+			//makeTimeChart("chart", "candidates", "20130153", "2012-01-01", "2014-11-30");
 
 			
-						
 		}); // end case race getJSON api/candidates
 		break;
 	case "contributors":

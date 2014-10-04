@@ -323,7 +323,7 @@ $(document).ready(function() {
 				corbettContributionAmt = parseFloat(corbettContributionAmt);
 				corbettContributionAmt = Math.round(corbettContributionAmt);
 				
-				var wolfContributionAmt = v.results[1].beneficiaries[0].amount;//wolf's contribution amount
+				var wolfContributionAmt = v.results[0].beneficiaries[1].amount;//wolf's contribution amount
 				wolfContributionAmt = parseFloat(wolfContributionAmt);
 				wolfContributionAmt = Math.round(wolfContributionAmt);
 		
@@ -335,7 +335,7 @@ $(document).ready(function() {
 				var corbettContributionNum = parseInt(v.results[0].beneficiaries[0].contributions);
 				corbettContributionNum = corbettContributionNum.numberFormat();
 				
-				var wolfContributionNum = parseInt(v.results[1].beneficiaries[0].contributions);
+				var wolfContributionNum = parseInt(v.results[0].beneficiaries[1].contributions);
 				wolfContributionNum = wolfContributionNum.numberFormat();
 				
 				var wolfBarWidth = "";
