@@ -251,8 +251,9 @@ class MyAPI extends API{
 						
 			$results = Array();
 			while($row = mysqli_fetch_assoc($res)){
-				
-				if( $i = $that->search_for_value_in_array($results, "county", $row["county"])) {
+				$i = $that->search_for_value_in_array($results, "county", $row["county"]);
+				if( $i !== FALSE ) {
+					
 					$results[$i]["contributions"] += $row["count"];
 					$results[$i]["amount"] += $row["total"];
 					$results[$i]["beneficiaries"][] = Array("name" => $row["name"], "filerid" => $row["filerid"], "party" => $row["party"], "contributions" => $row["count"], "amount" => $row["total"]);
