@@ -19,7 +19,7 @@ function makeTimeChart(id, endpoint, target, startDate, endDate){
 		data = [];
 		count = 0;
 		$.each(json.results, function(i, date){
-			data.push( [Date.parse(date["year"] + "-" + date["month"] + "-" + "01 05:01:00"), date["total"]] );
+			data.push( [Date.parse(date["year"] + "-" + pad(date["month"],2) + "-" + "01T05:01:00"), date["total"]] );
 			count = i;
 		});	
 		
@@ -305,7 +305,7 @@ function makeCandidateTimeChart(id, startDate, endDate, county){
 			var data = [];
 			$.getJSON("api/months/candidates/" + candidate.filerid + county + "?startDate=" + startDate + "&endDate=" + endDate, function(subjson){
 				$.each(subjson.results, function(j, date){
-					data.push( [Date.parse(date["year"] + "-" + date["month"] + "-" + "01 05:01:00"), +date["total"]] );
+					data.push( [Date.parse(date["year"] + "-" + pad(date["month"],2) + "-" + "01T05:01:00"), +date["total"]] );
 				});	
 				dataCollection.push({ label: candidate.name, data: data});
 				
@@ -372,3 +372,5 @@ function makeCandidateTimeChart(id, startDate, endDate, county){
 		});
 	});
 }
+
+function pad(num, size){ return ('000000000' + num).substr(-size); }
