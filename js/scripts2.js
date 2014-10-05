@@ -439,7 +439,7 @@ $(document).ready(function() {
 								.on("click", function(){
 									$(this).after("<div class='loading'>Loading data&nbsp;<i class='fa fa-money fa-spin'></i></div>");
 									this.remove();
-								$.getJSON("/api/contributors/filers/" +  + split[3] + "&limit=9999999&offset=25", function(data){
+								$.getJSON("/api/contributors/" + split[2] + "/" + split[3] + "&limit=9999999&offset=25", function(data){
 									appendRows(data, $("#contributors"), "contributors");
 									$.bootstrapSortable(applyLast=true);
 									$(".loading").remove();
