@@ -138,7 +138,7 @@ $(document).ready(function() {
 				// $( "<div class='banner-image'></div>" ).appendTo('body');
 			 	$( "<div class='banner-image'></div>" ).insertAfter( "#main" );
 
-				$('.banner-image').css('background-image', "url('/../img/" + lastName + "-header.jpg')");
+				$('.banner-image').css('background-image', "url('/../img/" + r.results[0].filerid + ".jpg')");
 				$('.banner-image').css('background-size', 'cover');
 				
 				//bio information
@@ -158,9 +158,7 @@ $(document).ready(function() {
 				//total raised
 				var flTotal = parseFloat(total);
 				flTotal = Math.round(flTotal);
-				//flTotal = flTotal.toLocaleString();
-				flTotal = flTotal.numberFormat(0);
-				$('#total_raised').html('$' + flTotal);
+				$('#total_raised').html(toDollars(flTotal));
 			  
 				//over $50
 				$.ajax({
@@ -204,7 +202,7 @@ $(document).ready(function() {
 						<h3>County-by-county contributions</h3> \
 						<svg id="map" style = "width:100%; height:465px;"></svg> \
 					</div> \
-					<div class="col-lg-4 col-md-4 col-sm-4"> \
+					<div class="col-lg-4 col-md-4 col-sm-4" id="graphsSidebar"> \
 						<h3>Over time</h3>\
 						<div id="timechart" style="width: 100%; height: 200px;"></div>\
 						<h3>In state vs. out of state</h3> \
@@ -215,6 +213,10 @@ $(document).ready(function() {
 				
 				makePieChart("pie", split[3], "PA");
 				makeTimeChart("timechart", "candidates", split[3], "2013-01-01", "2014-09-01");
+				
+				// Size chart to equal neighboring column
+				sizeToMatch($("#map"), $("#graphsSidebar"));
+				drawCandidateMap("map");
 				
 				
 				//$("<div class='thin-divider' id='chartdivider'></div>").insertAfter("#charts");
@@ -243,10 +245,12 @@ $(document).ready(function() {
 						if(u.results.length >= 25) {
 							button = $('<button type="button" class="btn btn-default btn-md btn-block">More results</button>').appendTo($("#contributors"))
 								.on("click", function(){
+									$(this).after("<div class='loading'>Loading data&nbsp;<i class='fa fa-money fa-spin'></i></div>");
 									this.remove();
 								$.getJSON("/api/contributors/filers/" +  + split[3] + "&limit=9999999&offset=25", function(data){
 									appendRows(data, $("#contributors"), "contributors");
 									$.bootstrapSortable(applyLast=true);
+									$(".loading").remove();
 								});
 							});
 						}
@@ -403,12 +407,12 @@ $(document).ready(function() {
 					<div class="col-lg-6 col-md-6 col-sm-6 block"><h3>Contributions over time</h3>\
 						<div id="timeline" style="width: 100%; height: 200px;"></div>\
 					</div>\
-					<div class="col-lg-6 col-md-6 col-sm-6 block"><h3>Contributions by type</h3>\
-						<div">\
+					<div class="col-lg-6 col-md-6 col-sm-6 block"><h3>Contributions by candidate</h3>\
+						<div id = "both-candidates-timeline" style = "width:100%; height:200px;"></div>\
 					</div></div></div>');
 				
 				makeTimeChart("timeline", "counties", countyName, "2013-01-01", "2014-09-01");
-				
+				makeCandidateTimeChart("both-candidates-timeline", "2013-01-01", "2014-09-01", countyName)
 				container.append("<div class='thin-divider'></div>");
 				
 				$.ajax({
@@ -429,13 +433,16 @@ $(document).ready(function() {
 							</div> \
 						</div>'); 
 						appendRows(u, $("#contributors"), "contributors");
+						
 						if(u.results.length >= 25) {
 							button = $('<button type="button" class="btn btn-default btn-md btn-block">More results</button>').appendTo($("#contributors"))
 								.on("click", function(){
+									$(this).after("<div class='loading'>Loading data&nbsp;<i class='fa fa-money fa-spin'></i></div>");
 									this.remove();
 								$.getJSON("/api/contributors/filers/" +  + split[3] + "&limit=9999999&offset=25", function(data){
 									appendRows(data, $("#contributors"), "contributors");
 									$.bootstrapSortable(applyLast=true);
+									$(".loading").remove();
 								});
 							});
 						}

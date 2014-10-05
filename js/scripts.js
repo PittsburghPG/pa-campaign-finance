@@ -21,19 +21,20 @@ $(document).ready(function() {
 	break;
 	
 	case "race":
+	
 		var race = split[3];
 		var container = $("#main");
-		var thinDivider = $("<div class='thin-divider'></div>");
-		
+		var thinDivider = $("<div class='thin-divider'></div>");	
 		$.getJSON("api/candidates", function(canData){
 			
 			var results = canData.results;
-			console.log(results);
-			
+
 			var totalCandidateContrib = 0;
 			var colWidth;
 			var candidateBlock;
 			
+			// Set up two-column layout if two candidates;
+			// otherwise, three-column
 			if(results.length <= 2){
 					colWidth = 6;
 				}else{
@@ -43,32 +44,24 @@ $(document).ready(function() {
 			var candidateVScandidate = $("<div class='row' id='candidate-vs-candidate'>")
 			
 			$.each( results, function(i, item) {
-				candidateContrib = parseFloat(results[i].total);
-				candidateContrib = Math.round(candidateContrib);
+				candidateContrib = Math.round(parseFloat(results[i].total));
 				totalCandidateContrib += candidateContrib;
 				
-				//$(selector).toNumber().formatCurrency();
-				
-				var img = results[i].img;
-				var name = results[i].name;
-				var party = results[i].party;
-				if (party == "DEM"){
-					party = "Democrat";
-				}else if(party == "REP"){
-					party = "Republican"
+				if (item.party == "DEM"){
+					item.party = "Democrat";
+				}else if (item.party == "REP"){
+					item.party = "Republican"
 				}
-				
+				console.log("yoooo");
 				candidateBlock = $("<div class='col-lg-" + colWidth + " col-md-" + colWidth + " col-sm-" + colWidth + " block'>");
-				candidateImg = $("<div class='banner-image' id='candidateImg'></div>").appendTo(candidateBlock);
-				candidateImg.attr("style", "background-image:url('../img/" + img + "'); background-size: cover; ");
-				candidateName = $("<h2>" + name + " <small>" + party + "</small></h2>").appendTo(candidateBlock);
-				candidateLabel = $("<label>Total contributed to " + name + "</label>").appendTo(candidateBlock);
+				candidateImg = $("<a href = '/a/candidates/" + item.filerid + "'><div class='banner-image' id='candidateImg'></div></div>").appendTo(candidateBlock);
+				candidateImg.children(".banner-image").attr("style", "background-image:url('../img/" + item.filerid + ".jpg'); background-size: cover; ");
+				candidateName = $("<a href = '/a/candidates/" + item.filerid + "' style='color:inherit; text-decoration:none'><h2>" + item.name + " <small>" + item.party + "</small></h2></a>").appendTo(candidateBlock);
+				candidateLabel = $("<label>Total contributed to " + item.name + "</label>").appendTo(candidateBlock);
 				candidateTotal = $("<h2 class='jumbo'>" + toDollars(candidateContrib) + "</h2>").appendTo(candidateBlock);
 				
 				candidateBlock.appendTo(candidateVScandidate);			
 			});
-			
-			//console.log(parseFloat(results[0].total) + parseFloat(results[1].total));
 			
 			var allCandidateContrib = toDollars(totalCandidateContrib);
 			
@@ -110,7 +103,7 @@ $(document).ready(function() {
 				
 				$.each(countyResults, function(c, county){
 					county.beneficiaries.sort(function(a,b){ return b.amount - a.amount; });
-					countyName = "<tr><td>" + countyResults[c].county + "</td><td>" + toDollars(county.amount) + "</td><td>" + county.beneficiaries[0].name + "</td></tr>";
+					countyName = "<tr><td><a href='/a/counties/" + county.county + "'>" + county.county + "</a></td><td>" + toDollars(county.amount) + "</td><td>" + county.beneficiaries[0].name + "</td></tr>";
 					$(countyName).appendTo(countiesTableBody);
 					if( c == 10) return false;
 				});
@@ -122,12 +115,10 @@ $(document).ready(function() {
 			
 			chartRow = $("<div class='row'></div>").appendTo(container);
 			chartColumn = $("<div class='col-lg-12 col-md-12 col-sm-12'><div id = 'chart' style = 'width:100%; height:300px'></div>").appendTo(chartRow);
-			makeCandidateTimeChart("chart", "2012-01-01", "2014-11-30");
-			//makeTimeChart("chart", "candidates", "20130153", "2012-01-01", "2014-11-30");
-
-			
+			makeCandidateTimeChart("chart", "2012-01-01", "2014-11-30");		
 		}); // end case race getJSON api/candidates
-		break;
+	break;
+		
 	case "contributors":
 	   var contribID = split[3];
 	   $.getJSON("/api/contributors/" + contribID, function(data){
@@ -277,10 +268,6 @@ $(document).ready(function() {
 				<div class="row tabular"> \
 					<div class="col-lg-12 col-md-12 col-sm-12"> \
 						<h3>All donations by ' + contribName +'</h3> \
-						<form class="form-inline pull-right"> \
-							<input type="search" class="form-control" placeholder="Search"> \
-							<button type="submit" class="btn btn-default">Submit</button> \
-						</form> \
 						<table class="table table-hover sortable"> \
 							<thead> \
 								<tr> \
@@ -300,6 +287,7 @@ $(document).ready(function() {
 				$.each(data.results, function(i, result){
 					$('.tabular tbody').append("<tr><td><a href='/a/contributions/" + result.id + "'>" + result.date + "</a></td><td>" + result.name + "</td><td>" + toDollars(result.contribution) + "</td></tr>");
 				});
+				$.bootstrapSortable(applyLast=true);
 			});	   
 		});			
 	break;

@@ -294,12 +294,16 @@ function makeGoogleMap(locationCity, locationZip, id){
 	});
 }
 
-function makeCandidateTimeChart(id, startDate, endDate){
+function makeCandidateTimeChart(id, startDate, endDate, county){
+	
+	// See if county was specified
+	county = (typeof county == "undefined") ? "" : "/counties/" + county;
+	console.log("api/months/candidates/" + 343423 + "?startDate=" + startDate + county + "&endDate=" + endDate);
 	dataCollection = [];
 	$.getJSON("api/candidates/", function(json){
 		$.each(json.results, function(i, candidate){
 			var data = [];
-			$.getJSON("api/months/candidates/" + candidate.filerid + "?startDate=" + startDate + "&endDate=" + endDate, function(subjson){
+			$.getJSON("api/months/candidates/" + candidate.filerid + county + "?startDate=" + startDate + "&endDate=" + endDate, function(subjson){
 				$.each(subjson.results, function(j, date){
 					data.push( [Date.parse(date["year"] + "-" + date["month"] + "-" + "01 05:01:00"), +date["total"]] );
 				});	
