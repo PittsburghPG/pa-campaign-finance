@@ -261,6 +261,7 @@ class MyAPI extends API{
 				}
 				else {
 					$results[] = Array("county" => $row["county"],
+										"state" => $row["state"],
 										"contributions" => $row["count"],
 										"amount" => $row["total"],
 										"beneficiaries" => Array( Array("name" => $row["name"], "filerid" => $row["filerid"], "party" => $row["party"], "contributions" => $row["count"], "amount" => $row["total"]) )
