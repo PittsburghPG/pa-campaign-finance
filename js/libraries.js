@@ -5,7 +5,7 @@ function toTitleCase(str)
 
 // Converts XXXXXX.XXXXX to $XXX,XXX.XX
 function toDollars(x){
-	return "$" + numberWithCommas( Math.floor(x * 100) / 100 );
+	return "$" + numberWithCommas(Math.round(Math.floor(x * 100) / 100 ));
 }
 
 // Converts XXXXXXXX to XX,XXX,XXX
