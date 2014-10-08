@@ -301,21 +301,46 @@ $(document).ready(function() {
 				
 				container.append(thinDivider);
 				
-				//var mapAndTotals = $("<div class='row'></div>").appendTo(container);
+				var mapAndTotals = $("<div class='row'></div>").appendTo(container);
 				
 				var countyState = v.results[0].state;
 				var widthTotals = "";
+				var mapSection;
 				if (countyState != "PA"){
 					widthTotals = "col-lg-12 col-md-12 col-sm-12";
+					mapSection = $("<div class='col-lg-5 col-md-5 col-sm-4 col-xs-12'> \
+														<svg id='map' style='width:100%; height:425px;'></svg> \)
+													</div>").appendTo(mapAndTotals);
 				}else{
 					widthTotals = "col-lg-7 col-md-7 col-sm-8"
 				};
-				console.log("The state is " + countyState + " and the Totals width will be " + widthTotals);
+				//console.log("The state is " + countyState + " and the Totals width will be " + widthTotals);
+				
+				var totalsSection = $("<div></div>").appendTo(mapAndTotals);
+				totalsSection.addClass(widthTotals + "top-totals");
+				
+				var totalsSectionTotals = $(" \
+						<div class='row'> \
+							<div class='col-lg-12 col-md-12 col-sm-12'> \
+								<label>TOTAL CONTRIBUTIONS</label> \
+								<h2 class='jumbo' id='totalcontributions'></h2> \
+							</div> \
+						</div> \
+						<div class='thin-divider'></div> \
+						<div class='row'> \
+							<div class='col-lg-12 col-md-12 col-sm-12'> \
+								<table class='horizontal-bar-graph' id='candidate-bar-table'></table> \
+							</div> \
+						</div> \
+						<div class='thin-divider'></div> \
+						<div class='row'> \
+							<div id='county-percent-total' class='col-lg-6 col-md-6 col-sm-6 col-xs-6 block first big-number-with-wrapped-text'></div> \
+							<div id='county-per-capita' class='col-lg-6 col-md-6 col-sm-6 col-xs-6 block big-number-with-wrapped-text' ></div> \
+						</div>").appendTo(totalsSection);
 				
 				
 				
-				
-				container.append(' \
+			/*	container.append(' \
 				<div class="row "> \
 					<div class="col-lg-5 col-md-5 col-sm-4 col-xs-12"> \
 						<svg id="map" style="width:100%; height:425px;"></svg> \
@@ -339,7 +364,7 @@ $(document).ready(function() {
 							<div id="county-per-capita" class="col-lg-6 col-md-6 col-sm-6 col-xs-6 block big-number-with-wrapped-text"></div> \
 						</div> \
 					</div> \
-				</div>');
+				</div>');*/
 				
 				var corbettContributionAmt = v.results[0].beneficiaries[0].amount; //corbett's contribution amount
 				corbettContributionAmt = parseFloat(corbettContributionAmt);
