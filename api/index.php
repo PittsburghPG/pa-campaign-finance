@@ -232,6 +232,7 @@ class MyAPI extends API{
 	
 	public function counties(){
 		$query["select"] = "SELECT contributions.county,
+						contributions.state,
 						contributions.filerid,
 						filers.name,
 						filers.party,

@@ -273,7 +273,8 @@ $(document).ready(function() {
     case "counties":
 		$('#bycounty').addClass('active');
 		var countyName = split[3];
-		countyName = toTitleCase(countyName);
+		
+		//countyName = toTitleCase(countyName);
 		 $.ajax({
 			url: "api/" + apiURL,
 			dataType: "json",
@@ -281,6 +282,9 @@ $(document).ready(function() {
 			success : function(v) {
 				//console.log(v.results[0]);
 				var container = $("#main");
+				
+				countyName = toTitleCase(v.results[0].county);
+								
 				introRow = $("<div></div>").appendTo(container);	
 				introRow.addClass("row intro-row");
 				
@@ -296,6 +300,20 @@ $(document).ready(function() {
 				var thinDivider = $("<div class='thin-divider'></div>");
 				
 				container.append(thinDivider);
+				
+				//var mapAndTotals = $("<div class='row'></div>").appendTo(container);
+				
+				var countyState = v.results[0].state;
+				var widthTotals = "";
+				if (countyState != "PA"){
+					widthTotals = "col-lg-12 col-md-12 col-sm-12";
+				}else{
+					widthTotals = "col-lg-7 col-md-7 col-sm-8"
+				};
+				console.log("The state is " + countyState + " and the Totals width will be " + widthTotals);
+				
+				
+				
 				
 				container.append(' \
 				<div class="row "> \
