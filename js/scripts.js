@@ -56,7 +56,7 @@ $(document).ready(function() {
 				candidateBlock = $("<div class='col-lg-" + colWidth + " col-md-" + colWidth + " col-sm-" + colWidth + " block'>");
 				candidateImg = $("<a href = '/a/candidates/" + item.filerid + "'><div class='banner-image' id='candidateImg'></div></div>").appendTo(candidateBlock);
 				candidateImg.children(".banner-image").attr("style", "background-image:url('../img/" + item.filerid + ".jpg'); background-size: cover; ");
-				candidateName = $("<a href = '/a/candidates/" + item.filerid + "' style='color:inherit; text-decoration:none'><h2>" + item.name + " <small>" + item.party + "</small></h2></a>").appendTo(candidateBlock);
+				candidateName = $("<h2><a href = '/a/candidates/" + item.filerid + "' style='color:inherit; text-decoration:none'>" + item.name + " <small>" + item.party + "</small></a></h2>").appendTo(candidateBlock);
 				candidateLabel = $("<label>Total contributed to " + item.name + "</label>").appendTo(candidateBlock);
 				candidateTotal = $("<h2 class='jumbo'>" + toDollars(candidateContrib) + "</h2>").appendTo(candidateBlock);
 				
