@@ -283,8 +283,8 @@ $(document).ready(function() {
 				//console.log(v.results[0]);
 				var container = $("#main");
 				
-				var countyName = v.results[0].county;
-				if(countyName.length > 0){
+				var countyName;
+				if($.isEmptyObject(v.results)){
 					countyName = toTitleCase(v.results[0].county);
 				}else{
 					countyName = countyNameRaw;
