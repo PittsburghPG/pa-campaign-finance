@@ -307,7 +307,9 @@ $(document).ready(function() {
 					
 					container.append(thinDivider);
 					
-					noContributions = $("<div class='row'><h2>There are no contributions from this county.</h2></div>")
+					noContributions = $("<div class='row'><h2>There are no contributions from this county.</h2></div>");
+					noContributions.appendTo(container);
+					console.log(noContributions);
 					
 				}else{
 					countyName = toTitleCase(v.results[0].county);
