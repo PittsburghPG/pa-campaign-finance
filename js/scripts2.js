@@ -285,9 +285,9 @@ $(document).ready(function() {
 				
 				var countyName;
 				if($.isEmptyObject(v.results)){
-					countyName = toTitleCase(v.results[0].county);
-				}else{
 					countyName = countyNameRaw;
+				}else{
+					countyName = toTitleCase(v.results[0].county);
 				}
 								
 				introRow = $("<div></div>").appendTo(container);	
