@@ -313,7 +313,7 @@ $(document).ready(function() {
 				}else{
 					widthTotals = "col-lg-7 col-md-7 col-sm-8"
 				};
-				//console.log("The state is " + countyState + " and the Totals width will be " + widthTotals);
+				console.log("The state is " + countyState + " and the Totals width will be " + widthTotals);
 				
 				var totalsSection = $("<div></div>").appendTo(mapAndTotals);
 				totalsSection.addClass(widthTotals + "top-totals");
