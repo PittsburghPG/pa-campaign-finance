@@ -283,7 +283,7 @@ $(document).ready(function() {
 				//console.log(v.results[0]);
 				var container = $("#main");
 				
-				var countyName = v.results[0].county);
+				var countyName = v.results[0].county;
 				if(countyName.length > 0){
 					countyName = toTitleCase(v.results[0].county);
 				}else{
