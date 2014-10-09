@@ -295,17 +295,19 @@ $(document).ready(function() {
 				var thinDivider = $("<div class='thin-divider'></div>");
 				
 				var countyName;
+				var countyHead;
+				var noContributions;
 				
 				// let's create an if/else statement for when a county has no contribution, but appears on map and is clickable
 				if($.isEmptyObject(v.results)){
 					countyName = countyNameRaw;
 					
-					var countyHead = $("<h1>" + countyName + "</h1>");
+					countyHead = $("<h1>" + countyName + "</h1>");
 					countyHead.appendTo(jumbotron);
 					
 					container.append(thinDivider);
 					
-					var noContributions = $("<div class='row'><h2>There are no contributions from this county.</h2></div>")
+					noContributions = $("<div class='row'><h2>There are no contributions from this county.</h2></div>")
 					
 				}else{
 					countyName = toTitleCase(v.results[0].county);
