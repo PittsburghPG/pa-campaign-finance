@@ -272,7 +272,7 @@ $(document).ready(function() {
 			break;
     case "counties":
 		$('#bycounty').addClass('active');
-		var countyName = split[3];
+		var countyNameRaw = split[3];
 		
 		//countyName = toTitleCase(countyName);
 		 $.ajax({
@@ -283,7 +283,12 @@ $(document).ready(function() {
 				//console.log(v.results[0]);
 				var container = $("#main");
 				
-				countyName = toTitleCase(v.results[0].county);
+				var countyName = v.results[0].county);
+				if(countyName.length > 0){
+					countyName = toTitleCase(v.results[0].county);
+				}else{
+					countyName = countyNameRaw;
+				}
 								
 				introRow = $("<div></div>").appendTo(container);	
 				introRow.addClass("row intro-row");
