@@ -348,7 +348,7 @@ class MyAPI extends API{
 			break;
 			
 			case "states":
-				return "AND state = '" . $this->mysqli -> real_escape_string($arg) . "' ";
+				return "AND contributions.state = '" . $this->mysqli -> real_escape_string($arg) . "' ";
 			break;
 			
 			case "counties":
