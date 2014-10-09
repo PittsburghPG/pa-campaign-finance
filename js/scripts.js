@@ -169,11 +169,12 @@ $(document).ready(function() {
 			
 			// Location block	
 			var locationCity = data.results[0].city;
+			var locationState = data.results[0].state;
 			var locationCounty = data.results[0].county;
 			var locationZip = data.results[0].zip;
 			var topTotalsLeftLocationBlock = $("<div class='row'> \
 													<div class='col-lg-12 col-md-12 col-sm-12'> \
-														<label>LOCATION</label><h3>" + locationCity + "</h3> \
+														<label>LOCATION</label><h3>" + locationCity + ", " + locationState + "</h3> \
 														<p><a href='/a/counties/" + locationCounty + "'>" + locationCounty + " County</a></p> \
 													</div> \
 												</div> \
@@ -300,7 +301,7 @@ $(document).ready(function() {
 		$.getJSON("/api/contributions/" + contributionID, function(data){
 			var contribName = data.results[0].contributor;
 			var contribID = data.results[0].contributorid;
-			var contributionAmt = "$" + data.results[0].contribution;
+			var contributionAmt = data.results[0].contribution;
 			
 			var conDateRaw = data.results[0].date;
 					
@@ -335,7 +336,7 @@ $(document).ready(function() {
 						var jumbotron = $("<div></div>").appendTo(introRow);
 						jumbotron.addClass("jumbotron");
 						
-						var headerAmt = $("<h1>" + contributionAmt + "</h1>");
+						var headerAmt = $("<h1>" + toDollars(contributionAmt) + "</h1>");
 						headerAmt.appendTo(jumbotron);
 						
 						var thinDivider = $("<div class='thin-divider'></div>");
