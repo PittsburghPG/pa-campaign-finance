@@ -239,11 +239,11 @@ $(document).ready(function() {
 			
 			
 			//Corbett row --> need to make graphic length respect amt donated 
-			var topTotalsCorbettRow = $("<tr><td><strong>Corbett</strong></td><td><div class='bar republican' style='width:" + corbettBarWidth +"%; color:#000000;'></div><span style='overflow:visible;'>" + corbettContributionAmt + " (" + corbettContributionNum + " contributions)" + "</span></td></tr>").appendTo(topTotalsContribCandidateTable);
+			var topTotalsCorbettRow = $("<tr><td><strong>Corbett</strong></td><td><div class='bar republican' style='width:" + corbettBarWidth +"%; color:#000000;'></div><span style='overflow:visible;'>" + toDollars(corbettContributionAmt) + " (" + parseInt(corbettContributionNum) + " contributions)" + "</span></td></tr>").appendTo(topTotalsContribCandidateTable);
 			
 			
 			//Wolf row --> need to make graphic length respect amt donated
-			var topTotalsWolfRow = $("<tr><td><strong>Wolf</strong></td><td><div class='bar democrat' style='width:" + wolfBarWidth + "%; color:#000000;'></div><span style='overflow:visible;'>" + wolfContributionAmt + " (" + wolfContributionNum + " contributions)" + "</span></td></tr>").appendTo(topTotalsContribCandidateTable);
+			var topTotalsWolfRow = $("<tr><td><strong>Wolf</strong></td><td><div class='bar democrat' style='width:" + wolfBarWidth + "%; color:#000000;'></div><span style='overflow:visible;'>" + toDollars(wolfContributionAmt) + " (" + parseInt(wolfContributionNum) + " contributions)" + "</span></td></tr>").appendTo(topTotalsContribCandidateTable);
 			
 			//Overtime
 			var topTotalsOvertime = $("<div class='col-lg-5 col-md-5 col-sm-5 col-xs-12 block last'>").appendTo(topTotals);
