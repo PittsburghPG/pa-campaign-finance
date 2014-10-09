@@ -13,6 +13,17 @@ function numberWithCommas(x){
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
+//formats data correctly
+
+function monthDayYear(date){
+			var d = new Date(date);
+			var con_date = d.getDate(date);
+			var con_month = d.getMonth(date);
+			var con_year = d.getFullYear(date);
+			return contributionDate = con_month + "/" + con_date + "/" + con_year;
+			
+}
+
 function makeTimeChart(id, endpoint, target, startDate, endDate){
 
 	$.getJSON("api/months/" + endpoint + "/" + target + "?startDate=" + startDate + "&endDate=" + endDate, function(json){

@@ -286,7 +286,7 @@ $(document).ready(function() {
 			$.getJSON("/api/contributions/contributors/" + contribID, function(data){
 				
 				$.each(data.results, function(i, result){
-					$('.tabular tbody').append("<tr><td><a href='/a/contributions/" + result.id + "'>" + result.date + "</a></td><td>" + result.name + "</td><td>" + toDollars(result.contribution) + "</td></tr>");
+					$('.tabular tbody').append("<tr><td><a href='/a/contributions/" + result.id + "'>" + monthDayYear(result.date) + "</a></td><td>" + result.name + "</td><td>" + toDollars(result.contribution) + "</td></tr>");
 				});
 				$.bootstrapSortable(applyLast=true);
 			});	   
@@ -303,12 +303,7 @@ $(document).ready(function() {
 			var contributionAmt = "$" + data.results[0].contribution;
 			
 			var conDateRaw = data.results[0].date;
-			var d = new Date(conDateRaw);
-			var con_date = d.getDate(conDateRaw);
-			var con_month = d.getMonth(conDateRaw);
-			var con_year = d.getFullYear(conDateRaw);
-			var contributionDate = con_month + "/" + con_date + "/" + con_year;
-			
+					
 			var filerID = data.results[0].filerid;
 			
 			$.getJSON("/api/contributors/" + contribID, function(data){
@@ -375,7 +370,7 @@ $(document).ready(function() {
 						var dateItem = $(h3).appendTo(contributionColumn);
 						dateItem.addClass("date-item");
 						var dateLabel = $("<strong>Date: </strong>").appendTo(dateItem);
-						var dateData = $("<span>" + contributionDate + "</span>").appendTo(dateItem);
+						var dateData = $("<span>" + monthDayYear(conDateRaw) + "</span>").appendTo(dateItem);
 						
 						
 						var locationItem = $(h3).appendTo(contributionColumn);
