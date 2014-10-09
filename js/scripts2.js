@@ -308,10 +308,8 @@ $(document).ready(function() {
 				var mapSection;
 				if (countyState != "PA"){
 					widthTotals = "col-lg-12 col-md-12 col-sm-12";
-					/*mapSection = $("<div class='col-lg-5 col-md-5 col-sm-4 col-xs-12'> \
-														<svg id='map' style='width:100%; height:425px;'></svg> \)
-													</div>");
-					mapSection.appendTo(mapAndTotals);*/
+					mapSection = $("<div class='col-lg-5 col-md-5 col-sm-4 col-xs-12'><svg id='map' style='width:100%; height:425px;'></svg></div>");
+					mapSection.appendTo(mapAndTotals);
 				}else{
 					widthTotals = "col-lg-7 col-md-7 col-sm-8"
 				};
