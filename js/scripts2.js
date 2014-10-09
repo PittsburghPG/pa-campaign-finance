@@ -283,13 +283,6 @@ $(document).ready(function() {
 				//console.log(v.results[0]);
 				var container = $("#main");
 				
-				var countyName;
-				if($.isEmptyObject(v.results)){
-					countyName = countyNameRaw;
-				}else{
-					countyName = toTitleCase(v.results[0].county);
-				}
-								
 				introRow = $("<div></div>").appendTo(container);	
 				introRow.addClass("row intro-row");
 				
@@ -299,203 +292,220 @@ $(document).ready(function() {
 				var jumbotron = $("<div></div>").appendTo(introRow);
 				jumbotron.addClass("jumbotron");
 				
-				var countyHead = $("<h1>" + countyName + "</h1>");
-				countyHead.appendTo(jumbotron);
-				
 				var thinDivider = $("<div class='thin-divider'></div>");
 				
-				container.append(thinDivider);
+				var countyName;
 				
-				var mapAndTotals = $("<div class='row'></div>").appendTo(container);
-				
-				var countyState = v.results[0].state;
-				var widthTotals = "";
-				var mapSection;
-				if (countyState != "PA"){
-					widthTotals = "col-lg-12 col-md-12 col-sm-12";
+				// let's create an if/else statement for when a county has no contribution, but appears on map and is clickable
+				if($.isEmptyObject(v.results)){
+					countyName = countyNameRaw;
+					
+					var countyHead = $("<h1>" + countyName + "</h1>");
+					countyHead.appendTo(jumbotron);
+					
+					container.append(thinDivider);
+					
+					var noContributions = $("<div class='row'><h2>There are no contributions from this county.</h2></div>")
+					
 				}else{
-					widthTotals = "col-lg-7 col-md-7 col-sm-8";
-					mapSection = $("<div class='col-lg-5 col-md-5 col-sm-4 col-xs-12'><svg id='map' style='width:100%; height:425px;'></svg></div>");
-					mapSection.appendTo(mapAndTotals);
-				};
-				console.log("Updated: The state is " + countyState + " and the Totals width will be " + widthTotals);
-				
-				var totalsSection = $("<div></div>").appendTo(mapAndTotals);
-				totalsSection.addClass(widthTotals + "top-totals");
-				
-				var totalsSectionTotals = $(" \
-						<div class='row'> \
-							<div class='col-lg-12 col-md-12 col-sm-12'> \
-								<label>TOTAL CONTRIBUTIONS</label> \
-								<h2 class='jumbo' id='totalcontributions'></h2> \
+					countyName = toTitleCase(v.results[0].county);
+					
+					var countyHead = $("<h1>" + countyName + "</h1>");
+					countyHead.appendTo(jumbotron);
+					
+					container.append(thinDivider);
+					
+					var mapAndTotals = $("<div class='row'></div>").appendTo(container);
+					
+					var countyState = v.results[0].state;
+					var widthTotals = "";
+					var mapSection;
+					if (countyState != "PA"){
+						widthTotals = "col-lg-12 col-md-12 col-sm-12";
+					}else{
+						widthTotals = "col-lg-7 col-md-7 col-sm-8";
+						mapSection = $("<div class='col-lg-5 col-md-5 col-sm-4 col-xs-12'><svg id='map' style='width:100%; height:425px;'></svg></div>");
+						mapSection.appendTo(mapAndTotals);
+					};
+					console.log("Updated: The state is " + countyState + " and the Totals width will be " + widthTotals);
+					
+					var totalsSection = $("<div></div>").appendTo(mapAndTotals);
+					totalsSection.addClass(widthTotals + "top-totals");
+					
+					var totalsSectionTotals = $(" \
+							<div class='row'> \
+								<div class='col-lg-12 col-md-12 col-sm-12'> \
+									<label>TOTAL CONTRIBUTIONS</label> \
+									<h2 class='jumbo' id='totalcontributions'></h2> \
+								</div> \
+							</div> \
+							<div class='thin-divider'></div> \
+							<div class='row'> \
+								<div class='col-lg-12 col-md-12 col-sm-12'> \
+									<table class='horizontal-bar-graph' id='candidate-bar-table'></table> \
+								</div> \
+							</div> \
+							<div class='thin-divider'></div> \
+							<div class='row'> \
+								<div id='county-percent-total' class='col-lg-6 col-md-6 col-sm-6 col-xs-6 block first big-number-with-wrapped-text'></div> \
+								<div id='county-per-capita' class='col-lg-6 col-md-6 col-sm-6 col-xs-6 block big-number-with-wrapped-text' ></div> \
+							</div>").appendTo(totalsSection);
+					
+					
+					
+				/*	container.append(' \
+					<div class="row "> \
+						<div class="col-lg-5 col-md-5 col-sm-4 col-xs-12"> \
+							<svg id="map" style="width:100%; height:425px;"></svg> \
+						</div> \
+						<div class="col-lg-7 col-md-7 col-sm-8 top-totals"> \
+							<div class="row"> \
+								<div class="col-lg-12 col-md-12 col-sm-12"> \
+									<label>TOTAL CONTRIBUTIONS</label> \
+									<h2 class="jumbo" id="totalcontributions"></h2> \
+								</div> \
+							</div> \
+							<div class="thin-divider"></div> \
+							<div class="row"> \
+								<div class="col-lg-12 col-md-12 col-sm-12"> \
+									<table class="horizontal-bar-graph" id="candidate-bar-table"></table> \
+								</div> \
+							</div> \
+							<div class="thin-divider"></div> \
+							<div class="row"> \
+								<div id="county-percent-total" class="col-lg-6 col-md-6 col-sm-6 col-xs-6 block first big-number-with-wrapped-text"></div> \
+								<div id="county-per-capita" class="col-lg-6 col-md-6 col-sm-6 col-xs-6 block big-number-with-wrapped-text"></div> \
 							</div> \
 						</div> \
-						<div class='thin-divider'></div> \
-						<div class='row'> \
-							<div class='col-lg-12 col-md-12 col-sm-12'> \
-								<table class='horizontal-bar-graph' id='candidate-bar-table'></table> \
-							</div> \
-						</div> \
-						<div class='thin-divider'></div> \
-						<div class='row'> \
-							<div id='county-percent-total' class='col-lg-6 col-md-6 col-sm-6 col-xs-6 block first big-number-with-wrapped-text'></div> \
-							<div id='county-per-capita' class='col-lg-6 col-md-6 col-sm-6 col-xs-6 block big-number-with-wrapped-text' ></div> \
-						</div>").appendTo(totalsSection);
-				
-				
-				
-			/*	container.append(' \
-				<div class="row "> \
-					<div class="col-lg-5 col-md-5 col-sm-4 col-xs-12"> \
-						<svg id="map" style="width:100%; height:425px;"></svg> \
-					</div> \
-					<div class="col-lg-7 col-md-7 col-sm-8 top-totals"> \
-						<div class="row"> \
-							<div class="col-lg-12 col-md-12 col-sm-12"> \
-								<label>TOTAL CONTRIBUTIONS</label> \
-								<h2 class="jumbo" id="totalcontributions"></h2> \
-							</div> \
-						</div> \
-						<div class="thin-divider"></div> \
-						<div class="row"> \
-							<div class="col-lg-12 col-md-12 col-sm-12"> \
-								<table class="horizontal-bar-graph" id="candidate-bar-table"></table> \
-							</div> \
-						</div> \
-						<div class="thin-divider"></div> \
-						<div class="row"> \
-							<div id="county-percent-total" class="col-lg-6 col-md-6 col-sm-6 col-xs-6 block first big-number-with-wrapped-text"></div> \
-							<div id="county-per-capita" class="col-lg-6 col-md-6 col-sm-6 col-xs-6 block big-number-with-wrapped-text"></div> \
-						</div> \
-					</div> \
-				</div>');*/
-				
-				var corbettContributionAmt = v.results[0].beneficiaries[0].amount; //corbett's contribution amount
-				corbettContributionAmt = parseFloat(corbettContributionAmt);
-				corbettContributionAmt = Math.round(corbettContributionAmt);
-				
-				var wolfContributionAmt = v.results[0].beneficiaries[1].amount;//wolf's contribution amount
-				wolfContributionAmt = parseFloat(wolfContributionAmt);
-				wolfContributionAmt = Math.round(wolfContributionAmt);
-		
-				var totalcontribs = corbettContributionAmt + wolfContributionAmt;
-				formatTotalcontribs = totalcontribs.numberFormat(0);
-				
-				$('#totalcontributions').html("$" + formatTotalcontribs);
-				
-				var corbettContributionNum = parseInt(v.results[0].beneficiaries[0].contributions);
-				corbettContributionNum = corbettContributionNum.numberFormat();
-				
-				var wolfContributionNum = parseInt(v.results[0].beneficiaries[1].contributions);
-				wolfContributionNum = wolfContributionNum.numberFormat();
-				
-				var wolfBarWidth = "";
-				var corbettBarWidth = "";
-				if(wolfContributionAmt > corbettContributionAmt){
-					wolfBarWidth = "100";
-					corbettBarWidth = (corbettContributionAmt)/(wolfContributionAmt)*100;
-				}else if(corbettContributionAmt > wolfContributionAmt){
-					corbettBarWidth = "100";
-					wolfBarWidth = (wolfContributionAmt)/(corbettContributionAmt) *100;
-					//console.log(wolfBarWidth);
-				} else{
-					corbettBarWidth = "100";
-					wolfBarWidth = "100";
-				};
-				
-				//Corbett row --> need to make graphic length respect amt donated 
-				var topTotalsCorbettRow = $("<tr><td><strong>Corbett</strong></td><td><div class='bar republican' style='width:" + corbettBarWidth +"%; color:#000000;'></div><span style='overflow:visible;'>$" + corbettContributionAmt.numberFormat() + " (" + corbettContributionNum + " contributions)" + "</span></td></tr>").appendTo("#candidate-bar-table");
-				//Wolf row --> need to make graphic length respect amt donated
-				var topTotalsWolfRow = $("<tr><td><strong>Wolf</strong></td><td><div class='bar democrat' style='width:" + wolfBarWidth + "%; color:#000000;'></div><span style='overflow:visible;'>$" + wolfContributionAmt.numberFormat() + " (" + wolfContributionNum + " contributions)" + "</span></td></tr>").appendTo("#candidate-bar-table");
-		
-				
-				//get population - don't have right now
-				var population = 1229000;
-				
-				$.ajax({
-					url: "api/counties",
-					dataType: "json",
-					type : "GET",
-					success : function(w) {
-						var totalAllCountyDonations = 0; //total of all counties
-						//totalContributions = total for THIS county
-						
-						for (var i = 0; i< w.results.length; i++) {
-							totalAllCountyDonations += Math.round(parseFloat(w.results[i].amount));
-							//console.log(Math.round(parseFloat(w.results[i].amount)));
+					</div>');*/
+					
+					var corbettContributionAmt = v.results[0].beneficiaries[0].amount; //corbett's contribution amount
+					corbettContributionAmt = parseFloat(corbettContributionAmt);
+					corbettContributionAmt = Math.round(corbettContributionAmt);
+					
+					var wolfContributionAmt = v.results[0].beneficiaries[1].amount;//wolf's contribution amount
+					wolfContributionAmt = parseFloat(wolfContributionAmt);
+					wolfContributionAmt = Math.round(wolfContributionAmt);
+			
+					var totalcontribs = corbettContributionAmt + wolfContributionAmt;
+					formatTotalcontribs = totalcontribs.numberFormat(0);
+					
+					$('#totalcontributions').html("$" + formatTotalcontribs);
+					
+					var corbettContributionNum = parseInt(v.results[0].beneficiaries[0].contributions);
+					corbettContributionNum = corbettContributionNum.numberFormat();
+					
+					var wolfContributionNum = parseInt(v.results[0].beneficiaries[1].contributions);
+					wolfContributionNum = wolfContributionNum.numberFormat();
+					
+					var wolfBarWidth = "";
+					var corbettBarWidth = "";
+					if(wolfContributionAmt > corbettContributionAmt){
+						wolfBarWidth = "100";
+						corbettBarWidth = (corbettContributionAmt)/(wolfContributionAmt)*100;
+					}else if(corbettContributionAmt > wolfContributionAmt){
+						corbettBarWidth = "100";
+						wolfBarWidth = (wolfContributionAmt)/(corbettContributionAmt) *100;
+						//console.log(wolfBarWidth);
+					} else{
+						corbettBarWidth = "100";
+						wolfBarWidth = "100";
+					};
+					
+					//Corbett row --> need to make graphic length respect amt donated 
+					var topTotalsCorbettRow = $("<tr><td><strong>Corbett</strong></td><td><div class='bar republican' style='width:" + corbettBarWidth +"%; color:#000000;'></div><span style='overflow:visible;'>$" + corbettContributionAmt.numberFormat() + " (" + corbettContributionNum + " contributions)" + "</span></td></tr>").appendTo("#candidate-bar-table");
+					//Wolf row --> need to make graphic length respect amt donated
+					var topTotalsWolfRow = $("<tr><td><strong>Wolf</strong></td><td><div class='bar democrat' style='width:" + wolfBarWidth + "%; color:#000000;'></div><span style='overflow:visible;'>$" + wolfContributionAmt.numberFormat() + " (" + wolfContributionNum + " contributions)" + "</span></td></tr>").appendTo("#candidate-bar-table");
+			
+					
+					//get population - don't have right now
+					var population = 1229000;
+					
+					$.ajax({
+						url: "api/counties",
+						dataType: "json",
+						type : "GET",
+						success : function(w) {
+							var totalAllCountyDonations = 0; //total of all counties
+							//totalContributions = total for THIS county
+							
+							for (var i = 0; i< w.results.length; i++) {
+								totalAllCountyDonations += Math.round(parseFloat(w.results[i].amount));
+								//console.log(Math.round(parseFloat(w.results[i].amount)));
+							}
+							//console.log(totalAllCountyDonations);
+							//console.log(totalAllCountyDonations + " " + totalcontribs);
+							var thisCountyPercent = totalcontribs/totalAllCountyDonations*100;
+							thisCountyPercent = thisCountyPercent.numberFormat(1);
+							
+							
+							$("<h3>" + thisCountyPercent + "%</h3><label>" + countyName + " County represents " + thisCountyPercent + "% of total race contributions.</label>").appendTo("#county-percent-total");
+							
+							//per capita
+							var perCapita = totalcontribs/population;
+							perCapita = perCapita.numberFormat(2);
+							
+							$("<h3>$" + perCapita + "</h3><label>Contributions represent $" + perCapita + " per capita in " + countyName + " County.</label>").appendTo("#county-per-capita")
+							
+							// Size chart to equal neighboring column
+							sizeToMatch($("#map"), $(".top-totals"));
+							drawLocatorMap("map", countyName);
+					
+							
 						}
-						//console.log(totalAllCountyDonations);
-						//console.log(totalAllCountyDonations + " " + totalcontribs);
-						var thisCountyPercent = totalcontribs/totalAllCountyDonations*100;
-						thisCountyPercent = thisCountyPercent.numberFormat(1);
 						
 						
-						$("<h3>" + thisCountyPercent + "%</h3><label>" + countyName + " County represents " + thisCountyPercent + "% of total race contributions.</label>").appendTo("#county-percent-total");
-						
-						//per capita
-						var perCapita = totalcontribs/population;
-						perCapita = perCapita.numberFormat(2);
-						
-						$("<h3>$" + perCapita + "</h3><label>Contributions represent $" + perCapita + " per capita in " + countyName + " County.</label>").appendTo("#county-per-capita")
-						
-						// Size chart to equal neighboring column
-						sizeToMatch($("#map"), $(".top-totals"));
-						drawLocatorMap("map", countyName);
-				
-						
-					}
+					}); //end counties case api/counties
 					
+					container.append("<div class='thin-divider'></div>");
 					
-				}); //end counties case api/counties
-				
-				container.append("<div class='thin-divider'></div>");
-				
-				container.append('<div class="row divider">\
-					<div class="col-lg-6 col-md-6 col-sm-6 block"><h3>Contributions over time</h3>\
-						<div id="timeline" style="width: 100%; height: 200px;"></div>\
-					</div>\
-					<div class="col-lg-6 col-md-6 col-sm-6 block"><h3>Contributions by candidate</h3>\
-						<div id = "both-candidates-timeline" style = "width:100%; height:200px;"></div>\
-					</div></div></div>');
-				
-				makeTimeChart("timeline", "counties", countyName, "2013-01-01", "2014-09-01");
-				makeCandidateTimeChart("both-candidates-timeline", "2013-01-01", "2014-09-01", countyName)
-				container.append("<div class='thin-divider'></div>");
-				
-				$.ajax({
-					url: "api/contributors/counties/" + countyName + "?limit=25",
-					dataType: "json",
-					type : "GET",
-					success : function(u) {
-						$("#main").append(' \
-						<div class = "row"> \
-							<div class="col-lg-12 col-md-12 col-sm-12" id = "contributors"> \
-								<h3>Contributors</h3> \
-								<table class="table table-hover sortable"> \
-									<thead> \
-										<tr><th>Contributor</th><th>City</th><th>County</th><th>State</th><th>Occupation</th><th>Employer name</th><th style="text-align:right" data-defaultsort="DESC">Total contributed</th></tr> \
-									</thead> \
-									<tbody></tbody> \
-								</table> \
-							</div> \
-						</div>'); 
-						appendRows(u, $("#contributors"), "contributors");
-						
-						if(u.results.length >= 25) {
-							button = $('<button type="button" class="btn btn-default btn-md btn-block">More results</button>').appendTo($("#contributors"))
-								.on("click", function(){
-									$(this).after("<div class='loading'>Loading data&nbsp;<i class='fa fa-money fa-spin'></i></div>");
-									this.remove();
-								$.getJSON("/api/contributors/" + split[2] + "/" + split[3] + "&limit=9999999&offset=25", function(data){
-									appendRows(data, $("#contributors"), "contributors");
-									$.bootstrapSortable(applyLast=true);
-									$(".loading").remove();
+					container.append('<div class="row divider">\
+						<div class="col-lg-6 col-md-6 col-sm-6 block"><h3>Contributions over time</h3>\
+							<div id="timeline" style="width: 100%; height: 200px;"></div>\
+						</div>\
+						<div class="col-lg-6 col-md-6 col-sm-6 block"><h3>Contributions by candidate</h3>\
+							<div id = "both-candidates-timeline" style = "width:100%; height:200px;"></div>\
+						</div></div></div>');
+					
+					makeTimeChart("timeline", "counties", countyName, "2013-01-01", "2014-09-01");
+					makeCandidateTimeChart("both-candidates-timeline", "2013-01-01", "2014-09-01", countyName)
+					container.append("<div class='thin-divider'></div>");
+					
+					$.ajax({
+						url: "api/contributors/counties/" + countyName + "?limit=25",
+						dataType: "json",
+						type : "GET",
+						success : function(u) {
+							$("#main").append(' \
+							<div class = "row"> \
+								<div class="col-lg-12 col-md-12 col-sm-12" id = "contributors"> \
+									<h3>Contributors</h3> \
+									<table class="table table-hover sortable"> \
+										<thead> \
+											<tr><th>Contributor</th><th>City</th><th>County</th><th>State</th><th>Occupation</th><th>Employer name</th><th style="text-align:right" data-defaultsort="DESC">Total contributed</th></tr> \
+										</thead> \
+										<tbody></tbody> \
+									</table> \
+								</div> \
+							</div>'); 
+							appendRows(u, $("#contributors"), "contributors");
+							
+							if(u.results.length >= 25) {
+								button = $('<button type="button" class="btn btn-default btn-md btn-block">More results</button>').appendTo($("#contributors"))
+									.on("click", function(){
+										$(this).after("<div class='loading'>Loading data&nbsp;<i class='fa fa-money fa-spin'></i></div>");
+										this.remove();
+									$.getJSON("/api/contributors/" + split[2] + "/" + split[3] + "&limit=9999999&offset=25", function(data){
+										appendRows(data, $("#contributors"), "contributors");
+										$.bootstrapSortable(applyLast=true);
+										$(".loading").remove();
+									});
 								});
-							});
+							}
+							$.bootstrapSortable();
 						}
-						$.bootstrapSortable();
-					}
-				});
+					});
+				}//end if $.isEmptyObject statement
 							
 			}//end success
 		}); // end counties case api/ + apiURL
