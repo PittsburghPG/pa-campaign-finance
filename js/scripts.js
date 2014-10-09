@@ -321,6 +321,7 @@ $(document).ready(function() {
 						$.each(results, function(i, item){
 							if(results[i].filerid == filerID){
 								candidateName = results[i].name;
+								candidateFilerID = results[i].filerid;
 							}
 						});
 						
@@ -366,7 +367,7 @@ $(document).ready(function() {
 						candidateItem.addClass("candidate-item");
 						var candidateLabel = $("<strong>Candidate: </strong>").appendTo(candidateItem);
 						var candidateLink = $("<a>" + candidateName + "</a>").appendTo(candidateItem);
-						candidateLink.attr("href", "/a/candidates/" + candidateName);
+						candidateLink.attr("href", "/a/candidates/" + candidateFilerID);
 						
 						var dateItem = $(h3).appendTo(contributionColumn);
 						dateItem.addClass("date-item");

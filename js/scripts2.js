@@ -354,45 +354,69 @@ $(document).ready(function() {
 								<div id='county-percent-total' class='col-lg-6 col-md-6 col-sm-6 col-xs-6 block first big-number-with-wrapped-text'></div> \
 								<div id='county-per-capita' class='col-lg-6 col-md-6 col-sm-6 col-xs-6 block big-number-with-wrapped-text' ></div> \
 							</div>").appendTo(totalsSection);
+
 					
+					var candidateName = "";
+					var candidateContribAmt = 0;
+					var totalContribs = 0;
+					var candidateContribNum = 0;
+					var candidateStyle = "";
+					var topTotalsCandidateRow;
+					var candidateBarWidth;
 					
-					var corbettContributionAmt = v.results[0].beneficiaries[0].amount; //corbett's contribution amount
-					corbettContributionAmt = parseFloat(corbettContributionAmt);
-					corbettContributionAmt = Math.round(corbettContributionAmt);
+					var candResults = v.results[0].beneficiaries;
+					candResults.sort( function(a, b){ 
+							return (b.amount - a.amount);
+						});
+						
+					$.each(candResults, function(c, candidate){
+						candidateName = candResults[c].name;
+						candidateStyle = candResults[c].party;
+						
+						candidateContribAmtRaw = parseFloat(Math.round(candResults[c].amount));
+						candidateContribAmt = candResults[c].amount;
+						
+						totalContribs += candidateContribAmtRaw;
+						totalContribs = totalContribs;
+						$('#totalcontributions').html(toDollars(totalContribs));
+						
+						candidateContribNum = candResults[c].contributions;
+						
+						
+						
+						/*var candABarWidth = "";
+						var candBBarWidth = "";
+						if(candAContributionAmt > candBContributionAmt){
+							candABarWidth = "100";
+							candBBarWidth = (candBContributionAmt)/(candAContributionAmt)*100;
+						}else if(candBContributionAmt > candAContributionAmt){
+							candBBarWidth = "100";
+							candABarWidth = (candAContributionAmt)/(candBContributionAmt) *100;
+						} else{
+							candABarWidth = "100";
+							candBBarWidth = "100";
+						};*/
+						
+						//candidate.amount.sort(function(a,b){ return b.amount - a.amount; });
+		
+						if($.inArray(candidate.amount, candidate) == 0){
+							candidateBarWidth = "100";
+						}else{
+							candidateBarWidth = (candResults[c].amount)/(candResults[0].amount) *100;
+						};
+						
+						
+						
+						
+
+													
+						topTotalsCandidateRow = $("<tr><td><strong>" + candidateName + "</strong></td><td><div class='bar " + candidateStyle + "' style='width:" + candidateBarWidth +"%; color:#000000;'></div><span style='overflow:visible;'>" + toDollars(candidateContribAmt) + " (" + candidateContribNum + " contributions)" + "</span></td></tr>").appendTo("#candidate-bar-table");
+
+						
+						
+					});					
 					
-					var wolfContributionAmt = v.results[0].beneficiaries[1].amount;//wolf's contribution amount
-					wolfContributionAmt = parseFloat(wolfContributionAmt);
-					wolfContributionAmt = Math.round(wolfContributionAmt);
-			
-					var totalcontribs = corbettContributionAmt + wolfContributionAmt;
-					formatTotalcontribs = totalcontribs.numberFormat(0);
-					
-					$('#totalcontributions').html("$" + formatTotalcontribs);
-					
-					var corbettContributionNum = parseInt(v.results[0].beneficiaries[0].contributions);
-					corbettContributionNum = corbettContributionNum.numberFormat();
-					
-					var wolfContributionNum = parseInt(v.results[0].beneficiaries[1].contributions);
-					wolfContributionNum = wolfContributionNum.numberFormat();
-					
-					var wolfBarWidth = "";
-					var corbettBarWidth = "";
-					if(wolfContributionAmt > corbettContributionAmt){
-						wolfBarWidth = "100";
-						corbettBarWidth = (corbettContributionAmt)/(wolfContributionAmt)*100;
-					}else if(corbettContributionAmt > wolfContributionAmt){
-						corbettBarWidth = "100";
-						wolfBarWidth = (wolfContributionAmt)/(corbettContributionAmt) *100;
-						//console.log(wolfBarWidth);
-					} else{
-						corbettBarWidth = "100";
-						wolfBarWidth = "100";
-					};
-					
-					//Corbett row --> need to make graphic length respect amt donated 
-					var topTotalsCorbettRow = $("<tr><td><strong>Corbett</strong></td><td><div class='bar republican' style='width:" + corbettBarWidth +"%; color:#000000;'></div><span style='overflow:visible;'>$" + corbettContributionAmt.numberFormat() + " (" + corbettContributionNum + " contributions)" + "</span></td></tr>").appendTo("#candidate-bar-table");
-					//Wolf row --> need to make graphic length respect amt donated
-					var topTotalsWolfRow = $("<tr><td><strong>Wolf</strong></td><td><div class='bar democrat' style='width:" + wolfBarWidth + "%; color:#000000;'></div><span style='overflow:visible;'>$" + wolfContributionAmt.numberFormat() + " (" + wolfContributionNum + " contributions)" + "</span></td></tr>").appendTo("#candidate-bar-table");
+					console.log(candResults[0].name);
 			
 					
 					//get population - don't have right now
@@ -412,17 +436,17 @@ $(document).ready(function() {
 							}
 							//console.log(totalAllCountyDonations);
 							//console.log(totalAllCountyDonations + " " + totalcontribs);
-							var thisCountyPercent = totalcontribs/totalAllCountyDonations*100;
+							var thisCountyPercent = totalContribs/totalAllCountyDonations*100;
 							thisCountyPercent = thisCountyPercent.numberFormat(1);
 							
 							
 							$("<h3>" + thisCountyPercent + "%</h3><label>" + countyName + " County represents " + thisCountyPercent + "% of total race contributions.</label>").appendTo("#county-percent-total");
 							
 							//per capita
-							var perCapita = totalcontribs/population;
-							perCapita = perCapita.numberFormat(2);
+							var perCapita = totalContribs/population;
+							perCapita = "$" + perCapita.numberFormat(2);
 							
-							$("<h3>$" + perCapita + "</h3><label>Contributions represent $" + perCapita + " per capita in " + countyName + " County.</label>").appendTo("#county-per-capita")
+							$("<h3>" + perCapita + "</h3><label>Contributions represent $" + perCapita + " per capita in " + countyName + " County.</label>").appendTo("#county-per-capita")
 							
 							// Size chart to equal neighboring column
 							sizeToMatch($("#map"), $(".top-totals"));

@@ -185,11 +185,13 @@ table.horizontal-bar-graph {
 			color: rgba(255,255,255,.8);
 		}
 			
-			table.horizontal-bar-graph tr td .bar.democrat {
+			table.horizontal-bar-graph tr td .bar.democrat,
+			table.horizontal-bar-graph tr td .bar.DEM {
 				background-color: #0B6BCF;
 			}
 			
-			table.horizontal-bar-graph tr td .bar.republican {
+			table.horizontal-bar-graph tr td .bar.republican,
+			table.horizontal-bar-graph tr td .bar.REP{
 				background-color:#B62C33;
 			}
 
