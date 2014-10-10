@@ -134,7 +134,7 @@ class MyAPI extends API{
 						
 			$results = Array();
 			while($row = mysqli_fetch_assoc($res)){
-				$i = $that->search_for_value_in_array($results, "contributorid", $row["contributorid"]);
+				$i = $that->search_for_value_in_array($results, Array( Array("contributorid", $row["contributorid"]) ) );
 				if( $i != FALSE ) {
 					$results[$i]["contributions"] += $row["contributions"];
 					$results[$i]["amount"] += $row["total_contribution"];
@@ -233,7 +233,7 @@ class MyAPI extends API{
 	public function counties(){
 		$query["select"] = "SELECT contributions.county,
 						contributions.state,
-						contributions.filerid,
+						contributions.filerid, 
 						filers.name,
 						filers.party,
 						SUM(contributions.contribution) as total,
@@ -244,7 +244,7 @@ class MyAPI extends API{
 		$query["join"] = "LEFT JOIN campaign_finance.contributions on contributions.filerid = candidates.filerid ";
 		$query["join"] .= "LEFT JOIN campaign_finance.filers on contributions.filerid = filers.filerid ";
 		$query["where"] = "WHERE 1=1 ";
-		$query["group"] = "GROUP BY contributions.county, contributions.filerid ";
+		$query["group"] = "GROUP BY contributions.county, contributions.state, contributions.filerid ";
 		$query["order"] = "ORDER BY contributions.county ASC ";
 		
 		$that = $this;
@@ -252,7 +252,7 @@ class MyAPI extends API{
 						
 			$results = Array();
 			while($row = mysqli_fetch_assoc($res)){
-				$i = $that->search_for_value_in_array($results, "county", $row["county"]);
+				$i = $that->search_for_value_in_array($results, Array( Array("county", $row["county"]), Array("state", $row["state"]) ));
 				if( $i !== FALSE ) {
 					
 					$results[$i]["contributions"] += $row["count"];
@@ -296,7 +296,7 @@ class MyAPI extends API{
 			$results = Array();
 			while($row = mysqli_fetch_assoc($res)){
 				
-				if( $i = $that->search_for_value_in_array($results, "state", $row["state"])) {
+				if( $i = $that->search_for_value_in_array($results, Array( Array("state", $row["state"]) ) )) {
 					$results[$i]["contributions"] += $row["count"];
 					$results[$i]["amount"] += $row["total"];
 					$results[$i]["beneficiaries"][] = Array("name" => $row["name"], "filerid" => $row["filerid"], "contributions" => $row["count"], "amount" => $row["total"]);
@@ -447,13 +447,17 @@ class MyAPI extends API{
 		return preg_replace("/\s+/", " ", $sql);
 	}
 	
-	public function search_for_value_in_array($array, $key, $value){
+	public function search_for_value_in_array($array, $args){
 		for($i = 0; $i < count($array); $i++){
-			if( array_key_exists($key, $array[$i]) ){
-				if( $array[$i][$key] == $value ){
-					return $i;
+			$match = 0;
+			foreach($args as $arg) {
+				if( array_key_exists($arg[0], $array[$i]) ){
+					if( $array[$i][$arg[0]] == $arg[1] ){
+						$match++;
+					}
 				}
 			}
+			if($match == count($args)) return $i;	
 		}
 		return false; 
 	}

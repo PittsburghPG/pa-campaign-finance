@@ -84,8 +84,8 @@ $(document).ready(function() {
 			var mapTopChart = $("<div class='row' id='map-top-chart'>").appendTo(container);
 			
 			var candidateMap = $("<div class='col-lg-7 col-md-7 col-sm-7'><svg id='map' style = 'width:100%; height:465px;'></svg>\</div>").appendTo(mapTopChart);
-			drawCandidateMap("map");
 
+			// Build top counties in PA table
 			var countiesTable = $("<div class='col-lg-5 col-md-5 col-sm-5 tabular'>").appendTo(mapTopChart);
 			var countiesTableLabel = $("<h3>Top contributions by county</h3>").appendTo(countiesTable);
 			var countiesTableTable = $("<table class='table table-hover sortable'></table>").appendTo(countiesTable);
@@ -93,7 +93,7 @@ $(document).ready(function() {
 			
 			var countiesTableBody = $("<tbody></tbody>").appendTo(countiesTableTable);
 
-			$.getJSON("/api/counties", function(countyData){
+			$.getJSON("/api/counties/states/PA", function(countyData){
 				countyResults = countyData.results;
 				var countyName = "";
 			
@@ -103,13 +103,14 @@ $(document).ready(function() {
 				
 				$.each(countyResults, function(c, county){
 					county.beneficiaries.sort(function(a,b){ return b.amount - a.amount; });
-					countyName = "<tr><td><a href='/a/counties/" + county.county + "'>" + county.county + "</a></td><td>" + toDollars(county.amount) + "</td><td>" + county.beneficiaries[0].name + "</td></tr>";
+					countyName = "<tr><td><a href='/a/counties/" + county.county + "/states/PA'>" + county.county + "</a></td><td>" + toDollars(county.amount) + "</td><td>" + county.beneficiaries[0].name + "</td></tr>";
 					$(countyName).appendTo(countiesTableBody);
-					if( c == 10) return false;
+					if( c == 8) return false;
 				});
 				
 				sizeToMatch($("#map"), countiesTable);
-			});
+				drawCandidateMap("map");
+			});	
 			
 			$("<div class='thin-divider'></div>").appendTo(container);
 			

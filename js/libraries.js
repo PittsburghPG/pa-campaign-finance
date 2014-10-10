@@ -129,7 +129,7 @@ function drawCandidateMap( id ){
 	w = $(map.node()).width();
 	h = $(map.node()).height();
 	var counties = [];
-	$.getJSON("/api/counties", function(countiesJSON){
+	$.getJSON("/api/counties/states/PA", function(countiesJSON){
 		$.each(countiesJSON.results, function(i, county){
 			county.beneficiaries.sort(function(a,b){
 				return +b.amount - +a.amount;
