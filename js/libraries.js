@@ -172,7 +172,7 @@ function drawCandidateMap( id ){
 				})
 				.on("click", function(d){
 					
-					window.location = "/a/counties/" + d.properties.NAME;
+					window.location = "/a/counties/" + d.properties.NAME + "/states/PA";
 				});
 				
 			// Detetct orientation of screen and scale map accordingly.
@@ -216,7 +216,7 @@ function drawLocatorMap( id, county ){
 				d3.select("#tooltip").remove();
 			})
 			.on("click", function(d){
-				window.location = "/a/counties/" + d.properties.NAME;
+				window.location = "/a/counties/" + d.properties.NAME + "/states/PA";
 			});
 		
 		// Detetct orientation of screen and scale map accordingly.
@@ -252,7 +252,7 @@ function appendRows(data, parent, type){
 					<td><a href='/a/contributions/" + contribution.id + "'>" + contribution.date + "</a></td> \
 					<td><a href='/a/contributors/" + contribution.contributorid + "'>" + contribution.contributor + "</a></td> \
 					<td><a href='/a/candidates/" + contribution.filerid + "'>" + contribution.name + "</a></td> \
-					<td><a href='/a/counties/" + contribution.county + "'>" + contribution.county + "</a></td> \
+					<td><a href='/a/counties/" + contribution.county + "/states/" + contribution.state + "'>" + contribution.county + "</a></td> \
 					<td style='text-align:right'  data-value='" + parseFloat(contribution.contribution)	 + "'>" + toDollars(contribution.contribution) + "</td> \
 				</tr>");
 			});
@@ -264,7 +264,7 @@ function appendRows(data, parent, type){
 				<tr> \
 					<td><a href='/a/contributors/" + contributor.contributorid + "'>" + contributor.contributor + "</a></td> \
 					<td>" + contributor.city + "</td> \
-					<td><a href='/a/counties/" + contributor.county + "'>" + contributor.county + "</a></td> \
+					<td><a href='/a/counties/" + contributor.county + "/states/" + contributor.state + "'>" + contributor.county + "</a></td> \
 					<td>" + contributor.state + "</td> \
 					<td>" + contributor.occupation + "</td> \
 					<td>" + contributor.empName + "</td> \
