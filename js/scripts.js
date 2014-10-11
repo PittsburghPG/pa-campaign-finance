@@ -56,7 +56,7 @@ $(document).ready(function() {
 				candidateBlock = $("<div class='col-lg-" + colWidth + " col-md-" + colWidth + " col-sm-" + colWidth + " block'>");
 				candidateImg = $("<a href = '/a/candidates/" + item.filerid + "'><div class='banner-image' id='candidateImg'></div></div>").appendTo(candidateBlock);
 				candidateImg.children(".banner-image").attr("style", "background-image:url('../img/" + item.filerid + ".jpg'); background-size: cover; ");
-				candidateName = $("<h2><a href = '/a/candidates/" + item.filerid + "' style='color:inherit; text-decoration:none'>" + item.name + " <small>" + item.party + "</small></a></h2>").appendTo(candidateBlock);
+				candidateName = $("<a href = '/a/candidates/" + item.filerid + "' style='color:inherit;'><h2><div style='text-decoration:underline; margin-right:5px; display:inline-block;'>" + item.name + "</div><small>" + item.party + "</small></h2></a>").appendTo(candidateBlock);
 				candidateLabel = $("<label>Total contributed to " + item.name + "</label>").appendTo(candidateBlock);
 				candidateTotal = $("<h2 class='jumbo'>" + toDollars(candidateContrib) + "</h2>").appendTo(candidateBlock);
 				
@@ -84,7 +84,7 @@ $(document).ready(function() {
 			var mapTopChart = $("<div class='row' id='map-top-chart'>").appendTo(container);
 			
 			var candidateMap = $("<div class='col-lg-7 col-md-7 col-sm-7'><svg id='map' style = 'width:100%; height:465px;'></svg>\</div>").appendTo(mapTopChart);
-
+			
 			// Build top counties in PA table
 			var countiesTable = $("<div class='col-lg-5 col-md-5 col-sm-5 tabular'>").appendTo(mapTopChart);
 			var countiesTableLabel = $("<h3>Top contributions by county</h3>").appendTo(countiesTable);
@@ -103,14 +103,14 @@ $(document).ready(function() {
 				
 				$.each(countyResults, function(c, county){
 					county.beneficiaries.sort(function(a,b){ return b.amount - a.amount; });
-					countyName = "<tr><td><a href='/a/counties/" + county.county + "/states/PA'>" + county.county + "</a></td><td>" + toDollars(county.amount) + "</td><td>" + county.beneficiaries[0].name + "</td></tr>";
+					countyName = "<tr><td><a href='/a/counties/" + county.county + "/states/" + county.state + "'>" + county.county + "</a></td><td>" + toDollars(county.amount) + "</td><td>" + county.beneficiaries[0].name + "</td></tr>";
 					$(countyName).appendTo(countiesTableBody);
 					if( c == 8) return false;
 				});
 				
 				sizeToMatch($("#map"), countiesTable);
 				drawCandidateMap("map");
-			});	
+			});
 			
 			$("<div class='thin-divider'></div>").appendTo(container);
 			
@@ -170,9 +170,9 @@ $(document).ready(function() {
 			
 			// Location block	
 			var locationCity = data.results[0].city;
-			var locationState = data.results[0].state;
 			var locationCounty = data.results[0].county;
 			var locationZip = data.results[0].zip;
+			var locationState = data.results[0].state;
 			var topTotalsLeftLocationBlock = $("<div class='row'> \
 													<div class='col-lg-12 col-md-12 col-sm-12'> \
 														<label>LOCATION</label><h3>" + locationCity + ", " + locationState + "</h3> \
@@ -305,7 +305,6 @@ $(document).ready(function() {
 			var contributionAmt = data.results[0].contribution;
 			
 			var conDateRaw = data.results[0].date;
-					
 			var filerID = data.results[0].filerid;
 			
 			$.getJSON("/api/contributors/" + contribID, function(data){
