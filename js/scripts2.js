@@ -273,10 +273,12 @@ $(document).ready(function() {
     case "counties":
 		$('#bycounty').addClass('active');
 		var countyNameRaw = split[3];
+		var countyStateRaw = split[5];
+		console.log(countyStateRaw);
 		
 		//countyName = toTitleCase(countyName);
 		 $.ajax({
-			url: "api/" + apiURL,
+			url: "api/counties/counties/" + countyNameRaw + "/states/" + countyStateRaw,
 			dataType: "json",
 			type : "GET",
 			success : function(v) {
@@ -309,12 +311,12 @@ $(document).ready(function() {
 					
 					noContributions = $("<div class='row'><h2>There are no contributions from this county.</h2></div>");
 					noContributions.appendTo(container);
-					console.log(noContributions);
 					
-				}else{
+				} else{
 					countyName = toTitleCase(v.results[0].county);
+					countyState = v.results[0].state;
 					
-					var countyHead = $("<h1>" + countyName + "</h1>");
+					var countyHead = $("<h1>" + countyName + ", " + countyState + "</h1>");
 					countyHead.appendTo(jumbotron);
 					
 					container.append(thinDivider);
@@ -381,23 +383,6 @@ $(document).ready(function() {
 						$('#totalcontributions').html(toDollars(totalContribs));
 						
 						candidateContribNum = candResults[c].contributions;
-						
-						
-						
-						/*var candABarWidth = "";
-						var candBBarWidth = "";
-						if(candAContributionAmt > candBContributionAmt){
-							candABarWidth = "100";
-							candBBarWidth = (candBContributionAmt)/(candAContributionAmt)*100;
-						}else if(candBContributionAmt > candAContributionAmt){
-							candBBarWidth = "100";
-							candABarWidth = (candAContributionAmt)/(candBContributionAmt) *100;
-						} else{
-							candABarWidth = "100";
-							candBBarWidth = "100";
-						};*/
-						
-						//candidate.amount.sort(function(a,b){ return b.amount - a.amount; });
 		
 						if($.inArray(candidate.amount, candidate) == 0){
 							candidateBarWidth = "100";
@@ -415,10 +400,7 @@ $(document).ready(function() {
 						
 						
 					});					
-					
-					console.log(candResults[0].name);
-			
-					
+						
 					//get population - don't have right now
 					var population = 1229000;
 					
@@ -432,10 +414,7 @@ $(document).ready(function() {
 							
 							for (var i = 0; i< w.results.length; i++) {
 								totalAllCountyDonations += Math.round(parseFloat(w.results[i].amount));
-								//console.log(Math.round(parseFloat(w.results[i].amount)));
 							}
-							//console.log(totalAllCountyDonations);
-							//console.log(totalAllCountyDonations + " " + totalcontribs);
 							var thisCountyPercent = totalContribs/totalAllCountyDonations*100;
 							thisCountyPercent = thisCountyPercent.numberFormat(1);
 							
@@ -473,7 +452,7 @@ $(document).ready(function() {
 					container.append("<div class='thin-divider'></div>");
 					
 					$.ajax({
-						url: "api/contributors/counties/" + countyName + "?limit=25",
+						url: "api/contributors/counties/" + countyName + "/states/" + countyState + "?limit=25",
 						dataType: "json",
 						type : "GET",
 						success : function(u) {
@@ -496,7 +475,7 @@ $(document).ready(function() {
 									.on("click", function(){
 										$(this).after("<div class='loading'>Loading data&nbsp;<i class='fa fa-money fa-spin'></i></div>");
 										this.remove();
-									$.getJSON("/api/contributors/" + split[2] + "/" + split[3] + "&limit=9999999&offset=25", function(data){
+									$.getJSON("/api/contributors/counties/" + countyName + "/states/" + countyState + "&limit=9999999&offset=25", function(data){
 										appendRows(data, $("#contributors"), "contributors");
 										$.bootstrapSortable(applyLast=true);
 										$(".loading").remove();
