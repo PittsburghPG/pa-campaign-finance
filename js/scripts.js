@@ -1,5 +1,7 @@
 $(document).ready(function() {      
-   
+
+	// Build pym child
+	var pymChild = new pym.Child();	
 
  //parse url
  var pathname = window.location.pathname; //get current url
@@ -110,6 +112,8 @@ $(document).ready(function() {
 				
 				sizeToMatch($("#map"), countiesTable);
 				drawCandidateMap("map");
+				pymChild.sendHeight();
+				
 			});
 			
 			$("<div class='thin-divider'></div>").appendTo(container);
@@ -118,6 +122,7 @@ $(document).ready(function() {
 			chartRow.append("<h3>Contributions over time</h3>");
 			chartColumn = $("<div class='col-lg-12 col-md-12 col-sm-12'><div id = 'chart' style = 'width:100%; height:300px'></div>").appendTo(chartRow);
 			makeCandidateTimeChart("chart", "2012-01-01", "2014-11-30");		
+			
 		}); // end case race getJSON api/candidates
 	break;
 		

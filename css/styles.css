@@ -241,7 +241,7 @@ table.horizontal-bar-graph {
 
 #tooltip {
 	position:absolute;
-	background-color:rgba(255,255,255,.8);
+	background-color:rgba(255,255,255,1);
 	padding:0;
 	border-radius:5px;
 	border:1px solid lightgray;
@@ -250,6 +250,7 @@ table.horizontal-bar-graph {
 	font-weight:400;
 	overflow:hidden;
 	text-align:Center;
+	z-index:3;
 }
 	#tooltip .date{
 		font-weight:100;
@@ -311,7 +312,30 @@ table.horizontal-bar-graph {
 	*/
 }
 
+#content {
+	width:100%;
+	box-shadow:gray 0px 5px 4px;
+	z-index:2;
+	position:relative;
+}
 
+#credits {
+	width:100%;
+	background-color:#ddd;
+	height:500px;
+	position:relative;
+}
+
+	#credits .logo {
+		width:100%;
+		margin-top:25px;
+		opacity:.75;
+	}
+	
+		#credits .logo:hover {
+			opacity:.9;
+			cursor:pointer;
+		}
 	
 @media screen and (max-width: 767px) {
 	.top-totals .col-lg-4 h3{
