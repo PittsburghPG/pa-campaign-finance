@@ -5,7 +5,10 @@ $(document).ready(function() {
 
 	// Build pym child
 	pymChild = new pym.Child({ polling:500, renderCallback: function(){ pym.Child } });	
-	$(document).on("click", "a", function(){ pymChild.sendMessage('url-tracker', $(this).attr("href")); });
+	$(document).on("click", "a", function(){ 
+		// if statement fixes search button bug on embed
+		if( !$(this).parent().hasClass("dropdown") ) pymChild.sendMessage('url-tracker', $(this).attr("href")); 
+	});
 	
 	
  //parse url
@@ -58,7 +61,7 @@ $(document).ready(function() {
 				var thinDivider = $("<div class='thin-divider'></div>");
 					
 			  
-				//banner image
+				// Banner image
 				var n = name.split(" ");
 				var lastName = n[1];
 				lastName = lastName.toLowerCase();
@@ -163,7 +166,7 @@ $(document).ready(function() {
 								<h3>Contributors</h3> \
 								<table class="table table-hover sortable"> \
 									<thead> \
-										<tr><th>Contributor</th><th>City</th><th>County</th><th>State</th><th>Occupation</th><th>Employer name</th><th style="text-align:right" data-defaultsort="DESC">Total contributed</th></tr> \
+										<tr><th>Contributor</th><th>City</th><th>County</th><th>State</th><th>Employer name</th><th>Candidate supported</th><th style="text-align:right" data-defaultsort="DESC">Total contributed</th></tr> \
 									</thead> \
 									<tbody></tbody> \
 								</table> \
@@ -399,7 +402,7 @@ $(document).ready(function() {
 										<h3>Contributors</h3> \
 										<table class="table table-hover sortable"> \
 											<thead> \
-												<tr><th>Contributor</th><th>City</th><th>County</th><th>State</th><th>Occupation</th><th>Employer name</th><th style="text-align:right" data-defaultsort="DESC">Total contributed</th></tr> \
+												<tr><th>Contributor</th><th>City</th><th>County</th><th>State</th><th>Employer name</th><th>Candidate supported</th><th style="text-align:right" data-defaultsort="DESC">Total contributed</th></tr> \
 											</thead> \
 											<tbody></tbody> \
 										</table> \
@@ -431,6 +434,7 @@ $(document).ready(function() {
 		}); // end counties case api/ + apiURL
 	break;
 	
+	default:
 	case "race":
 		var race = split[3];
 		var container = $("#main");
@@ -803,9 +807,6 @@ $(document).ready(function() {
 			
 		});
 	
-	
-	
-	
 	break;
    
 	case "search":
@@ -853,7 +854,7 @@ $(document).ready(function() {
 										<h3>Contributors matching search</h3> \
 										<table class="table table-hover sortable"> \
 											<thead> \
-												<tr><th>Contributor</th><th>City</th><th>County</th><th>State</th><th>Occupation</th><th>empName</th><th style="text-align:right" data-defaultsort="DESC">Total contributed</th></tr> \
+												<tr><th>Contributor</th><th>City</th><th>County</th><th>State</th><th>Employer</th><th>Candidate supported</th><th style="text-align:right" data-defaultsort="DESC">Total contributed</th></tr> \
 											</thead> \
 											<tbody></tbody> \
 										</table> \
@@ -874,32 +875,7 @@ $(document).ready(function() {
 			});
 		});
 	break;
-	
-	default:
-        //default //code block
 }
  
 	  
 });
-
-function toTitleCase(str)
-{
-    return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-}
-//insert something into a string
-String.prototype.insert = function (index, string) {
-  if (index > 0)
-    return this.substring(0, index) + string + this.substring(index, this.length);
-  else
-    return string + this;
-};
-//add thousands commas to number
-Number.prototype.numberFormat = function(decimals, dec_point, thousands_sep) {
-    dec_point = typeof dec_point !== 'undefined' ? dec_point : '.';
-    thousands_sep = typeof thousands_sep !== 'undefined' ? thousands_sep : ',';
-
-    var parts = this.toFixed(decimals).split('.');
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousands_sep);
-
-    return parts.join(dec_point);
-}

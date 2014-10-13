@@ -272,15 +272,21 @@ function appendRows(data, parent, type){
 		break;
 		
 		case "contributors":
+			// Arrange totals to determine preferred candidate
+			
 			$.each(data.results, function(i, contributor){
+				contributor.beneficiaries.sort(function(a,b){
+					return b.amount - a.amount;
+				});
+				
 				$(parent).find("tbody").append("\
 				<tr> \
 					<td><a href='/a/contributors/" + contributor.contributorid + "'>" + contributor.contributor + "</a></td> \
 					<td>" + contributor.city + "</td> \
 					<td><a href='/a/counties/" + contributor.county + "/states/" + contributor.state + "'>" + contributor.county + "</a></td> \
 					<td>" + contributor.state + "</td> \
-					<td>" + contributor.occupation + "</td> \
 					<td>" + contributor.empName + "</td> \
+					<td>" + contributor.beneficiaries[0].name + "</td> \
 					<td style='text-align:right' data-value='" + parseFloat(contributor.amount) + "'>" + toDollars(contributor.amount) + "</td> \
 				</tr>");
 			});
@@ -416,3 +422,26 @@ function makeCandidateTimeChart(id, startDate, endDate, county){
 }
 
 function pad(num, size){ return ('000000000' + num).substr(-size); }
+
+
+function toTitleCase(str)
+{
+    return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+}
+//insert something into a string
+String.prototype.insert = function (index, string) {
+  if (index > 0)
+    return this.substring(0, index) + string + this.substring(index, this.length);
+  else
+    return string + this;
+};
+//add thousands commas to number
+Number.prototype.numberFormat = function(decimals, dec_point, thousands_sep) {
+    dec_point = typeof dec_point !== 'undefined' ? dec_point : '.';
+    thousands_sep = typeof thousands_sep !== 'undefined' ? thousands_sep : ',';
+
+    var parts = this.toFixed(decimals).split('.');
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousands_sep);
+
+    return parts.join(dec_point);
+}
