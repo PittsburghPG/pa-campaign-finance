@@ -171,7 +171,7 @@ function drawCandidateMap( id ){
 					d3.select("#tooltip").remove();
 				})
 				.on("click", function(d){
-					
+					pymChild.sendMessage('url-tracker', "/a/counties/" + d.properties.NAME + "/states/PA");
 					window.location = "/a/counties/" + d.properties.NAME + "/states/PA";
 				});
 				
@@ -216,6 +216,7 @@ function drawLocatorMap( id, county ){
 				d3.select("#tooltip").remove();
 			})
 			.on("click", function(d){
+				pymChild.sendMessage('url-tracker', "/a/counties/" + d.properties.NAME + "/states/PA");
 				window.location = "/a/counties/" + d.properties.NAME + "/states/PA";
 			});
 		
