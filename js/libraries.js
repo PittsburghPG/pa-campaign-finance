@@ -373,7 +373,8 @@ function makeCandidateTimeChart(id, startDate, endDate, county){
 									right: 0,
 									bottom: 1
 								},
-								hoverable: true
+								hoverable: true,
+								clickable: true
 							},
 							markings:0,
 							colors: [ "#2E4272", "#AA3939"]
@@ -396,6 +397,20 @@ function makeCandidateTimeChart(id, startDate, endDate, county){
 				}
 			}
 			else $("#tooltip").remove();
+		});
+		
+		$("#" + id).bind("plotclick", function(event, pos, item){
+			if( item ) {
+				console.log(item);
+				start = new Date(item.datapoint[0]);
+				end =  new Date(item.datapoint[0]);
+				end.setMonth(end.getMonth() + 1);
+				end.setDate(-1);
+				url = "/a/search/?candidatename=" + item.series.label + "&startDate=" + start.getFullYear() + "-" + (start.getMonth() + 1) + "-" + start.getDate() + "&endDate=" + end.getFullYear() + "-" + (end.getMonth() + 1) + "-" + end.getDate();
+				pymChild.sendMessage('url-tracker', url);
+				window.location = url;
+				
+			}
 		});
 	});
 }

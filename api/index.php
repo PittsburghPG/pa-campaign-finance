@@ -385,6 +385,10 @@ class MyAPI extends API{
 							$query["where"] .= "AND contributions.contributor LIKE '%" . $this->mysqli -> real_escape_string($value) . "%' ";
 						break;
 						
+						case "candidatename":
+							$query["where"] .= "AND candidates.name LIKE '%" . $this->mysqli -> real_escape_string($value) . "%' ";
+						break;
+						
 						case "filername":
 							$query["where"] .= "AND filers.name LIKE '%" . $this->mysqli -> real_escape_string($value) . "%' ";
 						break;
