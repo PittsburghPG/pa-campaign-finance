@@ -317,90 +317,112 @@ $(document).ready(function() {
 						
 						
 					});					
-						
-					//get population - don't have right now
-					var population = 1229000;
 					
+					
+					// get counties populations
 					$.ajax({
-						url: "api/counties",
-						dataType: "json",
+						url: "http://api.usatoday.com/open/census/pop?keypat=" + countyNameRaw + "&keyname=placename&sumlevid=3&api_key=6vxwagz8yayp4t87ye7d2nf4",
+						dataType: "jsonp",
 						type : "GET",
-						success : function(w) {
-							var totalAllCountyDonations = 0; //total of all counties
-							//totalContributions = total for THIS county
+						jsonp: "callback",
+						success : function(USATdata) {
 							
-							for (var i = 0; i< w.results.length; i++) {
-								totalAllCountyDonations += Math.round(parseFloat(w.results[i].amount));
+							var countyResults = USATdata.response;
+							
+							$.each(countyResults, function(c, county){
+								if (countyResults[c].StatePostal == countyState){
+									countyPOP = countyResults[c].Pop;
+								}
+							});
+							console.log(countyPOP);
+							
+						
+						
+					
+					
+					
+						$.ajax({
+							url: "api/counties",
+							dataType: "json",
+							type : "GET",
+							success : function(w) {
+								var totalAllCountyDonations = 0; //total of all counties
+								//totalContributions = total for THIS county
+								
+								for (var i = 0; i< w.results.length; i++) {
+									totalAllCountyDonations += Math.round(parseFloat(w.results[i].amount));
+								}
+								var thisCountyPercent = totalContribs/totalAllCountyDonations*100;
+								thisCountyPercent = thisCountyPercent.numberFormat(1);
+								
+								
+								$("<h3>" + thisCountyPercent + "%</h3><label>" + countyName + " County represents " + thisCountyPercent + "% of total race contributions.</label>").appendTo("#county-percent-total");
+								
+								//per capita
+								var perCapita = totalContribs/countyPOP;
+								perCapita = "$" + perCapita.numberFormat(2);
+								
+								$("<h3>" + perCapita + "</h3><label>Contributions represent $" + perCapita + " per capita in " + countyName + " County.</label>").appendTo("#county-per-capita")
+								
+								// Size chart to equal neighboring column
+								sizeToMatch($("#map"), $(".top-totals"));
+								drawLocatorMap("map", countyName);
+						
+								
 							}
-							var thisCountyPercent = totalContribs/totalAllCountyDonations*100;
-							thisCountyPercent = thisCountyPercent.numberFormat(1);
 							
 							
-							$("<h3>" + thisCountyPercent + "%</h3><label>" + countyName + " County represents " + thisCountyPercent + "% of total race contributions.</label>").appendTo("#county-percent-total");
-							
-							//per capita
-							var perCapita = totalContribs/population;
-							perCapita = "$" + perCapita.numberFormat(2);
-							
-							$("<h3>" + perCapita + "</h3><label>Contributions represent $" + perCapita + " per capita in " + countyName + " County.</label>").appendTo("#county-per-capita")
-							
-							// Size chart to equal neighboring column
-							sizeToMatch($("#map"), $(".top-totals"));
-							drawLocatorMap("map", countyName);
-					
-							
-						}
+						}); //end counties case api/counties
 						
+						container.append("<div class='thin-divider'></div>");
 						
-					}); //end counties case api/counties
-					
-					container.append("<div class='thin-divider'></div>");
-					
-					container.append('<div class="row divider">\
-						<div class="col-lg-6 col-md-6 col-sm-6 block"><h3>Contributions over time</h3>\
-							<div id="timeline" style="width: 100%; height: 200px;"></div>\
-						</div>\
-						<div class="col-lg-6 col-md-6 col-sm-6 block"><h3>Contributions by candidate</h3>\
-							<div id = "both-candidates-timeline" style = "width:100%; height:200px;"></div>\
-						</div></div></div>');
-					
-					makeTimeChart("timeline", "counties", countyName, "2013-01-01", "2014-09-01");
-					makeCandidateTimeChart("both-candidates-timeline", "2013-01-01", "2014-09-01", countyName)
-					container.append("<div class='thin-divider'></div>");
-					
-					$.ajax({
-						url: "api/contributors/counties/" + countyName + "/states/" + countyState + "?limit=25",
-						dataType: "json",
-						type : "GET",
-						success : function(u) {
-							$("#main").append(' \
-							<div class = "row"> \
-								<div class="col-lg-12 col-md-12 col-sm-12" id = "contributors"> \
-									<h3>Contributors</h3> \
-									<table class="table table-hover sortable"> \
-										<thead> \
-											<tr><th>Contributor</th><th>City</th><th>County</th><th>State</th><th>Occupation</th><th>Employer name</th><th style="text-align:right" data-defaultsort="DESC">Total contributed</th></tr> \
-										</thead> \
-										<tbody></tbody> \
-									</table> \
-								</div> \
-							</div>'); 
-							appendRows(u, $("#contributors"), "contributors");
-							
-							if(u.results.length >= 25) {
-								button = $('<button type="button" class="btn btn-default btn-md btn-block">More results</button>').appendTo($("#contributors"))
-									.on("click", function(){
-										$(this).after("<div class='loading'>Loading data&nbsp;<i class='fa fa-money fa-spin'></i></div>");
-										this.remove();
-									$.getJSON("/api/contributors/counties/" + countyName + "/states/" + countyState + "&limit=9999999&offset=25", function(data){
-										appendRows(data, $("#contributors"), "contributors");
-										$.bootstrapSortable(applyLast=true);
-										$(".loading").remove();
+						container.append('<div class="row divider">\
+							<div class="col-lg-6 col-md-6 col-sm-6 block"><h3>Contributions over time</h3>\
+								<div id="timeline" style="width: 100%; height: 200px;"></div>\
+							</div>\
+							<div class="col-lg-6 col-md-6 col-sm-6 block"><h3>Contributions by candidate</h3>\
+								<div id = "both-candidates-timeline" style = "width:100%; height:200px;"></div>\
+							</div></div></div>');
+						
+						makeTimeChart("timeline", "counties", countyName, "2013-01-01", "2014-09-01");
+						makeCandidateTimeChart("both-candidates-timeline", "2013-01-01", "2014-09-01", countyName)
+						container.append("<div class='thin-divider'></div>");
+						
+						$.ajax({
+							url: "api/contributors/counties/" + countyName + "/states/" + countyState + "?limit=25",
+							dataType: "json",
+							type : "GET",
+							success : function(u) {
+								$("#main").append(' \
+								<div class = "row"> \
+									<div class="col-lg-12 col-md-12 col-sm-12" id = "contributors"> \
+										<h3>Contributors</h3> \
+										<table class="table table-hover sortable"> \
+											<thead> \
+												<tr><th>Contributor</th><th>City</th><th>County</th><th>State</th><th>Occupation</th><th>Employer name</th><th style="text-align:right" data-defaultsort="DESC">Total contributed</th></tr> \
+											</thead> \
+											<tbody></tbody> \
+										</table> \
+									</div> \
+								</div>'); 
+								appendRows(u, $("#contributors"), "contributors");
+								
+								if(u.results.length >= 25) {
+									button = $('<button type="button" class="btn btn-default btn-md btn-block">More results</button>').appendTo($("#contributors"))
+										.on("click", function(){
+											$(this).after("<div class='loading'>Loading data&nbsp;<i class='fa fa-money fa-spin'></i></div>");
+											this.remove();
+										$.getJSON("/api/contributors/counties/" + countyName + "/states/" + countyState + "&limit=9999999&offset=25", function(data){
+											appendRows(data, $("#contributors"), "contributors");
+											$.bootstrapSortable(applyLast=true);
+											$(".loading").remove();
+										});
 									});
-								});
+								}
+								$.bootstrapSortable();
 							}
-							$.bootstrapSortable();
-							
+						});
+						
 						}
 					});
 				}//end if $.isEmptyObject statement
