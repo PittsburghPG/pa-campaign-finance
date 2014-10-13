@@ -35,6 +35,12 @@
 	height:200px;
 	}
 	
+.navbar-brand{
+	height:inherit;
+	margin:0;
+	padding:0;
+	}
+	
 img{
 	width:100%;
 	}
@@ -323,7 +329,6 @@ table.horizontal-bar-graph {
 #credits {
 	width:100%;
 	background-color:#ddd;
-	height:500px;
 	position:relative;
 }
 

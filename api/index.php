@@ -376,6 +376,11 @@ class MyAPI extends API{
 			foreach( $parameters as $key => $value ){
 				if( $value ) {
 					switch($key) {
+						case "contributor":
+						case "contributors":
+							$query["where"] .= "AND contributions.contributorid = '" . $this->mysqli -> real_escape_string($value) . "' ";
+						break;
+						
 						case "contributorname":
 							$query["where"] .= "AND contributions.contributor LIKE '%" . $this->mysqli -> real_escape_string($value) . "%' ";
 						break;
@@ -392,6 +397,7 @@ class MyAPI extends API{
 							$query["where"] .= "AND contributions.zip LIKE '%" . $this->mysqli -> real_escape_string($value) . "%' "; 
 						break;
 						
+						case "counties":
 						case "county":
 							$query["where"] .= "AND contributions.county LIKE '%" . $this->mysqli -> real_escape_string($value) . "%' "; 
 						break;

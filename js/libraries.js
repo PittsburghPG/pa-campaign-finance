@@ -67,9 +67,22 @@ function makeTimeChart(id, endpoint, target, startDate, endDate){
 					right: 0,
 					bottom: 1
 				},
-				hoverable: true
+				hoverable: true,
+				clickable: true
 			},
 			markings:0
+		});
+		
+		$("#" + id).bind("plotclick", function(event, pos, item){
+			if( item ){
+				start = new Date(item.datapoint[0]);
+				end =  new Date(item.datapoint[0]);
+				end.setMonth(end.getMonth() + 1);
+				end.setDate(-1);
+				url = "/a/search/?" + endpoint + "=" + target + "&startDate=" + start.getFullYear() + "-" + (start.getMonth() + 1) + "-" + start.getDate() + "&endDate=" + end.getFullYear() + "-" + (end.getMonth() + 1) + "-" + end.getDate();
+				pymChild.sendMessage('url-tracker', url);
+				window.location = url;
+			}
 		});
 		
 		$("#" + id).bind("plothover", function(event, pos, item){
@@ -85,6 +98,9 @@ function makeTimeChart(id, endpoint, target, startDate, endDate){
 			}
 			else $("#tooltip").remove();
 		});
+		
+		
+		
 	});
 }
 
