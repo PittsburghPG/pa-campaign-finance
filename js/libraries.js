@@ -74,12 +74,10 @@ function makeTimeChart(id, endpoint, target, startDate, endDate){
 		
 		$("#" + id).bind("plothover", function(event, pos, item){
 			if( item ) {
-				console.log(item);
 				if( $("#tooltip").length == 0 ){
 					$("<div id='tooltip'></div>").appendTo( $("body") )
 						.css({top: item.pageY+5, left: item.pageX+5});
 					$("#tooltip").html("<div class='date'>" + ( new Date(item.datapoint[0]).getMonth() + 1 ) + "/" + new Date(item.datapoint[0]).getFullYear() + "</div><div class='text'>" + toDollars(item.datapoint[1]) + "</div>");
-					console.log(item.datapoint[0]);
 				}
 				else {
 					$("#tooltip").css({top: item.pageY-20, left: item.pageX+10});
@@ -111,7 +109,6 @@ function makePieChart(id, target, target_state){
 		});
 		$("#" + id).bind("plothover", function(e, pos, item){
 			if( item ) {
-				console.log(e);
 				if( $("#tooltip").length == 0 ){
 					$("<div id='tooltip'></div>").appendTo( $("body") );
 				}
@@ -165,7 +162,6 @@ function drawCandidateMap( id ){
 						})
 						.style("left", d3.event.clientX + 10 + "px")
 						.style("top", d3.event.clientY - 20 + "px");
-					console.log(d3.event.clientX);
 				})
 				.on("mouseout", function(d){
 					d3.select("#tooltip").remove();
@@ -280,12 +276,10 @@ function appendRows(data, parent, type){
 function sizeToMatch(item, target){
 	
 	item.height( target.height() );
-	console.log("Afadasdas");
 }
 
 function makeGoogleMap(locationCity, locationZip, id){
 	$.getJSON("https://maps.googleapis.com/maps/api/geocode/json?address=" + locationCity + "&components=postal_code:" + locationZip, function(geodata){
-		console.log(locationZip);
 		var contribLAT = geodata.results[0].geometry.location.lat;
 		var contribLNG = geodata.results[0].geometry.location.lng;
 		var mapOptions = {
@@ -310,7 +304,6 @@ function makeCandidateTimeChart(id, startDate, endDate, county){
 	
 	// See if county was specified
 	county = (typeof county == "undefined") ? "" : "/counties/" + county;
-	console.log("api/months/candidates/" + 343423 + "?startDate=" + startDate + county + "&endDate=" + endDate);
 	dataCollection = [];
 	$.getJSON("api/candidates/", function(json){
 		$.each(json.results, function(i, candidate){
@@ -369,12 +362,10 @@ function makeCandidateTimeChart(id, startDate, endDate, county){
 		
 		$("#" + id).bind("plothover", function(event, pos, item){
 			if( item ) {
-				console.log(item);
 				if( $("#tooltip").length == 0 ){
 					$("<div id='tooltip'></div>").appendTo( $("body") )
 						.css({top: item.pageY+5, left: item.pageX+5});
 					$("#tooltip").html("<div class='date'>" + ( new Date(item.datapoint[0]).getMonth() + 1 ) + "/" + new Date(item.datapoint[0]).getFullYear() + "</div><div class='text'>" + toDollars(item.datapoint[1]) + "</div>");
-					console.log(item.datapoint[0]);
 				}
 				else {
 					$("#tooltip").css({top: item.pageY-20, left: item.pageX+10});
