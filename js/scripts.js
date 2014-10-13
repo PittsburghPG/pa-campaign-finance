@@ -5,7 +5,7 @@ $(document).ready(function() {
 
 	// Build pym child
 	pymChild = new pym.Child({ polling:500, renderCallback: function(){ pym.Child } });	
-	$(document).on("click", "a", function(){ pymChild.sendMessage('height-tracker', $(this).attr("href")); });
+	$(document).on("click", "a", function(){ pymChild.sendMessage('url-tracker', $(this).attr("href")); });
 	
 	
  //parse url
