@@ -306,6 +306,12 @@ function makeCandidateTimeChart(id, startDate, endDate, county){
 	county = (typeof county == "undefined") ? "" : "/counties/" + county;
 	dataCollection = [];
 	$.getJSON("api/candidates/", function(json){
+		
+		// Sort by party so chart colors match according to our red/blue conventions
+		json.results.sort(function(a,b){ 
+			if(a.party == "REP") return 1; else return -1;
+		});
+		
 		$.each(json.results, function(i, candidate){
 			var data = [];
 			$.getJSON("api/months/candidates/" + candidate.filerid + county + "?startDate=" + startDate + "&endDate=" + endDate, function(subjson){
@@ -313,6 +319,8 @@ function makeCandidateTimeChart(id, startDate, endDate, county){
 					data.push( [Date.parse(date["year"] + "-" + pad(date["month"],2) + "-" + "01T05:01:00"), +date["total"]] );
 				});	
 				dataCollection.push({ label: candidate.name, data: data});
+				
+				
 				
 				$.plot("#" + id, dataCollection, { 
 							legend:	{

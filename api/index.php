@@ -209,7 +209,7 @@ class MyAPI extends API{
 						candidates.party, 
 						candidates.year,
 						candidates.race,
-						candidates.img,
+						candidates.bio,
 						filers.address1,
 						filers.address2,
 						filers.city,

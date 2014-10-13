@@ -74,7 +74,7 @@ $(document).ready(function() {
 	
 				$('#data').append("<div class='row' id='bio_totals'></div>");
 				$('#bio_totals').append("<div id='bio' class='col-lg-5 col-md-5 col-sm-5 col-xs-12'></div>");
-				$('#bio').append('<p><span class="fa-stack fa-md"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-birthday-cake fa-stack-1x fa-inverse"></i></span><strong id="party"></strong><br><span class="fa-stack fa-md"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-phone fa-stack-1x fa-inverse"></i></span><strong id="phone"></strong><br><span class="fa-stack fa-md"><i class="fa fa-square fa-stack-2x"></i>	<i class="fa fa-envelope fa-stack-1x fa-inverse"></i></span><strong id="address"></strong><br></p><p class="lead">Tom Corbett! What a bro. </p>');
+				$('#bio').append('<p><span class="fa-stack fa-md"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-birthday-cake fa-stack-1x fa-inverse"></i></span><strong id="party"></strong><br><span class="fa-stack fa-md"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-phone fa-stack-1x fa-inverse"></i></span><strong id="phone"></strong><br><span class="fa-stack fa-md"><i class="fa fa-square fa-stack-2x"></i>	<i class="fa fa-envelope fa-stack-1x fa-inverse"></i></span><strong id="address"></strong><br></p><p class="lead">' + r.results[0].bio + '</p>');
 				$('#party').html(party);
 	
 				$('#address').html(address1 + address2 + ", " + city + ", " + state + " " + zip);
@@ -206,7 +206,7 @@ $(document).ready(function() {
 				introRow = $("<div></div>").appendTo(container);	
 				introRow.addClass("row intro-row");
 				
-				var introLabel = $("<label>COUNTY</label>");
+				var introLabel = $("<label>COUNTY/REGION</label>");
 				introLabel.appendTo(introRow);
 				
 				var jumbotron = $("<div></div>").appendTo(introRow);
@@ -410,12 +410,10 @@ $(document).ready(function() {
 	break;
 	
 	case "race":
-		
 		var race = split[3];
 		var container = $("#main");
 		var thinDivider = $("<div class='thin-divider'></div>");	
 		$.getJSON("api/candidates", function(canData){
-			
 			var results = canData.results;
 
 			var totalCandidateContrib = 0;
@@ -457,7 +455,7 @@ $(document).ready(function() {
 			
 			var introText = $("\
 			<div class='col-lg-5 col-md-5 col-sm-5 lead'> \
-				<p>Causa similis loquor tation scisco. Ratis camur decet eu. Quibus et feugait ut gravis consequat duis. Quis jugis minim quis uxor dignissim. Comis vereor nimis. Wisi delenit feugait.</p>").appendTo(projectIntro);
+				<p>In politics, money is power. PublicSource and the Pittsburgh Post-Gazette believe you should know who's donating significant campaign cash to candidates for governor. So, we're following the money for you. Check back often for updates on who's contributing to the governor's race.</p>").appendTo(projectIntro);
 			
 			var totalContrib = $("<div class='col-lg-7 col-md-7 col-sm-7'></div>").appendTo(projectIntro);
 			
@@ -498,8 +496,6 @@ $(document).ready(function() {
 				
 				sizeToMatch($("#map"), countiesTable);
 				drawCandidateMap("map");
-				
-				
 			});
 			
 			$("<div class='thin-divider'></div>").appendTo(container);
