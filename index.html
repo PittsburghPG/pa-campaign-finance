@@ -223,7 +223,7 @@
   var pymParent = new pym.Parent('iframe', 'http://priceoftheprize.publicsource.org/a/race', {});
   pymParent.onMessage(&quot;url-tracker&quot;, function(url){ 
   document.getElementById(&quot;iframe&quot;).removeChild(document.getElementById(&quot;iframe&quot;).firstChild)
-    var pymParent = new pym.Parent('iframe', url, {});
+    var pymParent = new pym.Parent('iframe', "http://priceoftheprize.publicsource.org" + url, {});
   });
 &lt;/script&gt;</pre></p>
 				</div>				
