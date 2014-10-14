@@ -335,7 +335,7 @@ $(document).ready(function() {
 							$.each(countyResults, function(c, county){
 								if (countyResults[c].StatePostal == countyState){
 									countyPOPraw = countyResults[c].Pop;
-									countyPop = str.replace("County", "");
+									countyPop = str.replace("county", "");
 								}
 							});
 							console.log(countyPOP);
