@@ -157,8 +157,8 @@ function drawCandidateMap( id ){
 			.enter().append("path")
 				.attr("class", function(d){
 					var output = "county";
-					if(counties[d.properties.NAME]){
-						output += " " + counties[d.properties.NAME].winner;
+					if(counties[d.properties.NAMELSAD]){
+						output += " " + counties[d.properties.NAMELSAD].winner;
 					}
 					return output;
 				})
@@ -170,7 +170,7 @@ function drawCandidateMap( id ){
 						.html(function(){
 							output = "<h4>" + d.properties.NAME + "</h4><table><tbody>";
 							if( counties[d.properties.NAME] ){
-								$.each(	counties[d.properties.NAME].candidates, function(i, candidate){
+								$.each(	counties[d.properties.NAMELSAD].candidates, function(i, candidate){
 									output += "<tr><td>" + candidate.name + "</td><td><strong>" + toDollars(candidate.amount) + "</td></tr>";
 								});
 							}
@@ -183,19 +183,32 @@ function drawCandidateMap( id ){
 					d3.select("#tooltip").remove();
 				})
 				.on("click", function(d){
-					pymChild.sendMessage('url-tracker', "/a/counties/" + d.properties.NAME + "/states/PA");
-					window.location = "/a/counties/" + d.properties.NAME + "/states/PA";
+					pymChild.sendMessage('url-tracker', "/a/counties/" + d.properties.NAMELSAD + "/states/PA");
+					window.location = "/a/counties/" + d.properties.NAMELSAD + "/states/PA";
 				});
 				
 			// Detetct orientation of screen and scale map accordingly.
 			var bounds = d3.geo.path().bounds(json);
 			
-			// Chooses a mercator projection, sticks it roughly in the center of the screen,
-			// sets the center of Pennsylvania, scales it up based on bounds of map
-			projection = d3.geo.mercator().translate([ w / 2.2, h / 1.8]).center([-77.995133, 40.696298]).scale( 800 * w / (bounds[1][0] - bounds[0][0]) );	
+			resize();
+				
 			
-			// Apply transformation
-			county.attr("d", d3.geo.path().projection(projection));
+			// Make event to resize map on screen resize.
+			$(document).on("resize", resize);
+			
+			function resize(){
+				w = $(map.node()).width();
+				h = $(map.node()).height();
+				
+				// Chooses a mercator projection, sticks it roughly in the center of the screen,
+				// sets the center of Pennsylvania, scales it up based on bounds of map
+				projection = d3.geo.mercator().translate([ w / 2.2, h / 1.8]).center([-77.995133, 40.696298]).scale( 800 * w / (bounds[1][0] - bounds[0][0]) );	
+				
+				// Apply transformation
+				county.attr("d", d3.geo.path().projection(projection));
+				console.log("yo");
+			}
+			
 		});
 	});
 }
@@ -212,7 +225,7 @@ function drawLocatorMap( id, county ){
 		.enter().append("path")
 			.attr("class", function(d){
 				var output = "county";
-				if(d.properties.NAME == county) output += " selected";
+				if(d.properties.NAMELSAD == county) output += " selected";
 				return output;
 			})
 			.on("mousemove", function(d){
@@ -228,19 +241,30 @@ function drawLocatorMap( id, county ){
 				d3.select("#tooltip").remove();
 			})
 			.on("click", function(d){
-				pymChild.sendMessage('url-tracker', "/a/counties/" + d.properties.NAME + "/states/PA");
-				window.location = "/a/counties/" + d.properties.NAME + "/states/PA";
+				pymChild.sendMessage('url-tracker', "/a/counties/" + d.properties.NAMELSAD + "/states/PA");
+				window.location = "/a/counties/" + d.properties.NAMELSAD + "/states/PA";
 			});
 		
 		// Detetct orientation of screen and scale map accordingly.
 		var bounds = d3.geo.path().bounds(json);
 		
-		// Chooses a mercator projection, sticks it roughly in the center of the screen,
-		// sets the center of Pennsylvania, scales it up based on bounds of map
-		projection = d3.geo.mercator().translate([ w / 2.2, h / 1.8]).center([-77.995133, 40.696298]).scale( 800 * w / (bounds[1][0] - bounds[0][0]) );	
+		resize();
+					
+		// Make event to resize map on screen resize.
+		$(document).on("resize", resize);
 		
-		// Apply transformation
-		county.attr("d", d3.geo.path().projection(projection));
+		function resize(){
+			w = $(map.node()).width();
+			h = $(map.node()).height();
+			
+			// Chooses a mercator projection, sticks it roughly in the center of the screen,
+			// sets the center of Pennsylvania, scales it up based on bounds of map
+			projection = d3.geo.mercator().translate([ w / 2.2, h / 1.8]).center([-77.995133, 40.696298]).scale( 800 * w / (bounds[1][0] - bounds[0][0]) );	
+			
+			// Apply transformation
+			county.attr("d", d3.geo.path().projection(projection));
+			console.log("yo");
+		}
 		
 	});
 }
