@@ -5,40 +5,10 @@ A Post-Gazette/PublicSource collaboration cataloging campaign finance figures fo
 
 #API
 
-##Show contributions
-  Returns json listing either a collection of contributions, or a single contribution specified by an `id`. 
-
-* **URL**
-
-  /contributions
-
-  /contributions/:contributor-id
-
-* **Method:**
-
-  `GET`
-
-* **URL Paths**
-    
-    * **/contributors/:contributor-id<br />**
-    Filters by specific contributor.<br />
-       Example: `contributions/contributors/324`
-    * **/filers/:filerid** <br />
-    Filters by specific PAC or candidate.<br />
-       Example: `contributions/filers/2009216`
-    * **/candidates/:candidate-name** <br />
-    Filters by specific candidate, using filerid.<br />
-       Example: `contributions/candidates/2009216`
-	* **/counties/:county** <br />
-    Filters by county, using county name.<br />
-       Example: `contributions/counties/allegheny`
-	* **/states/:state** <br />
-    Filters by state, using state abbreviation.<br />
-       Example: `contributions/states/PA`   
-
-*  **URL Params**
-
-    * **contributorname=[string]<br />**
+## Univeral parameters
+   You can use these parameters for any API query (though they'll be redundent for some endpoints).
+   
+   * **contributorname=[string]<br />**
     Filters by contributor name (wildcarded).<br />
        Example: `contributions/?contributorname=andrew`
     * **filername=[string]<br />**
@@ -74,10 +44,38 @@ A Post-Gazette/PublicSource collaboration cataloging campaign finance figures fo
 	* **offset=[integer]<br />**
     Skips ahead first x returned records.<br />
        Example: `contributions/?offset=2500`
-	
-* **Data Params**
 
-    None
+
+##Show contributions
+  Returns json listing either a collection of contributions, or a single contribution specified by an `id`. 
+
+* **URL**
+
+  /contributions
+
+  /contributions/:contributor-id
+
+* **Method:**
+
+  `GET`
+
+* **URL Paths**
+    
+    * **/contributors/:contributor-id<br />**
+    Filters by specific contributor.<br />
+       Example: `contributions/contributors/324`
+    * **/filers/:filerid** <br />
+    Filters by specific PAC or candidate.<br />
+       Example: `contributions/filers/2009216`
+    * **/candidates/:candidate-name** <br />
+    Filters by specific candidate, using filerid.<br />
+       Example: `contributions/candidates/2009216`
+	* **/counties/:county** <br />
+    Filters by county, using county name.<br />
+       Example: `contributions/counties/allegheny`
+	* **/states/:state** <br />
+    Filters by state, using state abbreviation.<br />
+       Example: `contributions/states/PA`   
 
 * **Success Response:**
 
@@ -149,51 +147,6 @@ A Post-Gazette/PublicSource collaboration cataloging campaign finance figures fo
     * **/candidates/:candidate-id** <br />
     Filters to contributors who have given to a specific candidate, using their filerid.<br />
        Example: `contributors/candidates/20130153`
-
-*  **URL Params**
-    * **contributorname=[string]<br />**
-    Filters by contributor name (wildcarded).<br />
-       Example: `contributions/?contributor=andrew`
-    * **candidatename=[string]<br />**
-    Filters by candidate name (wildcarded).<br />
-       Example: `contributions/?candidatename=corbett`
-	* **filername=[string]<br />**
-    Filters by filer name (wildcarded).<br />
-       Example: `contributions/?filername=PPG`
-    * **contributor_city=[string]<br />**
-    Filters by contributor's listed city (wildcarded).<br />
-       Example: `contributors/?contributor_city=pittsburgh`
-    * **contributor_zip=[string]<br />**
-    Filters by contributor's listed zip code (wildcarded).<br />
-       Example: `contributors/?contributor_zip=15222`
-    * **county=[string]<br />**
-    Filters by county name (wildcarded).<br />
-       Example: `contributions/?county=allegheny`
-	* **employer=[string]<br />**
-    Filters by contributor's employer's name (wildcarded).<br />
-       Example: `contributors/?employer=US Steel`
-    * **startDate=[YYYY-MM-DD]<br />**
-    Filters for contributions made after (and including) specified date.<br />
-       Example: `contributors/?startDate=2014-06-01`
-    * **endDate=[YYYY-MM-DD]<br />**
-    Filters for contributions made before (and including) specified date.<br />
-       Example: `contributors/?endDate=2014-10-01`
-    * **startAmount=[integer]<br />**
-    Filters for contributions over (but including) specified amount.<br />
-       Example: `contributors/?startAmount=1000`
-    * **endAmount=[integer]<br />**
-    Filters for contributions under (but including) specified amount.<br />
-       Example: `contributors/?endAmount=2500`
-	* **limit=[integer]<br />**
-    Sets limit of returned records.<br />
-       Example: `contributors/?limit=50`
-	* **offset=[integer]<br />**
-    Skips ahead x returned records.<br />
-       Example: `contributors/?offset=2500`
-
-* **Data Params**
-
-    None
 
 * **Success Response:**
 
@@ -292,47 +245,6 @@ A Post-Gazette/PublicSource collaboration cataloging campaign finance figures fo
 	* **/contributors/:contributor-id<br />**
     Filters to candidates who have received donations from a specific contributor.<br />
        Example: `candidates/contributors/312`
-
-*  **URL Params**
-    * **contributorname=[string]<br />**
-    Filters by contributor name (wildcarded).<br />
-       Example: `candidates/?contributor=andrew`
-    * **candidatename=[string]<br />**
-    Filters by candidate name (wildcarded).<br />
-       Example: `candidates/?candidatename=corbett`
-	* **filername=[string]<br />**
-    Filters by filer name (wildcarded).<br />
-       Example: `candidates/?filername=PPG`
-    * **contributor_city=[string]<br />**
-    Filters by contributor's listed city (wildcarded).<br />
-       Example: `candidates/?contributor_city=pittsburgh`
-    * **contributor_zip=[string]<br />**
-    Filters by contributor's listed zip code (wildcarded).<br />
-       Example: `candidates/?contributor_zip=15222`
-    * **county=[string]<br />**
-    Filters by county name (wildcarded).<br />
-       Example: `candidates/?county=allegheny`
-	* **employer=[string]<br />**
-    Filters by contributor's employer's name (wildcarded).<br />
-       Example: `candidates/?employer=US Steel`
-    * **startDate=[YYYY-MM-DD]<br />**
-    Filters for contributions made after (and including) specified date.<br />
-       Example: `candidates/?startDate=2014-06-01`
-    * **endDate=[YYYY-MM-DD]<br />**
-    Filters for contributions made before (and including) specified date.<br />
-       Example: `candidates/?endDate=2014-10-01`
-    * **startAmount=[integer]<br />**
-    Filters for contributions over (but including) specified amount.<br />
-       Example: `candidates/?startAmount=1000`
-    * **endAmount=[integer]<br />**
-    Filters for contributions under (but including) specified amount.<br />
-       Example: `candidates/?endAmount=2500`
-	* **limit=[integer]<br />**
-    Sets limit of returned records.<br />
-       Example: `candidates/?limit=50`
-	* **offset=[integer]<br />**
-    Skips ahead x returned records.<br />
-       Example: `candidates/?offset=2500`
 	   
 * **Success Response:**
 
@@ -413,50 +325,6 @@ A Post-Gazette/PublicSource collaboration cataloging campaign finance figures fo
     Filters to filers who have received donations from a specific contributor.<br />
        Example: `filers/contributors/andrew mcgill`
 
-*  **URL Params**
-    * **contributorname=[string]<br />**
-    Filters by contributor name (wildcarded).<br />
-       Example: `filers/?contributor=andrew`
-    * **candidatename=[string]<br />**
-    Filters by candidate name (wildcarded).<br />
-       Example: `filers/?candidatename=corbett`
-	* **filername=[string]<br />**
-    Filters by filer name (wildcarded).<br />
-       Example: `filers/?filername=PPG`
-    * **contributor_city=[string]<br />**
-    Filters by contributor's listed city (wildcarded).<br />
-       Example: `filers/?contributor_city=pittsburgh`
-    * **contributor_zip=[string]<br />**
-    Filters by contributor's listed zip code (wildcarded).<br />
-       Example: `filers/?contributor_zip=15222`
-    * **county=[string]<br />**
-    Filters by county name (wildcarded).<br />
-       Example: `filers/?county=allegheny`
-	* **employer=[string]<br />**
-    Filters by contributor's employer's name (wildcarded).<br />
-       Example: `filers/?employer=US Steel`
-    * **startDate=[YYYY-MM-DD]<br />**
-    Filters for contributions made after (and including) specified date.<br />
-       Example: `filers/?startDate=2014-06-01`
-    * **endDate=[YYYY-MM-DD]<br />**
-    Filters for contributions made before (and including) specified date.<br />
-       Example: `filers/?endDate=2014-10-01`
-    * **startAmount=[integer]<br />**
-    Filters for contributions over (but including) specified amount.<br />
-       Example: `filers/?startAmount=1000`
-    * **endAmount=[integer]<br />**
-    Filters for contributions under (but including) specified amount.<br />
-       Example: `filers/?endAmount=2500`
-	* **limit=[integer]<br />**
-    Sets limit of returned records.<br />
-       Example: `filers/?limit=50`
-	* **offset=[integer]<br />**
-    Skips ahead x returned records.<br />
-       Example: `filers/?offset=2500`
-
-* **Data Params**
-
-    None
 
 * **Success Response:**
 
@@ -542,47 +410,6 @@ A Post-Gazette/PublicSource collaboration cataloging campaign finance figures fo
 	* **/states/:state** <br />
     Filters by state, using state abbreviation.<br />
        Example: `counties/states/PA`   
-
-*  **URL Params**
-    * **contributorname=[string]<br />**
-    Filters by contributor name (wildcarded).<br />
-       Example: `counties/?contributor=andrew`
-    * **candidatename=[string]<br />**
-    Filters by candidate name (wildcarded).<br />
-       Example: `counties/?candidatename=corbett`
-	* **filername=[string]<br />**
-    Filters by filer name (wildcarded).<br />
-       Example: `counties/?filername=PPG`
-    * **contributor_city=[string]<br />**
-    Filters by contributor's listed city (wildcarded).<br />
-       Example: `counties/?contributor_city=pittsburgh`
-    * **contributor_zip=[string]<br />**
-    Filters by contributor's listed zip code (wildcarded).<br />
-       Example: `counties/?contributor_zip=15222`
-    * **county=[string]<br />**
-    Filters by county name (wildcarded).<br />
-       Example: `counties/?county=allegheny`
-	* **employer=[string]<br />**
-    Filters by contributor's employer's name (wildcarded).<br />
-       Example: `counties/?employer=US Steel`
-    * **startDate=[YYYY-MM-DD]<br />**
-    Filters for contributions made after (and including) specified date.<br />
-       Example: `counties/?startDate=2014-06-01`
-    * **endDate=[YYYY-MM-DD]<br />**
-    Filters for contributions made before (and including) specified date.<br />
-       Example: `counties/?endDate=2014-10-01`
-    * **startAmount=[integer]<br />**
-    Filters for contributions over (but including) specified amount.<br />
-       Example: `counties/?startAmount=1000`
-    * **endAmount=[integer]<br />**
-    Filters for contributions under (but including) specified amount.<br />
-       Example: `counties/?endAmount=2500`
-	* **limit=[integer]<br />**
-    Sets limit of returned records.<br />
-       Example: `counties/?limit=50`
-	* **offset=[integer]<br />**
-    Skips ahead x returned records.<br />
-       Example: `counties/?offset=2500`
 
 * **Success Response:**
 
@@ -678,47 +505,6 @@ A Post-Gazette/PublicSource collaboration cataloging campaign finance figures fo
     Filters by state, using state abbreviation.<br />
        Example: `months/states/PA`   
 
-*  **URL Params**
-    * **contributorname=[string]<br />**
-    Filters by contributor name (wildcarded).<br />
-       Example: `months/?contributor=andrew`
-    * **candidatename=[string]<br />**
-    Filters by candidate name (wildcarded).<br />
-       Example: `months/?candidatename=corbett`
-	* **filername=[string]<br />**
-    Filters by filer name (wildcarded).<br />
-       Example: `months/?filername=PPG`
-    * **contributor_city=[string]<br />**
-    Filters by contributor's listed city (wildcarded).<br />
-       Example: `months/?contributor_city=pittsburgh`
-    * **contributor_zip=[string]<br />**
-    Filters by contributor's listed zip code (wildcarded).<br />
-       Example: `months/?contributor_zip=15222`
-    * **county=[string]<br />**
-    Filters by county name (wildcarded).<br />
-       Example: `months/?county=allegheny`
-	* **employer=[string]<br />**
-    Filters by contributor's employer's name (wildcarded).<br />
-       Example: `months/?employer=US Steel`
-    * **startDate=[YYYY-MM-DD]<br />**
-    Filters for contributions made after (and including) specified date.<br />
-       Example: `months/?startDate=2014-06-01`
-    * **endDate=[YYYY-MM-DD]<br />**
-    Filters for contributions made before (and including) specified date.<br />
-       Example: `months/?endDate=2014-10-01`
-    * **startAmount=[integer]<br />**
-    Filters for contributions over (but including) specified amount.<br />
-       Example: `months/?startAmount=1000`
-    * **endAmount=[integer]<br />**
-    Filters for contributions under (but including) specified amount.<br />
-       Example: `months/?endAmount=2500`
-	* **limit=[integer]<br />**
-    Sets limit of returned records.<br />
-       Example: `months/?limit=50`
-	* **offset=[integer]<br />**
-    Skips ahead x returned records.<br />
-       Example: `months/?offset=2500`
-
 * **Success Response:**
 
   * **Code:** 200 <br />
@@ -785,47 +571,6 @@ A Post-Gazette/PublicSource collaboration cataloging campaign finance figures fo
 	* **/counties/:county** <br />
     Filters by county, using county name.<br />
        Example: `states/counties/allegheny county`    
-
-*  **URL Params**
-    * **contributorname=[string]<br />**
-    Filters by contributor name (wildcarded).<br />
-       Example: `states/?contributor=andrew`
-    * **candidatename=[string]<br />**
-    Filters by candidate name (wildcarded).<br />
-       Example: `states/?candidatename=corbett`
-	* **filername=[string]<br />**
-    Filters by filer name (wildcarded).<br />
-       Example: `states/?filername=PPG`
-    * **contributor_city=[string]<br />**
-    Filters by contributor's listed city (wildcarded).<br />
-       Example: `states/?contributor_city=pittsburgh`
-    * **contributor_zip=[string]<br />**
-    Filters by contributor's listed zip code (wildcarded).<br />
-       Example: `states/?contributor_zip=15222`
-    * **county=[string]<br />**
-    Filters by county name (wildcarded).<br />
-       Example: `states/?county=allegheny`
-	* **employer=[string]<br />**
-    Filters by contributor's employer's name (wildcarded).<br />
-       Example: `states/?employer=US Steel`
-    * **startDate=[YYYY-MM-DD]<br />**
-    Filters for contributions made after (and including) specified date.<br />
-       Example: `states/?startDate=2014-06-01`
-    * **endDate=[YYYY-MM-DD]<br />**
-    Filters for contributions made before (and including) specified date.<br />
-       Example: `states/?endDate=2014-10-01`
-    * **startAmount=[integer]<br />**
-    Filters for contributions over (but including) specified amount.<br />
-       Example: `states/?startAmount=1000`
-    * **endAmount=[integer]<br />**
-    Filters for contributions under (but including) specified amount.<br />
-       Example: `states/?endAmount=2500`
-	* **limit=[integer]<br />**
-    Sets limit of returned records.<br />
-       Example: `states/?limit=50`
-	* **offset=[integer]<br />**
-    Skips ahead x returned records.<br />
-       Example: `states/?offset=2500`
 
 * **Success Response:**
 
