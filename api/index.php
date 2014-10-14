@@ -186,7 +186,7 @@ class MyAPI extends API{
 						filers.city,
 						filers.state,
 						filers.zip,
-						county,
+						filers.county,
 						phone
 					";
 		$query["from"] = "FROM campaign_finance.filers ";
@@ -295,8 +295,8 @@ class MyAPI extends API{
 						
 			$results = Array();
 			while($row = mysqli_fetch_assoc($res)){
-				
-				if( $i = $that->search_for_value_in_array($results, Array( Array("state", $row["state"]) ) )) {
+				$i = $that->search_for_value_in_array($results, Array( Array("state", $row["state"]) ) );
+				if( $i !== FALSE) {
 					$results[$i]["contributions"] += $row["count"];
 					$results[$i]["amount"] += $row["total"];
 					$results[$i]["beneficiaries"][] = Array("name" => $row["name"], "filerid" => $row["filerid"], "contributions" => $row["count"], "amount" => $row["total"]);
@@ -326,6 +326,7 @@ class MyAPI extends API{
 					";
 		$query["from"] = "FROM campaign_finance.candidates ";
 		$query["join"] = "LEFT JOIN campaign_finance.contributions on contributions.filerid = candidates.filerid ";
+		$query["join"] .= "LEFT JOIN campaign_finance.filers on contributions.filerid = filers.filerid  ";
 		$query["where"] = "WHERE 1=1 ";
 		$query["group"] = "GROUP BY month, year ";
 		$query["order"] = "ORDER BY year ASC, month ASC ";
