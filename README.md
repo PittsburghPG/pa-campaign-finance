@@ -3,7 +3,26 @@ Pennsylvania campaign finance tracker
 
 A Post-Gazette/PublicSource collaboration cataloging campaign finance figures for the 2014 gubernatorial election (and beyond!) 
 
-#API
+# Requirements
+ 
+* An Apache server with PHP installed and mod_rewrite enabled
+* MySQL
+
+# Installation
+
+Rough and dirty right now. We'll update this later with in-depth instructions.
+
+* Navigate to the empty HTML root of the your server (commonly `/var/www/html/`.
+* Grab our code using curl: `curl -L -O https://github.com/arm5077/pa-campaign-finance/tarball/master`.
+* Unpack the tarball with `tar -zxvf master`.
+* Copy the contents of the unpacked directory with `cp -r arm5077-pa-campaign-finance-abcdefg/* .`. (You might have to `chmod 775 .` first, and make sure you use the real folder name.)
+* After setting up your MySQL server, run `/sql/init.sql`, upload your campaign finance data, and run `/sql/add-contributor-id.sql`.
+
+# API
+
+Access campaign finance data in machine-readble format whenever you'd like! No rate limits yet, but don't push us. 
+
+Base URL on our end is `http://priceoftheprize.publicsource.org/api`.
 
 ## Univeral parameters
    You can use these parameters for any API query (though they'll be redundent for some endpoints).
@@ -11,39 +30,39 @@ A Post-Gazette/PublicSource collaboration cataloging campaign finance figures fo
    * **contributorname=[string]<br />**
     Filters by contributor name (wildcarded).<br />
        Example: `contributions/?contributorname=andrew`
-    * **filername=[string]<br />**
-    Filters by filer name (wildcarded).<br />
-       Example: `contributions/?filername=corbett`
-    * **contributor_city=[string]<br />**
-    Filters by contributor's listed city (wildcarded).<br />
-       Example: `contributions/?contributor_city=pittsburgh`
-    * **contributor_zip=[string]<br />**
-    Filters by contributor's listed zip code (wildcarded).<br />
-       Example: `contributions/?contributor_zip=15222`
-    * **county=[string]<br />**
-    Filters by contributor's listed county (wildcarded).<br />
-       Example: `contributions/?county=phila`
-	* **employer=[string]<br />**
-    Filters by contributor's employer's name (wildcarded).<br />
-       Example: `contributions/?employer=US Steel`
-    * **startDate=[YYYY-MM-DD]<br />**
-    Filters for contributions made after (and including) specified date.<br />
-       Example: `contributions/?startDate=2014-06-01`
-    * **endDate=[YYYY-MM-DD]<br />**
-    Filters for contributions made before (and including) specified date.<br />
-       Example: `contributions/?endDate=2014-10-01`
-    * **startAmount=[integer]<br />**
-    Filters for contributions over (but including) specified amount.<br />
-       Example: `contributions/?startAmount=1000`
-    * **endAmount=[integer]<br />**
-    Filters for contributions under (but including) specified amount.<br />
-       Example: `contributions/?endAmount=2500`
-	* **limit=[integer]<br />**
-    Sets limit of returned records.<br />
-       Example: `contributions/?limit=50`
-	* **offset=[integer]<br />**
-    Skips ahead first x returned records.<br />
-       Example: `contributions/?offset=2500`
+   * **filername=[string]<br />**
+   Filters by filer name (wildcarded).<br />
+      Example: `contributions/?filername=corbett`
+   * **contributor_city=[string]<br />**
+   Filters by contributor's listed city (wildcarded).<br />
+      Example: `contributions/?contributor_city=pittsburgh`
+   * **contributor_zip=[string]<br />**
+   Filters by contributor's listed zip code (wildcarded).<br />
+      Example: `contributions/?contributor_zip=15222`
+   * **county=[string]<br />**
+   Filters by contributor's listed county (wildcarded).<br />
+      Example: `contributions/?county=phila`
+* **employer=[string]<br />**
+   Filters by contributor's employer's name (wildcarded).<br />
+      Example: `contributions/?employer=US Steel`
+   * **startDate=[YYYY-MM-DD]<br />**
+   Filters for contributions made after (and including) specified date.<br />
+      Example: `contributions/?startDate=2014-06-01`
+   * **endDate=[YYYY-MM-DD]<br />**
+   Filters for contributions made before (and including) specified date.<br />
+      Example: `contributions/?endDate=2014-10-01`
+   * **startAmount=[integer]<br />**
+   Filters for contributions over (but including) specified amount.<br />
+      Example: `contributions/?startAmount=1000`
+   * **endAmount=[integer]<br />**
+   Filters for contributions under (but including) specified amount.<br />
+      Example: `contributions/?endAmount=2500`
+* **limit=[integer]<br />**
+   Sets limit of returned records.<br />
+      Example: `contributions/?limit=50`
+* **offset=[integer]<br />**
+   Skips ahead first x returned records.<br />
+      Example: `contributions/?offset=2500`
 
 
 ##Show contributions
