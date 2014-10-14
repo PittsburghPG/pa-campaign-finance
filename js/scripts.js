@@ -590,7 +590,7 @@ $(document).ready(function() {
 			var topTotalsLeftLocationBlock = $("<div class='row'> \
 													<div class='col-lg-12 col-md-12 col-sm-12'> \
 														<label>LOCATION</label><h3>" + locationCity + ", " + locationState + "</h3> \
-														<p><a href='/a/counties/" + locationCounty + "'>" + locationCounty + " County</a></p> \
+														<p><a href='/a/counties/" + locationCounty + "'>" + locationCounty + "</a></p> \
 													</div> \
 												</div> \
 												<div class='thin-divider'></div>"
