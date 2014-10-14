@@ -365,7 +365,7 @@ $(document).ready(function() {
 								var perCapita = totalContribs/countyPOP;
 								perCapita = "$" + perCapita.numberFormat(2);
 								
-								$("<h3>" + perCapita + "</h3><label>Contributions represent $" + perCapita + " per capita in " + countyName + " County.</label>").appendTo("#county-per-capita")
+								$("<h3>" + perCapita + "</h3><label>Contributions represent " + perCapita + " per capita in " + countyName + " County.</label>").appendTo("#county-per-capita")
 								
 								// Size chart to equal neighboring column
 								sizeToMatch($("#map"), $(".top-totals"));
