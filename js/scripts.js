@@ -331,11 +331,11 @@ $(document).ready(function() {
 						success : function(USATdata) {
 							
 							var countyResults = USATdata.response;
-							
+							var countyPOP = "";
 							$.each(countyResults, function(c, county){
 								if (countyResults[c].StatePostal == countyState){
 									countyPOPraw = countyResults[c].Pop;
-									countyPop = str.replace("county", "");
+									countyPOP = str.replace("county", "");
 								}
 							});
 							console.log(countyPOP);
