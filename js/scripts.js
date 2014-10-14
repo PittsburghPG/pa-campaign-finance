@@ -255,6 +255,9 @@ $(document).ready(function() {
 						mapSection.appendTo(mapAndTotals);
 					};
 					
+					var countyNameBare = countyName.replace(" County", "");
+					console.log(countyNameBare);
+					
 					var totalsSection = $("<div></div>").appendTo(mapAndTotals);
 					totalsSection.addClass(widthTotals + "top-totals");
 					
@@ -324,21 +327,20 @@ $(document).ready(function() {
 					
 					// get counties populations
 					$.ajax({
-						url: "http://api.usatoday.com/open/census/pop?keypat=" + countyNameRaw + "&keyname=placename&sumlevid=3&api_key=6vxwagz8yayp4t87ye7d2nf4",
+						url: "http://api.usatoday.com/open/census/pop?keypat=" + countyNameBare + "&keyname=placename&sumlevid=3&api_key=6vxwagz8yayp4t87ye7d2nf4",
 						dataType: "jsonp",
 						type : "GET",
 						jsonp: "callback",
 						success : function(USATdata) {
 							
 							var countyResults = USATdata.response;
-							var countyPOP = "";
+							
 							$.each(countyResults, function(c, county){
 								if (countyResults[c].StatePostal == countyState){
-									countyPOPraw = countyResults[c].Pop;
-									countyPOP = countyPOPraw.replace("county", "");
+									countyPOP = countyResults[c].Pop;
 								}
 							});
-							console.log(countyPOP);
+							console.log(countyPOP + countyNameBare);
 							
 						
 						
