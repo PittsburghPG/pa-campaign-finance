@@ -169,7 +169,7 @@ function drawCandidateMap( id ){
 						.attr("class", "formap")
 						.html(function(){
 							output = "<h4>" + d.properties.NAME + "</h4><table><tbody>";
-							if( counties[d.properties.NAME] ){
+							if( counties[d.properties.NAMELSAD] ){
 								$.each(	counties[d.properties.NAMELSAD].candidates, function(i, candidate){
 									output += "<tr><td>" + candidate.name + "</td><td><strong>" + toDollars(candidate.amount) + "</td></tr>";
 								});
