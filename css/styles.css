@@ -211,6 +211,7 @@ table.horizontal-bar-graph {
 		font-size:40pt;
 		float:left;
 		margin-right: 15px;
+		margin-top:0;
 	}
 	
 	.big-number-with-wrapped-text label {
