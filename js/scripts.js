@@ -223,7 +223,7 @@ $(document).ready(function() {
 				
 				// let's create an if/else statement for when a county has no contribution, but appears on map and is clickable
 				if($.isEmptyObject(v.results)){
-					countyName = $(countyNameRaw).text();
+					countyName = countyNameRaw;
 					
 					countyHead = $("<h1>" + countyName + "</h1>");
 					countyHead.appendTo(jumbotron);
