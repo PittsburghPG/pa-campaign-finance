@@ -331,7 +331,7 @@ $(document).ready(function() {
 							thisCountyPercent = thisCountyPercent.numberFormat(1);
 							
 							
-							$("<h3>" + thisCountyPercent + "%</h3><label>" + countyName + " County represents " + thisCountyPercent + "% of total race contributions.</label>").appendTo("#county-percent-total");
+							$("<h3>" + thisCountyPercent + "%</h3><label>" + countyName + " represents " + thisCountyPercent + "% of total race contributions.</label>").appendTo("#county-percent-total");
 							
 							$.ajax({
 								url: "http://api.usatoday.com/open/census/pop?keypat=" + countyNameBare + "&keyname=placename&sumlevid=3&api_key=6vxwagz8yayp4t87ye7d2nf4",
