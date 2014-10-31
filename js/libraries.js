@@ -24,6 +24,11 @@ function monthDayYear(date){
 			
 }
 
+function yearMonthDay(date){
+	date = new Date(date);
+	return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+}
+
 function makeTimeChart(id, endpoint, target, startDate, endDate){
 
 	$.getJSON("api/months/" + endpoint + "/" + target + "?startDate=" + startDate + "&endDate=" + endDate, function(json){

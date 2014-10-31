@@ -143,7 +143,7 @@ $(document).ready(function() {
 				<div class="thin-divider"></div>').appendTo( $("#data") );
 				
 				makePieChart("pie", split[3], "PA");
-				makeTimeChart("timechart", "candidates", split[3], "2013-01-01", "2014-09-01");
+				makeTimeChart("timechart", "candidates", split[3], "2013-01-01", yearMonthDay(new Date()));
 				
 				// Size chart to equal neighboring column
 				sizeToMatch($("#map"), $("#graphsSidebar"));
@@ -388,8 +388,8 @@ $(document).ready(function() {
 							<div id = "both-candidates-timeline" style = "width:100%; height:200px;"></div>\
 						</div></div></div>');
 					
-					makeTimeChart("timeline", "counties", countyName, "2013-01-01", "2014-09-01");
-					makeCandidateTimeChart("both-candidates-timeline", "2013-01-01", "2014-09-01", countyName)
+					makeTimeChart("timeline", "counties", countyName, "2013-01-01", yearMonthDay(new Date()));
+					makeCandidateTimeChart("both-candidates-timeline", "2013-01-01", yearMonthDay(new Date()), countyName)
 					container.append("<div class='thin-divider'></div>");
 					
 					$.ajax({
